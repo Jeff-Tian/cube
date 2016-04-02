@@ -5,6 +5,7 @@ describe('Graph World', function () {
     it('should display itself', function () {
         var v1 = new GraphWorld.Vertex('test');
         assert.equal('Vertex (test)', v1.toString());
+        assert.equal('test', v1.label);
 
         var v2 = new GraphWorld.Vertex('again');
         assert.equal('Vertex (again)', v2.toString());
@@ -12,7 +13,7 @@ describe('Graph World', function () {
         assert.equal('Edge (Vertex (test), Vertex (again))', e.toString());
 
         var g = new GraphWorld.Graph([v1, v2], e);
-        assert.deepStrictEqual(["Vertex (test)", "Vertex (again)"], g.vertices());
+        assert.deepStrictEqual([v1, v2], g.vertices());
     });
 
     it('can get edge item', function () {

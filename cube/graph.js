@@ -51,7 +51,9 @@ function Graph(vs, es) {
 
     if (!Graph.__initialized__) {
         function addVertex(v) {
-            data[v] = {};
+            data[v] = {
+                self: v
+            };
         }
 
         function addEdge(e) {
@@ -70,8 +72,7 @@ function Graph(vs, es) {
         Graph.prototype.vertices = function () {
             var vs = [];
             for (var v in data) {
-                console.log('finding vertex: ', v)
-                vs.push(v);
+                vs.push(data[v].self);
             }
 
             return vs;
@@ -100,6 +101,15 @@ function Graph(vs, es) {
             }
 
             return es;
+        };
+
+        Graph.simplestGraph = function () {
+            var v = new Vertex('v');
+            var w = new Vertex('w');
+            var e = new Edge(v, w);
+            var g = new Graph([v, w], [e]);
+
+            return g;
         };
 
         Graph.__initialized__ = true;

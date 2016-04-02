@@ -44,8 +44,16 @@ html
             script(src="#{cdn.host}semantic/dist/semantic.min.js?#{cdn.version}")
             script(src="#{cdn.host}bower_components/angular/angular.min.js?#{cdn.version}")
             script(src="#{cdn.host}virtual-scripts/cube/graph.js?#{cdn.version}")
+            script(src="#{cdn.host}virtual-scripts/cube/layout.js?#{cdn.version}")
+            script(src="#{cdn.host}virtual-scripts/cube/painter.js?#{cdn.version}")
             script(type="text/javascript").
                 angular.module('cubeModule', [])
                         .controller('cubeCtrl', ['$scope', function ($scope) {
+                            var v = new GraphWorld.Vertex('v');
+                            var w = new GraphWorld.Vertex('w');
+                            var e = new GraphWorld.Edge(v, w);
+                            var g = new GraphWorld.Graph([v, w], e);
+                            var layout = new Layout.CircleLayout(g);
+                            var painter = new Painter('mycanvas', g, layout);
                         }])
                 ;
