@@ -32,7 +32,7 @@ $.site = $.fn.site = function(parameters) {
     $document       = $(document),
     $module         = $document,
     element         = this,
-    instance        = $module.data(moduleNamespace),
+    instance        = $module.blocks(moduleNamespace),
 
     module,
     returnedValue
@@ -47,7 +47,7 @@ $.site = $.fn.site = function(parameters) {
       module.verbose('Storing instance of site', module);
       instance = module;
       $module
-        .data(moduleNamespace, module)
+        .blocks(moduleNamespace, module)
       ;
     },
 
@@ -471,15 +471,15 @@ $.site.settings = {
 
 // allows for selection of elements with data attributes
 $.extend($.expr[ ":" ], {
-  data: ($.expr.createPseudo)
+  blocks: ($.expr.createPseudo)
     ? $.expr.createPseudo(function(dataName) {
         return function(elem) {
-          return !!$.data(elem, dataName);
+          return !!$.blocks(elem, dataName);
         };
       })
     : function(elem, i, match) {
       // support: jQuery < 1.8
-      return !!$.data(elem, match[ 3 ]);
+      return !!$.blocks(elem, match[ 3 ]);
     }
 });
 

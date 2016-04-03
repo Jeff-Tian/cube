@@ -42,7 +42,7 @@ $.site = $.fn.site = function(parameters) {
     $document       = $(document),
     $module         = $document,
     element         = this,
-    instance        = $module.data(moduleNamespace),
+    instance        = $module.blocks(moduleNamespace),
 
     module,
     returnedValue
@@ -57,7 +57,7 @@ $.site = $.fn.site = function(parameters) {
       module.verbose('Storing instance of site', module);
       instance = module;
       $module
-        .data(moduleNamespace, module)
+        .blocks(moduleNamespace, module)
       ;
     },
 
@@ -481,15 +481,15 @@ $.site.settings = {
 
 // allows for selection of elements with data attributes
 $.extend($.expr[ ":" ], {
-  data: ($.expr.createPseudo)
+  blocks: ($.expr.createPseudo)
     ? $.expr.createPseudo(function(dataName) {
         return function(elem) {
-          return !!$.data(elem, dataName);
+          return !!$.blocks(elem, dataName);
         };
       })
     : function(elem, i, match) {
       // support: jQuery < 1.8
-      return !!$.data(elem, match[ 3 ]);
+      return !!$.blocks(elem, match[ 3 ]);
     }
 });
 
@@ -583,7 +583,7 @@ $.fn.form = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
@@ -660,7 +660,7 @@ $.fn.form = function(parameters) {
                 $element     = $field.parent(),
                 $fieldGroup  = $field.closest($group),
                 $prompt      = $fieldGroup.find(selector.prompt),
-                defaultValue = $field.data(metadata.defaultValue) || '',
+                defaultValue = $field.blocks(metadata.defaultValue) || '',
                 isCheckbox   = $element.is(selector.uiCheckbox),
                 isDropdown   = $element.is(selector.uiDropdown),
                 isErrored    = $fieldGroup.hasClass(className.error)
@@ -693,7 +693,7 @@ $.fn.form = function(parameters) {
                 $element     = $field.parent(),
                 $fieldGroup  = $field.closest($group),
                 $prompt      = $fieldGroup.find(selector.prompt),
-                defaultValue = $field.data(metadata.defaultValue),
+                defaultValue = $field.blocks(metadata.defaultValue),
                 isCheckbox   = $element.is(selector.uiCheckbox),
                 isDropdown   = $element.is(selector.uiDropdown),
                 isErrored    = $fieldGroup.hasClass(className.error)
@@ -936,7 +936,7 @@ $.fn.form = function(parameters) {
             eventNamespace  = '.' + namespace;
 
             // grab instance
-            instance = $module.data(moduleNamespace);
+            instance = $module.blocks(moduleNamespace);
 
             // refresh selector cache
             module.refresh();
@@ -1172,7 +1172,7 @@ $.fn.form = function(parameters) {
                     ? $field.is(':checked')
                     : $field.val()
                 ;
-                $field.data(metadata.defaultValue, value);
+                $field.blocks(metadata.defaultValue, value);
               })
             ;
           },
@@ -1274,7 +1274,7 @@ $.fn.form = function(parameters) {
                 module.add.errors(formErrors);
               }
               // prevent ajax submit
-              if($module.data('moduleApi') !== undefined) {
+              if($module.blocks('moduleApi') !== undefined) {
                 event.stopImmediatePropagation();
               }
               if(ignoreCallbacks !== true) {
@@ -2069,7 +2069,7 @@ $.fn.accordion = function(parameters) {
         $content = $module.find(selector.content),
 
         element  = this,
-        instance = $module.data(moduleNamespace),
+        instance = $module.blocks(moduleNamespace),
         observer,
         module
       ;
@@ -2088,7 +2088,7 @@ $.fn.accordion = function(parameters) {
         instantiate: function() {
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
@@ -2660,7 +2660,7 @@ $.fn.checkbox = function(parameters) {
 
         initialLoad     = false,
         shortcutPressed = false,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         observer,
         element         = this,
@@ -2687,7 +2687,7 @@ $.fn.checkbox = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
@@ -3475,7 +3475,7 @@ $.fn.dimmer = function(parameters) {
         $dimmable,
 
         element   = this,
-        instance  = $module.data(moduleNamespace),
+        instance  = $module.blocks(moduleNamespace),
         module
       ;
 
@@ -3515,7 +3515,7 @@ $.fn.dimmer = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, instance)
+            .blocks(moduleNamespace, instance)
           ;
         },
 
@@ -4185,7 +4185,7 @@ $.fn.dropdown = function(parameters) {
         itemActivated   = false,
         internalChange  = false,
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         initialLoad,
         pageLostFocus,
@@ -4224,7 +4224,7 @@ $.fn.dropdown = function(parameters) {
           module.verbose('Storing instance of dropdown', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
@@ -5149,7 +5149,7 @@ $.fn.dropdown = function(parameters) {
                 var
                   $label            = $module.find(selector.label),
                   $activeLabel      = $label.filter('.' + className.active),
-                  activeValue       = $activeLabel.data(metadata.value),
+                  activeValue       = $activeLabel.blocks(metadata.value),
                   labelIndex        = $label.index($activeLabel),
                   labelCount        = $label.length,
                   hasActiveLabel    = ($activeLabel.length > 0),
@@ -5537,13 +5537,13 @@ $.fn.dropdown = function(parameters) {
             return id;
           },
           defaultText: function() {
-            return $module.data(metadata.defaultText);
+            return $module.blocks(metadata.defaultText);
           },
           defaultValue: function() {
-            return $module.data(metadata.defaultValue);
+            return $module.blocks(metadata.defaultValue);
           },
           placeholderText: function() {
-            return $module.data(metadata.placeholderText) || '';
+            return $module.blocks(metadata.placeholderText) || '';
           },
           text: function() {
             return $text.text();
@@ -5618,7 +5618,7 @@ $.fn.dropdown = function(parameters) {
             var
               value = ($input.length > 0)
                 ? $input.val()
-                : $module.data(metadata.value)
+                : $module.blocks(metadata.value)
             ;
             // prevents placeholder element from being selected when multiple
             if($.isArray(value) && value.length === 1 && value[0] === '') {
@@ -5675,8 +5675,8 @@ $.fn.dropdown = function(parameters) {
                 $choice.find(selector.menu).remove();
                 $choice.find(selector.menuIcon).remove();
               }
-              return ($choice.data(metadata.text) !== undefined)
-                ? $choice.data(metadata.text)
+              return ($choice.blocks(metadata.text) !== undefined)
+                ? $choice.blocks(metadata.text)
                 : (preserveHTML)
                   ? $.trim($choice.html())
                   : $.trim($choice.text())
@@ -5688,8 +5688,8 @@ $.fn.dropdown = function(parameters) {
             if(!$choice) {
               return false;
             }
-            return ($choice.data(metadata.value) !== undefined)
-              ? String( $choice.data(metadata.value) )
+            return ($choice.blocks(metadata.value) !== undefined)
+              ? String( $choice.blocks(metadata.value) )
               : (typeof choiceText === 'string')
                 ? $.trim(choiceText.toLowerCase())
                 : String(choiceText)
@@ -5993,14 +5993,14 @@ $.fn.dropdown = function(parameters) {
               value = module.get.value()
             ;
             module.verbose('Saving default value as', value);
-            $module.data(metadata.defaultValue, value);
+            $module.blocks(metadata.defaultValue, value);
           },
           defaultText: function() {
             var
               text = module.get.text()
             ;
             module.verbose('Saving default text as', text);
-            $module.data(metadata.defaultText, text);
+            $module.blocks(metadata.defaultText, text);
           },
           placeholderText: function() {
             var
@@ -6009,7 +6009,7 @@ $.fn.dropdown = function(parameters) {
             if(settings.placeholder !== false && $text.hasClass(className.placeholder)) {
               text = module.get.text();
               module.verbose('Saving placeholder text as', text);
-              $module.data(metadata.placeholderText, text);
+              $module.blocks(metadata.placeholderText, text);
             }
           },
           remoteData: function(name, value) {
@@ -6311,7 +6311,7 @@ $.fn.dropdown = function(parameters) {
             else {
               module.verbose('Storing value in metadata', value, $input);
               if(value !== currentValue) {
-                $module.data(metadata.value, stringValue);
+                $module.blocks(metadata.value, stringValue);
               }
             }
             if(settings.fireOnInit === false && module.is.initialLoad()) {
@@ -6763,7 +6763,7 @@ $.fn.dropdown = function(parameters) {
               .each(function(){
                 var
                   $label      = $(this),
-                  value       = $label.data(metadata.value),
+                  value       = $label.blocks(metadata.value),
                   stringValue = (value !== undefined)
                     ? String(value)
                     : value,
@@ -7614,7 +7614,7 @@ $.fn.embed = function(parameters) {
         $embed          = $module.find(selector.embed),
 
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
         module
       ;
 
@@ -7632,7 +7632,7 @@ $.fn.embed = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
@@ -7708,9 +7708,9 @@ $.fn.embed = function(parameters) {
         change: function(source, id, url) {
           module.debug('Changing video to ', source, id, url);
           $module
-            .data(metadata.source, source)
-            .data(metadata.id, id)
-            .data(metadata.url, url)
+            .blocks(metadata.source, source)
+            .blocks(metadata.id, id)
+            .blocks(metadata.url, url)
           ;
           module.create();
         },
@@ -7744,24 +7744,24 @@ $.fn.embed = function(parameters) {
 
         get: {
           id: function() {
-            return settings.id || $module.data(metadata.id);
+            return settings.id || $module.blocks(metadata.id);
           },
           placeholder: function() {
-            return settings.placeholder || $module.data(metadata.placeholder);
+            return settings.placeholder || $module.blocks(metadata.placeholder);
           },
           icon: function() {
             return (settings.icon)
               ? settings.icon
-              : ($module.data(metadata.icon) !== undefined)
-                ? $module.data(metadata.icon)
+              : ($module.blocks(metadata.icon) !== undefined)
+                ? $module.blocks(metadata.icon)
                 : module.determine.icon()
             ;
           },
           source: function(url) {
             return (settings.source)
               ? settings.source
-              : ($module.data(metadata.source) !== undefined)
-                ? $module.data(metadata.source)
+              : ($module.blocks(metadata.source) !== undefined)
+                ? $module.blocks(metadata.source)
                 : module.determine.source()
             ;
           },
@@ -7775,8 +7775,8 @@ $.fn.embed = function(parameters) {
           url: function() {
             return (settings.url)
               ? settings.url
-              : ($module.data(metadata.url) !== undefined)
-                ? $module.data(metadata.url)
+              : ($module.blocks(metadata.url) !== undefined)
+                ? $module.blocks(metadata.url)
                 : module.determine.url()
             ;
           }
@@ -7814,8 +7814,8 @@ $.fn.embed = function(parameters) {
           },
           url: function() {
             var
-              id     = settings.id     || $module.data(metadata.id),
-              source = settings.source || $module.data(metadata.source),
+              id     = settings.id     || $module.blocks(metadata.id),
+              source = settings.source || $module.blocks(metadata.source),
               url
             ;
             url = (sources[source] !== undefined)
@@ -7823,7 +7823,7 @@ $.fn.embed = function(parameters) {
               : false
             ;
             if(url) {
-              $module.data(metadata.url, url);
+              $module.blocks(metadata.url, url);
             }
             return url;
           }
@@ -7893,14 +7893,14 @@ $.fn.embed = function(parameters) {
 
         has: {
           placeholder: function() {
-            return settings.placeholder || $module.data(metadata.placeholder);
+            return settings.placeholder || $module.blocks(metadata.placeholder);
           }
         },
 
         should: {
           autoplay: function() {
             return (settings.autoplay === 'auto')
-              ? (settings.placeholder || $module.data(metadata.placeholder) !== undefined)
+              ? (settings.placeholder || $module.blocks(metadata.placeholder) !== undefined)
               : settings.autoplay
             ;
           }
@@ -8283,7 +8283,7 @@ $.fn.modal = function(parameters) {
         $dimmer,
 
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         elementNamespace,
         id,
@@ -8310,7 +8310,7 @@ $.fn.modal = function(parameters) {
           module.verbose('Storing instance of modal');
           instance = module;
           $module
-            .data(moduleNamespace, instance)
+            .blocks(moduleNamespace, instance)
           ;
         },
 
@@ -9161,7 +9161,7 @@ $.fn.nag = function(parameters) {
           : $('body'),
 
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         moduleOffset,
         moduleHeight,
@@ -9189,7 +9189,7 @@ $.fn.nag = function(parameters) {
 
           $module
             .on('click' + eventNamespace, selector.close, module.dismiss)
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
 
           if(settings.detachable && $module.parent()[0] !== $context[0]) {
@@ -9661,7 +9661,7 @@ $.fn.popup = function(parameters) {
         openedWithTouch    = false,
 
         element            = this,
-        instance           = $module.data(moduleNamespace),
+        instance           = $module.blocks(moduleNamespace),
 
         elementNamespace,
         id,
@@ -9685,7 +9685,7 @@ $.fn.popup = function(parameters) {
           module.verbose('Storing instance', module);
           instance = module;
           $module
-            .data(moduleNamespace, instance)
+            .blocks(moduleNamespace, instance)
           ;
         },
 
@@ -9810,7 +9810,7 @@ $.fn.popup = function(parameters) {
             }
             $popup = $('<div/>')
               .addClass(className.popup)
-              .data(metadata.activator, $module)
+              .blocks(metadata.activator, $module)
               .html(html)
             ;
             if(settings.inline) {
@@ -9836,14 +9836,14 @@ $.fn.popup = function(parameters) {
           else if($target.next(selector.popup).length !== 0) {
             module.verbose('Pre-existing popup found');
             settings.inline = true;
-            settings.popups  = $target.next(selector.popup).data(metadata.activator, $module);
+            settings.popups  = $target.next(selector.popup).blocks(metadata.activator, $module);
             module.refresh();
             if(settings.hoverable) {
               module.bind.popup();
             }
           }
           else if(settings.popup) {
-            $(settings.popup).data(metadata.activator, $module);
+            $(settings.popup).blocks(metadata.activator, $module);
             module.verbose('Used popup specified in settings');
             module.refresh();
             if(settings.hoverable) {
@@ -9919,7 +9919,7 @@ $.fn.popup = function(parameters) {
             .filter('.' + className.visible)
             .each(function() {
               $(this)
-                .data(metadata.activator)
+                .blocks(metadata.activator)
                 .popup('hide')
               ;
             })
@@ -10031,19 +10031,19 @@ $.fn.popup = function(parameters) {
         get: {
           html: function() {
             $module.removeData(metadata.html);
-            return $module.data(metadata.html) || settings.html;
+            return $module.blocks(metadata.html) || settings.html;
           },
           title: function() {
             $module.removeData(metadata.title);
-            return $module.data(metadata.title) || settings.title;
+            return $module.blocks(metadata.title) || settings.title;
           },
           content: function() {
             $module.removeData(metadata.content);
-            return $module.data(metadata.content) || $module.attr('title') || settings.content;
+            return $module.blocks(metadata.content) || $module.attr('title') || settings.content;
           },
           variation: function() {
             $module.removeData(metadata.variation);
-            return $module.data(metadata.variation) || settings.variation;
+            return $module.blocks(metadata.variation) || settings.variation;
           },
           popup: function() {
             return $popup;
@@ -10286,9 +10286,9 @@ $.fn.popup = function(parameters) {
             ;
 
             calculations = calculations || module.get.calculations();
-            position     = position     || $module.data(metadata.position) || settings.position;
+            position     = position     || $module.blocks(metadata.position) || settings.position;
 
-            offset       = $module.data(metadata.offset) || settings.offset;
+            offset       = $module.blocks(metadata.offset) || settings.offset;
             distanceAway = settings.distanceAway;
 
             // shorthand
@@ -11064,7 +11064,7 @@ $.fn.progress = function(parameters) {
         $label          = $(this).find(selector.label),
 
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         animating = false,
         transitionEnd,
@@ -11089,7 +11089,7 @@ $.fn.progress = function(parameters) {
           module.verbose('Storing instance of progress', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
         destroy: function() {
@@ -11115,9 +11115,9 @@ $.fn.progress = function(parameters) {
           metadata: function() {
             var
               data = {
-                percent : $module.data(metadata.percent),
-                total   : $module.data(metadata.total),
-                value   : $module.data(metadata.value)
+                percent : $module.blocks(metadata.percent),
+                total   : $module.blocks(metadata.total),
+                value   : $module.blocks(metadata.value)
               }
             ;
             if(data.percent) {
@@ -11851,7 +11851,7 @@ $.fn.rating = function(parameters) {
         moduleNamespace = 'module-' + namespace,
 
         element         = this,
-        instance        = $(this).data(moduleNamespace),
+        instance        = $(this).blocks(moduleNamespace),
 
         $module         = $(this),
         $icon           = $module.find(selector.icon),
@@ -11882,7 +11882,7 @@ $.fn.rating = function(parameters) {
           module.verbose('Instantiating module', settings);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
@@ -11999,16 +11999,16 @@ $.fn.rating = function(parameters) {
 
         get: {
           initialRating: function() {
-            if($module.data(metadata.rating) !== undefined) {
+            if($module.blocks(metadata.rating) !== undefined) {
               $module.removeData(metadata.rating);
-              return $module.data(metadata.rating);
+              return $module.blocks(metadata.rating);
             }
             return settings.initialRating;
           },
           maxRating: function() {
-            if($module.data(metadata.maxRating) !== undefined) {
+            if($module.blocks(metadata.maxRating) !== undefined) {
               $module.removeData(metadata.maxRating);
-              return $module.data(metadata.maxRating);
+              return $module.blocks(metadata.maxRating);
             }
             return settings.maxRating;
           },
@@ -12336,7 +12336,7 @@ $.fn.search = function(parameters) {
         $category       = $module.find(selector.category),
 
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         module
       ;
@@ -12355,7 +12355,7 @@ $.fn.search = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
         destroy: function() {
@@ -12464,7 +12464,7 @@ $.fn.search = function(parameters) {
                   ? $title.text()
                   : false,
                 results = module.get.results(),
-                result  = $result.data(metadata.result) || module.get.result(value, results),
+                result  = $result.blocks(metadata.result) || module.get.result(value, results),
                 returnedValue
               ;
               if( $.isFunction(settings.onSelect) ) {
@@ -12647,7 +12647,7 @@ $.fn.search = function(parameters) {
           },
           results: function() {
             var
-              results = $module.data(metadata.results)
+              results = $module.blocks(metadata.results)
             ;
             return results;
           },
@@ -12925,7 +12925,7 @@ $.fn.search = function(parameters) {
         clear: {
           cache: function(value) {
             var
-              cache = $module.data(metadata.cache)
+              cache = $module.blocks(metadata.cache)
             ;
             if(!value) {
               module.debug('Clearing cache', value);
@@ -12934,7 +12934,7 @@ $.fn.search = function(parameters) {
             else if(value && cache && cache[value]) {
               module.debug('Removing value from cache', value);
               delete cache[value];
-              $module.data(metadata.cache, cache);
+              $module.blocks(metadata.cache, cache);
             }
           }
         },
@@ -12942,7 +12942,7 @@ $.fn.search = function(parameters) {
         read: {
           cache: function(name) {
             var
-              cache = $module.data(metadata.cache)
+              cache = $module.blocks(metadata.cache)
             ;
             if(settings.cache) {
               module.verbose('Checking cache for generated html for query', name);
@@ -12999,7 +12999,7 @@ $.fn.search = function(parameters) {
             ;
             module.verbose('Injecting results metadata', $selectedResult);
             $selectedResult
-              .data(metadata.result, result)
+              .blocks(metadata.result, result)
             ;
           },
           id: function(results) {
@@ -13046,22 +13046,22 @@ $.fn.search = function(parameters) {
         save: {
           results: function(results) {
             module.verbose('Saving current search results to metadata', results);
-            $module.data(metadata.results, results);
+            $module.blocks(metadata.results, results);
           }
         },
 
         write: {
           cache: function(name, value) {
             var
-              cache = ($module.data(metadata.cache) !== undefined)
-                ? $module.data(metadata.cache)
+              cache = ($module.blocks(metadata.cache) !== undefined)
+                ? $module.blocks(metadata.cache)
                 : {}
             ;
             if(settings.cache) {
               module.verbose('Writing generated html to cache', name, value);
               cache[name] = value;
               $module
-                .data(metadata.cache, cache)
+                .blocks(metadata.cache, cache)
               ;
             }
           }
@@ -13694,7 +13694,7 @@ $.fn.shape = function(parameters) {
 
         // standard module
         element       = this,
-        instance      = $module.data(moduleNamespace),
+        instance      = $module.blocks(moduleNamespace),
         module
       ;
 
@@ -13710,7 +13710,7 @@ $.fn.shape = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, instance)
+            .blocks(moduleNamespace, instance)
           ;
         },
 
@@ -14570,7 +14570,7 @@ $.fn.sidebar = function(parameters) {
         $style,
 
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         elementNamespace,
         id,
@@ -14612,7 +14612,7 @@ $.fn.sidebar = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
@@ -15577,7 +15577,7 @@ $.fn.sticky = function(parameters) {
         $context,
 
         selector              = $module.selector || '',
-        instance              = $module.data(moduleNamespace),
+        instance              = $module.blocks(moduleNamespace),
 
         requestAnimationFrame = window.requestAnimationFrame
           || window.mozRequestAnimationFrame
@@ -15612,7 +15612,7 @@ $.fn.sticky = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
@@ -16493,7 +16493,7 @@ $.fn.tab = function(parameters) {
         firstLoad       = true,
         recursionDepth  = 0,
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         activeTabPath,
         parameterArray,
@@ -16529,7 +16529,7 @@ $.fn.tab = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
@@ -16635,7 +16635,7 @@ $.fn.tab = function(parameters) {
         event: {
           click: function(event) {
             var
-              tabPath = $(this).data(metadata.tab)
+              tabPath = $(this).blocks(metadata.tab)
             ;
             if(tabPath !== undefined) {
               if(settings.history) {
@@ -16810,7 +16810,7 @@ $.fn.tab = function(parameters) {
             else if(tabPath.search('/') == -1 && tabPath !== '') {
               // look for in page anchor
               $anchor     = $('#' + tabPath + ', a[name="' + tabPath + '"]');
-              currentPath = $anchor.closest('[data-tab]').data(metadata.tab);
+              currentPath = $anchor.closest('[data-tab]').blocks(metadata.tab);
               $tab        = module.get.tabElement(currentPath);
               // if anchor exists use parent tab
               if($anchor && $anchor.length > 0 && currentPath) {
@@ -17003,7 +17003,7 @@ $.fn.tab = function(parameters) {
 
         get: {
           initialPath: function() {
-            return $allModules.eq(0).data(metadata.tab) || $tabs.eq(0).data(metadata.tab);
+            return $allModules.eq(0).blocks(metadata.tab) || $tabs.eq(0).blocks(metadata.tab);
           },
           path: function() {
             return $.address.value();
@@ -17015,7 +17015,7 @@ $.fn.tab = function(parameters) {
           defaultPath: function(tabPath) {
             var
               $defaultNav = $allModules.filter('[data-' + metadata.tab + '^="' + tabPath + '/"]').eq(0),
-              defaultTab  = $defaultNav.data(metadata.tab) || false
+              defaultTab  = $defaultNav.blocks(metadata.tab) || false
             ;
             if( defaultTab ) {
               module.debug('Found default tab', defaultTab);
@@ -17406,7 +17406,7 @@ $.fn.transition = function() {
           // define namespace
           eventNamespace  = '.' + settings.namespace;
           moduleNamespace = 'module-' + settings.namespace;
-          instance        = $module.data(moduleNamespace) || module;
+          instance        = $module.blocks(moduleNamespace) || module;
 
           // get vendor specific events
           animationEnd    = module.get.animationEndEvent();
@@ -17432,7 +17432,7 @@ $.fn.transition = function() {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, instance)
+            .blocks(moduleNamespace, instance)
           ;
         },
 
@@ -17742,7 +17742,7 @@ $.fn.transition = function() {
           },
           displayType: function(displayType) {
             if(displayType !== 'none') {
-              $module.data(metadata.displayType, displayType);
+              $module.blocks(metadata.displayType, displayType);
             }
           },
           transitionExists: function(animation, exists) {
@@ -17946,11 +17946,11 @@ $.fn.transition = function() {
             if(settings.displayType) {
               return settings.displayType;
             }
-            if($module.data(metadata.displayType) === undefined) {
+            if($module.blocks(metadata.displayType) === undefined) {
               // create fake element to determine display state
               module.can.transition(true);
             }
-            return $module.data(metadata.displayType);
+            return $module.blocks(metadata.displayType);
           },
           userStyle: function(style) {
             style = style || $module.attr('style') || '';
@@ -18478,7 +18478,7 @@ $.api = $.fn.api = function(parameters) {
         // standard module
         element         = this,
         context         = $context[0],
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
         module
       ;
 
@@ -18495,7 +18495,7 @@ $.api = $.fn.api = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, instance)
+            .blocks(moduleNamespace, instance)
           ;
         },
 
@@ -18597,7 +18597,7 @@ $.api = $.fn.api = function(parameters) {
 
           // Add form content
           if(settings.serializeForm) {
-            settings.data = module.add.formData(settings.data);
+            settings.blocks = module.add.formData(settings.blocks);
           }
 
           // call beforesend and get any settings changes
@@ -18760,10 +18760,10 @@ $.api = $.fn.api = function(parameters) {
                       : templatedString.substr(1, templatedString.length - 2),
                     value   = ($.isPlainObject(urlData) && urlData[variable] !== undefined)
                       ? urlData[variable]
-                      : ($module.data(variable) !== undefined)
-                        ? $module.data(variable)
-                        : ($context.data(variable) !== undefined)
-                          ? $context.data(variable)
+                      : ($module.blocks(variable) !== undefined)
+                        ? $module.blocks(variable)
+                        : ($context.blocks(variable) !== undefined)
+                          ? $context.blocks(variable)
                           : urlData[variable]
                   ;
                   // remove value
@@ -18792,10 +18792,10 @@ $.api = $.fn.api = function(parameters) {
                       : templatedString.substr(2, templatedString.length - 3),
                     value   = ($.isPlainObject(urlData) && urlData[variable] !== undefined)
                       ? urlData[variable]
-                      : ($module.data(variable) !== undefined)
-                        ? $module.data(variable)
-                        : ($context.data(variable) !== undefined)
-                          ? $context.data(variable)
+                      : ($module.blocks(variable) !== undefined)
+                        ? $module.blocks(variable)
+                        : ($context.blocks(variable) !== undefined)
+                          ? $context.blocks(variable)
                           : urlData[variable]
                   ;
                   // optional replacement
@@ -18826,7 +18826,7 @@ $.api = $.fn.api = function(parameters) {
                 : $form.serialize(),
               hasOtherData
             ;
-            data         = data || settings.data;
+            data         = data || settings.blocks;
             hasOtherData = $.isPlainObject(data);
 
             if(hasOtherData) {
@@ -19194,8 +19194,8 @@ $.api = $.fn.api = function(parameters) {
             }
           },
           templatedURL: function(action) {
-            action = action || $module.data(metadata.action) || settings.action || false;
-            url    = $module.data(metadata.url) || settings.url || false;
+            action = action || $module.blocks(metadata.action) || settings.action || false;
+            url    = $module.blocks(metadata.url) || settings.url || false;
             if(url) {
               module.debug('Using specified url', url);
               return url;
@@ -19602,7 +19602,7 @@ $.fn.state = function(parameters) {
         $module         = $(this),
 
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         module
       ;
@@ -19638,7 +19638,7 @@ $.fn.state = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
@@ -19913,8 +19913,8 @@ $.fn.state = function(parameters) {
           // on mouseout sets text to previous value
           text: function() {
             var
-              activeText   = text.active   || $module.data(metadata.storedText),
-              inactiveText = text.inactive || $module.data(metadata.storedText)
+              activeText   = text.active   || $module.blocks(metadata.storedText),
+              inactiveText = text.inactive || $module.blocks(metadata.storedText)
             ;
             if( module.is.textEnabled() ) {
               if( module.is.active() && activeText) {
@@ -19938,14 +19938,14 @@ $.fn.state = function(parameters) {
               module.debug('Updating text', text);
               if(settings.selector.text) {
                 $module
-                  .data(metadata.storedText, text)
+                  .blocks(metadata.storedText, text)
                   .find(settings.selector.text)
                     .text(text)
                 ;
               }
               else {
                 $module
-                  .data(metadata.storedText, text)
+                  .blocks(metadata.storedText, text)
                   .html(text)
                 ;
               }
@@ -20299,7 +20299,7 @@ $.fn.visibility = function(parameters) {
         $placeholder,
 
         selector        = $module.selector || '',
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         requestAnimationFrame = window.requestAnimationFrame
           || window.mozRequestAnimationFrame
@@ -20350,7 +20350,7 @@ $.fn.visibility = function(parameters) {
         instantiate: function() {
           module.debug('Storing instance', module);
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
           instance = module;
         },
@@ -20499,7 +20499,7 @@ $.fn.visibility = function(parameters) {
           },
           image: function() {
             var
-              src = $module.data(metadata.src)
+              src = $module.blocks(metadata.src)
             ;
             if(src) {
               module.verbose('Lazy loading image', src);

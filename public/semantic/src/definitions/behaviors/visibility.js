@@ -50,7 +50,7 @@ $.fn.visibility = function(parameters) {
         $placeholder,
 
         selector        = $module.selector || '',
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         requestAnimationFrame = window.requestAnimationFrame
           || window.mozRequestAnimationFrame
@@ -101,7 +101,7 @@ $.fn.visibility = function(parameters) {
         instantiate: function() {
           module.debug('Storing instance', module);
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
           instance = module;
         },
@@ -250,7 +250,7 @@ $.fn.visibility = function(parameters) {
           },
           image: function() {
             var
-              src = $module.data(metadata.src)
+              src = $module.blocks(metadata.src)
             ;
             if(src) {
               module.verbose('Lazy loading image', src);

@@ -69,7 +69,7 @@ $.fn.dropdown = function(parameters) {
         itemActivated   = false,
         internalChange  = false,
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         initialLoad,
         pageLostFocus,
@@ -108,7 +108,7 @@ $.fn.dropdown = function(parameters) {
           module.verbose('Storing instance of dropdown', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
@@ -1033,7 +1033,7 @@ $.fn.dropdown = function(parameters) {
                 var
                   $label            = $module.find(selector.label),
                   $activeLabel      = $label.filter('.' + className.active),
-                  activeValue       = $activeLabel.data(metadata.value),
+                  activeValue       = $activeLabel.blocks(metadata.value),
                   labelIndex        = $label.index($activeLabel),
                   labelCount        = $label.length,
                   hasActiveLabel    = ($activeLabel.length > 0),
@@ -1421,13 +1421,13 @@ $.fn.dropdown = function(parameters) {
             return id;
           },
           defaultText: function() {
-            return $module.data(metadata.defaultText);
+            return $module.blocks(metadata.defaultText);
           },
           defaultValue: function() {
-            return $module.data(metadata.defaultValue);
+            return $module.blocks(metadata.defaultValue);
           },
           placeholderText: function() {
-            return $module.data(metadata.placeholderText) || '';
+            return $module.blocks(metadata.placeholderText) || '';
           },
           text: function() {
             return $text.text();
@@ -1502,7 +1502,7 @@ $.fn.dropdown = function(parameters) {
             var
               value = ($input.length > 0)
                 ? $input.val()
-                : $module.data(metadata.value)
+                : $module.blocks(metadata.value)
             ;
             // prevents placeholder element from being selected when multiple
             if($.isArray(value) && value.length === 1 && value[0] === '') {
@@ -1559,8 +1559,8 @@ $.fn.dropdown = function(parameters) {
                 $choice.find(selector.menu).remove();
                 $choice.find(selector.menuIcon).remove();
               }
-              return ($choice.data(metadata.text) !== undefined)
-                ? $choice.data(metadata.text)
+              return ($choice.blocks(metadata.text) !== undefined)
+                ? $choice.blocks(metadata.text)
                 : (preserveHTML)
                   ? $.trim($choice.html())
                   : $.trim($choice.text())
@@ -1572,8 +1572,8 @@ $.fn.dropdown = function(parameters) {
             if(!$choice) {
               return false;
             }
-            return ($choice.data(metadata.value) !== undefined)
-              ? String( $choice.data(metadata.value) )
+            return ($choice.blocks(metadata.value) !== undefined)
+              ? String( $choice.blocks(metadata.value) )
               : (typeof choiceText === 'string')
                 ? $.trim(choiceText.toLowerCase())
                 : String(choiceText)
@@ -1877,14 +1877,14 @@ $.fn.dropdown = function(parameters) {
               value = module.get.value()
             ;
             module.verbose('Saving default value as', value);
-            $module.data(metadata.defaultValue, value);
+            $module.blocks(metadata.defaultValue, value);
           },
           defaultText: function() {
             var
               text = module.get.text()
             ;
             module.verbose('Saving default text as', text);
-            $module.data(metadata.defaultText, text);
+            $module.blocks(metadata.defaultText, text);
           },
           placeholderText: function() {
             var
@@ -1893,7 +1893,7 @@ $.fn.dropdown = function(parameters) {
             if(settings.placeholder !== false && $text.hasClass(className.placeholder)) {
               text = module.get.text();
               module.verbose('Saving placeholder text as', text);
-              $module.data(metadata.placeholderText, text);
+              $module.blocks(metadata.placeholderText, text);
             }
           },
           remoteData: function(name, value) {
@@ -2195,7 +2195,7 @@ $.fn.dropdown = function(parameters) {
             else {
               module.verbose('Storing value in metadata', value, $input);
               if(value !== currentValue) {
-                $module.data(metadata.value, stringValue);
+                $module.blocks(metadata.value, stringValue);
               }
             }
             if(settings.fireOnInit === false && module.is.initialLoad()) {
@@ -2647,7 +2647,7 @@ $.fn.dropdown = function(parameters) {
               .each(function(){
                 var
                   $label      = $(this),
-                  value       = $label.data(metadata.value),
+                  value       = $label.blocks(metadata.value),
                   stringValue = (value !== undefined)
                     ? String(value)
                     : value,

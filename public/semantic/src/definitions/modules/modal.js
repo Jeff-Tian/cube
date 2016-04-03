@@ -64,7 +64,7 @@ $.fn.modal = function(parameters) {
         $dimmer,
 
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         elementNamespace,
         id,
@@ -91,7 +91,7 @@ $.fn.modal = function(parameters) {
           module.verbose('Storing instance of modal');
           instance = module;
           $module
-            .data(moduleNamespace, instance)
+            .blocks(moduleNamespace, instance)
           ;
         },
 

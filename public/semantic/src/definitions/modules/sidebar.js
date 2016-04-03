@@ -64,7 +64,7 @@ $.fn.sidebar = function(parameters) {
         $style,
 
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         elementNamespace,
         id,
@@ -106,7 +106,7 @@ $.fn.sidebar = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 

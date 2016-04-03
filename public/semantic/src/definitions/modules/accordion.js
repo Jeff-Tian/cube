@@ -53,7 +53,7 @@ $.fn.accordion = function(parameters) {
         $content = $module.find(selector.content),
 
         element  = this,
-        instance = $module.data(moduleNamespace),
+        instance = $module.blocks(moduleNamespace),
         observer,
         module
       ;
@@ -72,7 +72,7 @@ $.fn.accordion = function(parameters) {
         instantiate: function() {
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 

@@ -24,7 +24,7 @@ function CircleLayout(g, radius) {
         radius = 130;
     }
 
-    this.data = {};
+    this.blocks = {};
 
     var vs = g.vertices();
 
@@ -33,23 +33,23 @@ function CircleLayout(g, radius) {
         v = vs[i];
         var x = radius * Math.cos(i * theta);
         var y = radius * Math.sin(i * theta);
-        this.data[v] = new Position(x, y);
+        this.blocks[v] = new Position(x, y);
     }
 
     if (typeof this.pos !== 'function') {
         CircleLayout.prototype.pos = function (v) {
-            return this.data[v];
+            return this.blocks[v];
         };
 
         CircleLayout.prototype.shift = function (offsetX, offsetY) {
             console.log('shifting ', offsetX, offsetY);
-            for (var v in this.data) {
-                console.log('Old position: ', this.data[v]);
-                this.data[v] = new Position(
-                    this.data[v].x + offsetX,
-                    this.data[v].y + offsetY
+            for (var v in this.blocks) {
+                console.log('Old position: ', this.blocks[v]);
+                this.blocks[v] = new Position(
+                    this.blocks[v].x + offsetX,
+                    this.blocks[v].y + offsetY
                 );
-                console.log('New position: ', this.data[v]);
+                console.log('New position: ', this.blocks[v]);
             }
         };
     }

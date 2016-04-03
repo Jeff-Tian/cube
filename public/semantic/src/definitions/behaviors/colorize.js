@@ -51,7 +51,7 @@
           error     = settings.error,
 
           // boilerplate
-          instance   = $module.data('module-' + namespace),
+          instance   = $module.blocks('module-' + namespace),
           module
         ;
 
@@ -78,8 +78,8 @@
 
           getMetadata: function() {
             module.debug('Grabbing metadata');
-            image     = $module.data('image') || settings.image || undefined;
-            imageName = $module.data('name')  || settings.name  || instanceIndex;
+            image     = $module.blocks('image') || settings.image || undefined;
+            imageName = $module.blocks('name')  || settings.name  || instanceIndex;
             width     = settings.width        || $module.width();
             height    = settings.height       || $module.height();
             if(width === 0 || height === 0) {
@@ -100,7 +100,7 @@
                   module.canvas.merge();
                 });
                 $module
-                  .data('module-' + namespace, module)
+                  .blocks('module-' + namespace, module)
                 ;
               });
             }

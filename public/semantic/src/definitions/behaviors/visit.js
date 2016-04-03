@@ -45,7 +45,7 @@ $.visit = $.fn.visit = function(parameters) {
         $displays       = $(),
 
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
         module
       ;
       module = {
@@ -68,7 +68,7 @@ $.visit = $.fn.visit = function(parameters) {
           module.verbose('Storing instance of visit module', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 

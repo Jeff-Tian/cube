@@ -71,7 +71,7 @@ $.fn.transition = function() {
           // define namespace
           eventNamespace  = '.' + settings.namespace;
           moduleNamespace = 'module-' + settings.namespace;
-          instance        = $module.data(moduleNamespace) || module;
+          instance        = $module.blocks(moduleNamespace) || module;
 
           // get vendor specific events
           animationEnd    = module.get.animationEndEvent();
@@ -97,7 +97,7 @@ $.fn.transition = function() {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, instance)
+            .blocks(moduleNamespace, instance)
           ;
         },
 
@@ -407,7 +407,7 @@ $.fn.transition = function() {
           },
           displayType: function(displayType) {
             if(displayType !== 'none') {
-              $module.data(metadata.displayType, displayType);
+              $module.blocks(metadata.displayType, displayType);
             }
           },
           transitionExists: function(animation, exists) {
@@ -611,11 +611,11 @@ $.fn.transition = function() {
             if(settings.displayType) {
               return settings.displayType;
             }
-            if($module.data(metadata.displayType) === undefined) {
+            if($module.blocks(metadata.displayType) === undefined) {
               // create fake element to determine display state
               module.can.transition(true);
             }
-            return $module.data(metadata.displayType);
+            return $module.blocks(metadata.displayType);
           },
           userStyle: function(style) {
             style = style || $module.attr('style') || '';

@@ -85,7 +85,7 @@ $.fn.form = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
@@ -162,7 +162,7 @@ $.fn.form = function(parameters) {
                 $element     = $field.parent(),
                 $fieldGroup  = $field.closest($group),
                 $prompt      = $fieldGroup.find(selector.prompt),
-                defaultValue = $field.data(metadata.defaultValue) || '',
+                defaultValue = $field.blocks(metadata.defaultValue) || '',
                 isCheckbox   = $element.is(selector.uiCheckbox),
                 isDropdown   = $element.is(selector.uiDropdown),
                 isErrored    = $fieldGroup.hasClass(className.error)
@@ -195,7 +195,7 @@ $.fn.form = function(parameters) {
                 $element     = $field.parent(),
                 $fieldGroup  = $field.closest($group),
                 $prompt      = $fieldGroup.find(selector.prompt),
-                defaultValue = $field.data(metadata.defaultValue),
+                defaultValue = $field.blocks(metadata.defaultValue),
                 isCheckbox   = $element.is(selector.uiCheckbox),
                 isDropdown   = $element.is(selector.uiDropdown),
                 isErrored    = $fieldGroup.hasClass(className.error)
@@ -438,7 +438,7 @@ $.fn.form = function(parameters) {
             eventNamespace  = '.' + namespace;
 
             // grab instance
-            instance = $module.data(moduleNamespace);
+            instance = $module.blocks(moduleNamespace);
 
             // refresh selector cache
             module.refresh();
@@ -674,7 +674,7 @@ $.fn.form = function(parameters) {
                     ? $field.is(':checked')
                     : $field.val()
                 ;
-                $field.data(metadata.defaultValue, value);
+                $field.blocks(metadata.defaultValue, value);
               })
             ;
           },
@@ -776,7 +776,7 @@ $.fn.form = function(parameters) {
                 module.add.errors(formErrors);
               }
               // prevent ajax submit
-              if($module.data('moduleApi') !== undefined) {
+              if($module.blocks('moduleApi') !== undefined) {
                 event.stopImmediatePropagation();
               }
               if(ignoreCallbacks !== true) {

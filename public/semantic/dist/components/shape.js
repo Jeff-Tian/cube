@@ -64,7 +64,7 @@ $.fn.shape = function(parameters) {
 
         // standard module
         element       = this,
-        instance      = $module.data(moduleNamespace),
+        instance      = $module.blocks(moduleNamespace),
         module
       ;
 
@@ -80,7 +80,7 @@ $.fn.shape = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, instance)
+            .blocks(moduleNamespace, instance)
           ;
         },
 

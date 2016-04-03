@@ -52,7 +52,7 @@ $.fn.search = function(parameters) {
         $category       = $module.find(selector.category),
 
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         module
       ;
@@ -71,7 +71,7 @@ $.fn.search = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
         destroy: function() {
@@ -180,7 +180,7 @@ $.fn.search = function(parameters) {
                   ? $title.text()
                   : false,
                 results = module.get.results(),
-                result  = $result.data(metadata.result) || module.get.result(value, results),
+                result  = $result.blocks(metadata.result) || module.get.result(value, results),
                 returnedValue
               ;
               if( $.isFunction(settings.onSelect) ) {
@@ -363,7 +363,7 @@ $.fn.search = function(parameters) {
           },
           results: function() {
             var
-              results = $module.data(metadata.results)
+              results = $module.blocks(metadata.results)
             ;
             return results;
           },
@@ -641,7 +641,7 @@ $.fn.search = function(parameters) {
         clear: {
           cache: function(value) {
             var
-              cache = $module.data(metadata.cache)
+              cache = $module.blocks(metadata.cache)
             ;
             if(!value) {
               module.debug('Clearing cache', value);
@@ -650,7 +650,7 @@ $.fn.search = function(parameters) {
             else if(value && cache && cache[value]) {
               module.debug('Removing value from cache', value);
               delete cache[value];
-              $module.data(metadata.cache, cache);
+              $module.blocks(metadata.cache, cache);
             }
           }
         },
@@ -658,7 +658,7 @@ $.fn.search = function(parameters) {
         read: {
           cache: function(name) {
             var
-              cache = $module.data(metadata.cache)
+              cache = $module.blocks(metadata.cache)
             ;
             if(settings.cache) {
               module.verbose('Checking cache for generated html for query', name);
@@ -715,7 +715,7 @@ $.fn.search = function(parameters) {
             ;
             module.verbose('Injecting results metadata', $selectedResult);
             $selectedResult
-              .data(metadata.result, result)
+              .blocks(metadata.result, result)
             ;
           },
           id: function(results) {
@@ -762,22 +762,22 @@ $.fn.search = function(parameters) {
         save: {
           results: function(results) {
             module.verbose('Saving current search results to metadata', results);
-            $module.data(metadata.results, results);
+            $module.blocks(metadata.results, results);
           }
         },
 
         write: {
           cache: function(name, value) {
             var
-              cache = ($module.data(metadata.cache) !== undefined)
-                ? $module.data(metadata.cache)
+              cache = ($module.blocks(metadata.cache) !== undefined)
+                ? $module.blocks(metadata.cache)
                 : {}
             ;
             if(settings.cache) {
               module.verbose('Writing generated html to cache', name, value);
               cache[name] = value;
               $module
-                .data(metadata.cache, cache)
+                .blocks(metadata.cache, cache)
               ;
             }
           }

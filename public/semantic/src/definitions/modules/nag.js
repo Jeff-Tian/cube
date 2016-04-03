@@ -49,7 +49,7 @@ $.fn.nag = function(parameters) {
           : $('body'),
 
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         moduleOffset,
         moduleHeight,
@@ -77,7 +77,7 @@ $.fn.nag = function(parameters) {
 
           $module
             .on('click' + eventNamespace, selector.close, module.dismiss)
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
 
           if(settings.detachable && $module.parent()[0] !== $context[0]) {

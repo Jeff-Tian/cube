@@ -49,7 +49,7 @@ $.fn.state = function(parameters) {
         $module         = $(this),
 
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         module
       ;
@@ -85,7 +85,7 @@ $.fn.state = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
@@ -360,8 +360,8 @@ $.fn.state = function(parameters) {
           // on mouseout sets text to previous value
           text: function() {
             var
-              activeText   = text.active   || $module.data(metadata.storedText),
-              inactiveText = text.inactive || $module.data(metadata.storedText)
+              activeText   = text.active   || $module.blocks(metadata.storedText),
+              inactiveText = text.inactive || $module.blocks(metadata.storedText)
             ;
             if( module.is.textEnabled() ) {
               if( module.is.active() && activeText) {
@@ -385,14 +385,14 @@ $.fn.state = function(parameters) {
               module.debug('Updating text', text);
               if(settings.selector.text) {
                 $module
-                  .data(metadata.storedText, text)
+                  .blocks(metadata.storedText, text)
                   .find(settings.selector.text)
                     .text(text)
                 ;
               }
               else {
                 $module
-                  .data(metadata.storedText, text)
+                  .blocks(metadata.storedText, text)
                   .html(text)
                 ;
               }

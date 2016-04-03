@@ -51,7 +51,7 @@ $.fn.progress = function(parameters) {
         $label          = $(this).find(selector.label),
 
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         animating = false,
         transitionEnd,
@@ -76,7 +76,7 @@ $.fn.progress = function(parameters) {
           module.verbose('Storing instance of progress', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
         destroy: function() {
@@ -102,9 +102,9 @@ $.fn.progress = function(parameters) {
           metadata: function() {
             var
               data = {
-                percent : $module.data(metadata.percent),
-                total   : $module.data(metadata.total),
-                value   : $module.data(metadata.value)
+                percent : $module.blocks(metadata.percent),
+                total   : $module.blocks(metadata.total),
+                value   : $module.blocks(metadata.value)
               }
             ;
             if(data.percent) {

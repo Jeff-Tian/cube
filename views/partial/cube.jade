@@ -1,0 +1,101 @@
+mixin surface(which)
+    table.surface.ui.celled.structured.table
+        tbody
+            tr
+                td(style="background-color: {{cube.#{which}.blocks[0][0].color}};") {{cube.#{which}.blocks[0][0].label}}
+                td(style="background-color: {{cube.#{which}.blocks[0][1].color}};") {{cube.#{which}.blocks[0][1].label}}
+            tr
+                td(style="background-color: {{cube.#{which}.blocks[1][0].color}};") {{cube.#{which}.blocks[1][0].label}}
+                td(style="background-color: {{cube.#{which}.blocks[1][1].color}};") {{cube.#{which}.blocks[1][1].label}}
+
+mixin firstRow()
+    tr
+        td
+        td
+            block
+        td
+
+mixin secondRow()
+    tr
+        td
+        td
+            block
+        td
+
+mixin thirdRow()
+    tr
+        block
+
+mixin fourthRow()
+    tr
+        td
+        td
+            block
+        td
+
+mixin cubeTable()
+    table&attributes(attributes)
+        tbody
+            block
+
+mixin realCubeTable()
+    + cubeTable
+        + firstRow
+            + surface('back')
+        + secondRow
+            + surface('top')
+        + thirdRow
+            td
+                + surface('left')
+            td
+                + surface('front')
+            td
+                + surface('right')
+        + fourthRow
+            + surface('under')
+
+mixin buttonRow
+    div.ui.buttons
+        block
+
+mixin or
+    div.or(data-text="或")
+
+mixin buttonCubeTable()
+    + cubeTable&attributes(attributes)
+        + firstRow
+            + buttonRow
+                button.ui.button B
+                + or
+                button.ui.positive.button B'
+        + secondRow
+            + buttonRow
+                button.ui.button U
+                + or
+                button.ui.positive.button U'
+        + thirdRow
+            td
+                + buttonRow
+                    button.ui.button L
+                    + or
+                    button.ui.positive.button L'
+            td
+                + buttonRow
+                    button.ui.button(ng-click="cube.F()") F
+                    + or
+                    button.ui.positive.button(ng-click="cube.F_()") F'
+            td
+                + buttonRow
+                    button.ui.button R
+                    + or
+                    button.ui.positive.button R'
+        + fourthRow
+            + buttonRow
+                button.ui.button D
+                + or
+                button.ui.positive.button D'
+
+
++ realCubeTable
+div.ui.divider
++ buttonCubeTable.ui.celled.padded.table

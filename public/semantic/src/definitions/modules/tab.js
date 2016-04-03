@@ -57,7 +57,7 @@ $.fn.tab = function(parameters) {
         firstLoad       = true,
         recursionDepth  = 0,
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         activeTabPath,
         parameterArray,
@@ -93,7 +93,7 @@ $.fn.tab = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
@@ -199,7 +199,7 @@ $.fn.tab = function(parameters) {
         event: {
           click: function(event) {
             var
-              tabPath = $(this).data(metadata.tab)
+              tabPath = $(this).blocks(metadata.tab)
             ;
             if(tabPath !== undefined) {
               if(settings.history) {
@@ -374,7 +374,7 @@ $.fn.tab = function(parameters) {
             else if(tabPath.search('/') == -1 && tabPath !== '') {
               // look for in page anchor
               $anchor     = $('#' + tabPath + ', a[name="' + tabPath + '"]');
-              currentPath = $anchor.closest('[data-tab]').data(metadata.tab);
+              currentPath = $anchor.closest('[data-tab]').blocks(metadata.tab);
               $tab        = module.get.tabElement(currentPath);
               // if anchor exists use parent tab
               if($anchor && $anchor.length > 0 && currentPath) {
@@ -567,7 +567,7 @@ $.fn.tab = function(parameters) {
 
         get: {
           initialPath: function() {
-            return $allModules.eq(0).data(metadata.tab) || $tabs.eq(0).data(metadata.tab);
+            return $allModules.eq(0).blocks(metadata.tab) || $tabs.eq(0).blocks(metadata.tab);
           },
           path: function() {
             return $.address.value();
@@ -579,7 +579,7 @@ $.fn.tab = function(parameters) {
           defaultPath: function(tabPath) {
             var
               $defaultNav = $allModules.filter('[data-' + metadata.tab + '^="' + tabPath + '/"]').eq(0),
-              defaultTab  = $defaultNav.data(metadata.tab) || false
+              defaultTab  = $defaultNav.blocks(metadata.tab) || false
             ;
             if( defaultTab ) {
               module.debug('Found default tab', defaultTab);

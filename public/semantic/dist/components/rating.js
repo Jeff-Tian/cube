@@ -43,7 +43,7 @@ $.fn.rating = function(parameters) {
         moduleNamespace = 'module-' + namespace,
 
         element         = this,
-        instance        = $(this).data(moduleNamespace),
+        instance        = $(this).blocks(moduleNamespace),
 
         $module         = $(this),
         $icon           = $module.find(selector.icon),
@@ -74,7 +74,7 @@ $.fn.rating = function(parameters) {
           module.verbose('Instantiating module', settings);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
@@ -191,16 +191,16 @@ $.fn.rating = function(parameters) {
 
         get: {
           initialRating: function() {
-            if($module.data(metadata.rating) !== undefined) {
+            if($module.blocks(metadata.rating) !== undefined) {
               $module.removeData(metadata.rating);
-              return $module.data(metadata.rating);
+              return $module.blocks(metadata.rating);
             }
             return settings.initialRating;
           },
           maxRating: function() {
-            if($module.data(metadata.maxRating) !== undefined) {
+            if($module.blocks(metadata.maxRating) !== undefined) {
               $module.removeData(metadata.maxRating);
-              return $module.data(metadata.maxRating);
+              return $module.blocks(metadata.maxRating);
             }
             return settings.maxRating;
           },

@@ -55,7 +55,7 @@ $.fn.embed = function(parameters) {
         $embed          = $module.find(selector.embed),
 
         element         = this,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
         module
       ;
 
@@ -73,7 +73,7 @@ $.fn.embed = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
@@ -149,9 +149,9 @@ $.fn.embed = function(parameters) {
         change: function(source, id, url) {
           module.debug('Changing video to ', source, id, url);
           $module
-            .data(metadata.source, source)
-            .data(metadata.id, id)
-            .data(metadata.url, url)
+            .blocks(metadata.source, source)
+            .blocks(metadata.id, id)
+            .blocks(metadata.url, url)
           ;
           module.create();
         },
@@ -185,24 +185,24 @@ $.fn.embed = function(parameters) {
 
         get: {
           id: function() {
-            return settings.id || $module.data(metadata.id);
+            return settings.id || $module.blocks(metadata.id);
           },
           placeholder: function() {
-            return settings.placeholder || $module.data(metadata.placeholder);
+            return settings.placeholder || $module.blocks(metadata.placeholder);
           },
           icon: function() {
             return (settings.icon)
               ? settings.icon
-              : ($module.data(metadata.icon) !== undefined)
-                ? $module.data(metadata.icon)
+              : ($module.blocks(metadata.icon) !== undefined)
+                ? $module.blocks(metadata.icon)
                 : module.determine.icon()
             ;
           },
           source: function(url) {
             return (settings.source)
               ? settings.source
-              : ($module.data(metadata.source) !== undefined)
-                ? $module.data(metadata.source)
+              : ($module.blocks(metadata.source) !== undefined)
+                ? $module.blocks(metadata.source)
                 : module.determine.source()
             ;
           },
@@ -216,8 +216,8 @@ $.fn.embed = function(parameters) {
           url: function() {
             return (settings.url)
               ? settings.url
-              : ($module.data(metadata.url) !== undefined)
-                ? $module.data(metadata.url)
+              : ($module.blocks(metadata.url) !== undefined)
+                ? $module.blocks(metadata.url)
                 : module.determine.url()
             ;
           }
@@ -255,8 +255,8 @@ $.fn.embed = function(parameters) {
           },
           url: function() {
             var
-              id     = settings.id     || $module.data(metadata.id),
-              source = settings.source || $module.data(metadata.source),
+              id     = settings.id     || $module.blocks(metadata.id),
+              source = settings.source || $module.blocks(metadata.source),
               url
             ;
             url = (sources[source] !== undefined)
@@ -264,7 +264,7 @@ $.fn.embed = function(parameters) {
               : false
             ;
             if(url) {
-              $module.data(metadata.url, url);
+              $module.blocks(metadata.url, url);
             }
             return url;
           }
@@ -334,14 +334,14 @@ $.fn.embed = function(parameters) {
 
         has: {
           placeholder: function() {
-            return settings.placeholder || $module.data(metadata.placeholder);
+            return settings.placeholder || $module.blocks(metadata.placeholder);
           }
         },
 
         should: {
           autoplay: function() {
             return (settings.autoplay === 'auto')
-              ? (settings.placeholder || $module.data(metadata.placeholder) !== undefined)
+              ? (settings.placeholder || $module.blocks(metadata.placeholder) !== undefined)
               : settings.autoplay
             ;
           }

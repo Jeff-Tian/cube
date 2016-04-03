@@ -52,7 +52,7 @@ $.fn.dimmer = function(parameters) {
         $dimmable,
 
         element   = this,
-        instance  = $module.data(moduleNamespace),
+        instance  = $module.blocks(moduleNamespace),
         module
       ;
 
@@ -92,7 +92,7 @@ $.fn.dimmer = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, instance)
+            .blocks(moduleNamespace, instance)
           ;
         },
 

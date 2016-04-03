@@ -62,7 +62,7 @@ $.fn.popup = function(parameters) {
         openedWithTouch    = false,
 
         element            = this,
-        instance           = $module.data(moduleNamespace),
+        instance           = $module.blocks(moduleNamespace),
 
         elementNamespace,
         id,
@@ -86,7 +86,7 @@ $.fn.popup = function(parameters) {
           module.verbose('Storing instance', module);
           instance = module;
           $module
-            .data(moduleNamespace, instance)
+            .blocks(moduleNamespace, instance)
           ;
         },
 
@@ -211,7 +211,7 @@ $.fn.popup = function(parameters) {
             }
             $popup = $('<div/>')
               .addClass(className.popup)
-              .data(metadata.activator, $module)
+              .blocks(metadata.activator, $module)
               .html(html)
             ;
             if(settings.inline) {
@@ -237,14 +237,14 @@ $.fn.popup = function(parameters) {
           else if($target.next(selector.popup).length !== 0) {
             module.verbose('Pre-existing popup found');
             settings.inline = true;
-            settings.popups  = $target.next(selector.popup).data(metadata.activator, $module);
+            settings.popups  = $target.next(selector.popup).blocks(metadata.activator, $module);
             module.refresh();
             if(settings.hoverable) {
               module.bind.popup();
             }
           }
           else if(settings.popup) {
-            $(settings.popup).data(metadata.activator, $module);
+            $(settings.popup).blocks(metadata.activator, $module);
             module.verbose('Used popup specified in settings');
             module.refresh();
             if(settings.hoverable) {
@@ -320,7 +320,7 @@ $.fn.popup = function(parameters) {
             .filter('.' + className.visible)
             .each(function() {
               $(this)
-                .data(metadata.activator)
+                .blocks(metadata.activator)
                 .popup('hide')
               ;
             })
@@ -432,19 +432,19 @@ $.fn.popup = function(parameters) {
         get: {
           html: function() {
             $module.removeData(metadata.html);
-            return $module.data(metadata.html) || settings.html;
+            return $module.blocks(metadata.html) || settings.html;
           },
           title: function() {
             $module.removeData(metadata.title);
-            return $module.data(metadata.title) || settings.title;
+            return $module.blocks(metadata.title) || settings.title;
           },
           content: function() {
             $module.removeData(metadata.content);
-            return $module.data(metadata.content) || $module.attr('title') || settings.content;
+            return $module.blocks(metadata.content) || $module.attr('title') || settings.content;
           },
           variation: function() {
             $module.removeData(metadata.variation);
-            return $module.data(metadata.variation) || settings.variation;
+            return $module.blocks(metadata.variation) || settings.variation;
           },
           popup: function() {
             return $popup;
@@ -687,9 +687,9 @@ $.fn.popup = function(parameters) {
             ;
 
             calculations = calculations || module.get.calculations();
-            position     = position     || $module.data(metadata.position) || settings.position;
+            position     = position     || $module.blocks(metadata.position) || settings.position;
 
-            offset       = $module.data(metadata.offset) || settings.offset;
+            offset       = $module.blocks(metadata.offset) || settings.offset;
             distanceAway = settings.distanceAway;
 
             // shorthand

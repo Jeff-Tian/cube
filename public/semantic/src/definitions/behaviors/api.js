@@ -68,7 +68,7 @@ $.api = $.fn.api = function(parameters) {
         // standard module
         element         = this,
         context         = $context[0],
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
         module
       ;
 
@@ -85,7 +85,7 @@ $.api = $.fn.api = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, instance)
+            .blocks(moduleNamespace, instance)
           ;
         },
 
@@ -187,7 +187,7 @@ $.api = $.fn.api = function(parameters) {
 
           // Add form content
           if(settings.serializeForm) {
-            settings.data = module.add.formData(settings.data);
+            settings.blocks = module.add.formData(settings.blocks);
           }
 
           // call beforesend and get any settings changes
@@ -350,10 +350,10 @@ $.api = $.fn.api = function(parameters) {
                       : templatedString.substr(1, templatedString.length - 2),
                     value   = ($.isPlainObject(urlData) && urlData[variable] !== undefined)
                       ? urlData[variable]
-                      : ($module.data(variable) !== undefined)
-                        ? $module.data(variable)
-                        : ($context.data(variable) !== undefined)
-                          ? $context.data(variable)
+                      : ($module.blocks(variable) !== undefined)
+                        ? $module.blocks(variable)
+                        : ($context.blocks(variable) !== undefined)
+                          ? $context.blocks(variable)
                           : urlData[variable]
                   ;
                   // remove value
@@ -382,10 +382,10 @@ $.api = $.fn.api = function(parameters) {
                       : templatedString.substr(2, templatedString.length - 3),
                     value   = ($.isPlainObject(urlData) && urlData[variable] !== undefined)
                       ? urlData[variable]
-                      : ($module.data(variable) !== undefined)
-                        ? $module.data(variable)
-                        : ($context.data(variable) !== undefined)
-                          ? $context.data(variable)
+                      : ($module.blocks(variable) !== undefined)
+                        ? $module.blocks(variable)
+                        : ($context.blocks(variable) !== undefined)
+                          ? $context.blocks(variable)
                           : urlData[variable]
                   ;
                   // optional replacement
@@ -416,7 +416,7 @@ $.api = $.fn.api = function(parameters) {
                 : $form.serialize(),
               hasOtherData
             ;
-            data         = data || settings.data;
+            data         = data || settings.blocks;
             hasOtherData = $.isPlainObject(data);
 
             if(hasOtherData) {
@@ -784,8 +784,8 @@ $.api = $.fn.api = function(parameters) {
             }
           },
           templatedURL: function(action) {
-            action = action || $module.data(metadata.action) || settings.action || false;
-            url    = $module.data(metadata.url) || settings.url || false;
+            action = action || $module.blocks(metadata.action) || settings.action || false;
+            url    = $module.blocks(metadata.url) || settings.url || false;
             if(url) {
               module.debug('Using specified url', url);
               return url;

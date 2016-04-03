@@ -47,7 +47,7 @@ $.fn.checkbox = function(parameters) {
 
         initialLoad     = false,
         shortcutPressed = false,
-        instance        = $module.data(moduleNamespace),
+        instance        = $module.blocks(moduleNamespace),
 
         observer,
         element         = this,
@@ -74,7 +74,7 @@ $.fn.checkbox = function(parameters) {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module
-            .data(moduleNamespace, module)
+            .blocks(moduleNamespace, module)
           ;
         },
 
