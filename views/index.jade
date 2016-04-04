@@ -49,8 +49,10 @@ body
         div.ui.horizontal.divider
         div.ui.two.column.grid
             div.ui.column
-                canvas#mycanvas.cmd(style="padding: 0px; box-sizing: border-box; image-rendering: -webkit-optimize-contrast !important; width: 100%; min-height: 150px;", tabindex="0")
+                canvas#mycanvas.cmd(style="padding: 0px; box-sizing: border-box; image-rendering: -webkit-optimize-contrast !important; width: 100%; min-height: 150px;", tabindex="0", ng-show="false")
+                div#cy.cmd(style="padding: 0px; box-sizing: border-box; image-rendering: -webkit-optimize-contrast !important; width: 100%; min-height: 300px; display: block;, background-color: #aaa;", tabindex="0")
                 pre.hard.auto-wrap.cmd {{cube.history}}
+                pre.hard.auto-wrap.cmd {{history}}
             div.ui.column
                 include partial/cube
 
@@ -62,19 +64,6 @@ body
         script(src="#{cdn.host}virtual-scripts/cube/layout.js?#{cdn.version}")
         script(src="#{cdn.host}virtual-scripts/cube/painter.js?#{cdn.version}")
         script(src="#{cdn.host}virtual-scripts/cube/cube.js?#{cdn.version}")
+        script(src="#{cdn.host}bower_components/cytoscape/dist/cytoscape.min.js?#{cdn.version}")
+        script(src="#{cdn.host}scripts/cubeModule.js?#{cdn.version}")
         script(type="text/javascript").
-            angular.module('cubeModule', [])
-                    .controller('cubeCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
-                        $scope.$timeout = $timeout;
-                        
-                        var v = new GraphWorld.Vertex('v');
-                        var w = new GraphWorld.Vertex('w');
-                        var e = new GraphWorld.Edge(v, w);
-                        var g = new GraphWorld.Graph([v, w], e);
-                        var layout = new Layout.CircleLayout(g);
-                        var painter = new Painter('mycanvas', g, layout);
-
-                        $scope.cube = CubeWorld.Cube.getPristineCube();
-                        $scope.CubeWorld = CubeWorld;
-                    }])
-            ;

@@ -1,7 +1,36 @@
 function Painter(canvasId, g, layout) {
+    function clear() {
+        context.fillStyle = 'black';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function drawAxes() {
+        context.fillStyle = 'white';
+        context.strokeStyle = 'white';
+        context.moveTo(0, 0);
+        context.lineTo(context.canvas.width, 0);
+        context.moveTo(context.canvas.width - 10, -5);
+        context.lineTo(context.canvas.width, 0);
+        context.moveTo(context.canvas.width - 10, 5);
+        context.lineTo(context.canvas.width, 0);
+        context.stroke();
+
+        context.moveTo(0, 0);
+        context.lineTo(0, context.canvas.height);
+        context.moveTo(-5, context.canvas.height - 10);
+        context.lineTo(0, context.canvas.height);
+        context.moveTo(5, context.canvas.height - 10);
+        context.lineTo(0, context.canvas.height);
+        context.stroke();
+    }
+
     var canvas = document.getElementById(canvasId);
     layout.shift(canvas.width / 2, canvas.height / 2);
     var context = canvas.getContext('2d');
+
+    clear();
+    drawAxes();
+
     context.fillStyle = '#ffffff';
     context.strokeStyle = '#ffffff';
 
@@ -17,7 +46,7 @@ function Painter(canvasId, g, layout) {
     function drawVertex(v, r, color) {
         console.log('drawing vertex: ', JSON.stringify(v));
         if (typeof r === 'undefined') {
-            r = 20;
+            r = 10;
         }
 
         if (typeof color === 'undefined') {
@@ -31,10 +60,10 @@ function Painter(canvasId, g, layout) {
         context.fill();
 
         context.fillStyle = '#ff0000';
-        context.font = '20px Arial';
+        context.font = '8px Arial';
         context.fillText(v.label, pos.x, pos.y);
-        context.font = '10px Arial';
-        context.fillText(pos, pos.x - 10, pos.y + 20);
+        //context.font = '5px Arial';
+        //context.fillText(pos, pos.x - 10, pos.y + 20);
     }
 
     function paint() {

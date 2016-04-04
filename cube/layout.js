@@ -21,7 +21,7 @@ function CircleLayout(g, radius) {
     }
 
     if (typeof radius === 'undefined') {
-        radius = 130;
+        radius = 50;
     }
 
     this.blocks = {};
@@ -31,6 +31,7 @@ function CircleLayout(g, radius) {
     var theta = Math.PI * 2 / vs.length;
     for (var i = 0; i < vs.length; i++) {
         v = vs[i];
+        console.log('Positioning the ', i + 1, i + 1 === 1 ? 'st' : (i + 1 === 2 ? 'nd' : (i + 1 === 3 ? 'rd' : 'th')), ' vertex: ', v);
         var x = radius * Math.cos(i * theta);
         var y = radius * Math.sin(i * theta);
         this.blocks[v] = new Position(x, y);

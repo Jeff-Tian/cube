@@ -150,6 +150,8 @@ function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface,
     this.under = underSurface;
     this.back = backSurface;
 
+    self.sides = [frontSurface, topSurface, leftSurface, rightSurface, underSurface, backSurface];
+
     this.history = [];
 
     if (!Cube.__initialized__) {
@@ -401,7 +403,8 @@ function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface,
             return step.length === 1 ? step + '`' : step[0];
         };
 
-        Cube.prototype.randomize = function (numberOfSteps) {
+        Cube.prototype.randomize = function ($timeout, interval, numberOfSteps) {
+            $timeout = $timeout || window.setTimeout;
             var availableSteps = ['F', 'F`', 'B', 'B`', 'L', 'L`', 'R', 'R`', 'U', 'U`', 'D', 'D`'];
 
             var steps = [];
@@ -411,9 +414,21 @@ function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface,
                 steps.push(availableSteps[Math.floor(Math.random() * availableSteps.length)]);
             }
 
-            while (steps.length) {
-                self[steps.shift()]();
-            }
+            var doJob = function () {
+                while (steps.length) {
+                    self[steps.shift()]();
+
+                    if (interval) {
+                        $timeout(function () {
+                            doJob();
+                        }, interval);
+
+                        break;
+                    }
+                }
+            };
+
+            doJob();
         };
 
         Cube.prototype.reset = function ($timeout, interval) {
@@ -536,6 +551,26 @@ function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface,
             self.perspectiveUp();
             self.perspectiveUp();
             self.perspectiveUp();
+        };
+
+        Cube.prototype.toString = function () {
+            var a = function (x, y) {
+                return x + y;
+            };
+
+            return self.sides
+                .map(function (s) {
+                    return s.blocks
+                        .map(function (row) {
+                            return row
+                                .map(function (col) {
+                                    return col.label[col.label.length - 1];
+                                })
+                                .reduce(a);
+                        })
+                        .reduce(a);
+                })
+                .reduce(a);
         };
 
         Cube.__initialized__ = true;

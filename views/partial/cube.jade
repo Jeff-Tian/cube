@@ -102,9 +102,10 @@ mixin buttonCubeTable()
                     + or
                     button.ui.positive.button(ng-click="cube.D_()") D'
             td
-                button.ui.button(ng-click="cube.randomize()") 随机化
+                button.ui.button(ng-click="cube.randomize($timeout, 1000)") 随机化
 
 
 + realCubeTable
+div {{cube.toString()}}
 div.ui.divider
 + buttonCubeTable.ui.celled.padded.table

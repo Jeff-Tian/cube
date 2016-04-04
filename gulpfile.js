@@ -29,5 +29,16 @@ gulp.task('test', function (done) {
 
 gulp.task('release', ['jshint', 'mocha', 'test']);
 
-gulp.task('default', ['jshint', 'mocha', 'test', 'start'])
+gulp.task('default', ['jshint', 'mocha', 'test', 'start']);
 
+gulp.task('replace', function (done) {
+    var replace = require('gulp-replace');
+
+    gulp.src(['public/semantic/dist/semantic.min.css'])
+        //.pipe(replace(/https:\/\/fonts.googleapis.com\/css/g, 'http://fonts.useso.com/css'))
+        .pipe(replace(/https:\/\/fonts.googleapis.com\/css/g, ''))
+        .pipe(gulp.dest('public/semantic/dist/'))
+    ;
+
+    done();
+});
