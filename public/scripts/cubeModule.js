@@ -109,7 +109,7 @@ angular.module('cubeModule', [])
         });
         $scope.traverse = function () {
             var iter = new Iterator.CubeIterator();
-            $scope.traverseGraph = iter.traverse($scope.cube);
+            $scope.traverseGraph = iter.traverse($scope.cube, $timeout, 3000);
         };
     }])
 ;

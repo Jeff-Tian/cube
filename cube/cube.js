@@ -439,30 +439,32 @@ function Cube(frontSurface, backSurface, leftSurface, rightSurface, topSurface, 
         };
 
         Cube.prototype.reset = function ($timeout, interval) {
+            var self = this;
+
             var player = {
-                'F': this.executeF,
-                'F`': this.executeF_,
-                "F'": this.executeF_,
+                'F': self.executeF,
+                'F`': self.executeF_,
+                "F'": self.executeF_,
 
-                'B': this.executeB,
-                'B`': this.executeB_,
-                "B'": this.executeB_,
+                'B': self.executeB,
+                'B`': self.executeB_,
+                "B'": self.executeB_,
 
-                'U': this.executeU,
-                'U`': this.executeU_,
-                "U'": this.executeU_,
+                'U': self.executeU,
+                'U`': self.executeU_,
+                "U'": self.executeU_,
 
-                'D': this.executeD,
-                'D`': this.executeD_,
-                "D'": this.executeD_,
+                'D': self.executeD,
+                'D`': self.executeD_,
+                "D'": self.executeD_,
 
-                'L': this.executeL,
-                'L`': this.executeL_,
-                "L'": this.executeL_,
+                'L': self.executeL,
+                'L`': self.executeL_,
+                "L'": self.executeL_,
 
-                'R': this.executeR,
-                'R`': this.executeR_,
-                "R'": this.executeR_
+                'R': self.executeR,
+                'R`': self.executeR_,
+                "R'": self.executeR_
             };
 
             player.execute = function (step) {
@@ -473,7 +475,6 @@ function Cube(frontSurface, backSurface, leftSurface, rightSurface, topSurface, 
                 return step.length === 1 ? step + '`' : step[0];
             };
 
-            var self = this;
             $timeout = $timeout || window.setTimeout;
 
             while (self.history.length) {
@@ -482,7 +483,7 @@ function Cube(frontSurface, backSurface, leftSurface, rightSurface, topSurface, 
 
                 console.log('reverse step ', s, ' by ', rs);
 
-                player[rs]();
+                player[rs].call(self);
 
                 if (interval) {
                     $timeout(function () {
