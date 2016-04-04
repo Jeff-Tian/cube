@@ -20,48 +20,61 @@ html
                 overflow: auto;
                 padding: 15px;
             }
-    body
-        div(class="ui large top fixed hidden menu")
-            div(class="ui container")
-                a(class="active item") Home
-                a(class="item") Work
-                div(class="right menu")
-                    div(class="item")
-                        a(class="ui button") Log in
-                    div(class="item")
-                        a(class="ui primary button") Sign up
 
-        div(ng-app="cubeModule", ng-controller="cubeCtrl")
-            div.ui.horizontal.divider
-            div.ui.horizontal.divider
-            div.ui.horizontal.divider
-            div.ui.horizontal.divider
-            div.ui.horizontal.divider
-            div.ui.two.column.grid
-                div.ui.column
-                    canvas#mycanvas.cmd(style="padding: 0px; box-sizing: border-box; image-rendering: -webkit-optimize-contrast !important; width: 100%; min-height: 150px;", tabindex="0")
-                div.ui.column
-                    include partial/cube
+            .auto-wrap {
+                word-wrap: normal;
+                white-space: pre-wrap;
+            }
 
-        div
-            script(src="#{cdn.host}bower_components/jquery/dist/jquery.min.js?#{cdn.version}")
-            script(src="#{cdn.host}semantic/dist/semantic.min.js?#{cdn.version}")
-            script(src="#{cdn.host}bower_components/angular/angular.min.js?#{cdn.version}")
-            script(src="#{cdn.host}virtual-scripts/cube/graph.js?#{cdn.version}")
-            script(src="#{cdn.host}virtual-scripts/cube/layout.js?#{cdn.version}")
-            script(src="#{cdn.host}virtual-scripts/cube/painter.js?#{cdn.version}")
-            script(src="#{cdn.host}virtual-scripts/cube/cube.js?#{cdn.version}")
-            script(type="text/javascript").
-                angular.module('cubeModule', [])
-                        .controller('cubeCtrl', ['$scope', function ($scope) {
-                            var v = new GraphWorld.Vertex('v');
-                            var w = new GraphWorld.Vertex('w');
-                            var e = new GraphWorld.Edge(v, w);
-                            var g = new GraphWorld.Graph([v, w], e);
-                            var layout = new Layout.CircleLayout(g);
-                            var painter = new Painter('mycanvas', g, layout);
+            .hard.auto-wrap {
+                word-wrap: break-word;
+            }
 
-                            $scope.cube = CubeWorld.Cube.getPristineCube();
-                            $scope.CubeWorld = CubeWorld;
-                        }])
-                ;
+body
+    div(class="ui large top fixed hidden menu")
+        div(class="ui container")
+            a(class="active item") Home
+            a(class="item") Work
+            div(class="right menu")
+                div(class="item")
+                    a(class="ui button") Log in
+                div(class="item")
+                    a(class="ui primary button") Sign up
+
+    div(ng-app="cubeModule", ng-controller="cubeCtrl")
+        div.ui.horizontal.divider
+        div.ui.horizontal.divider
+        div.ui.horizontal.divider
+        div.ui.horizontal.divider
+        div.ui.horizontal.divider
+        div.ui.two.column.grid
+            div.ui.column
+                canvas#mycanvas.cmd(style="padding: 0px; box-sizing: border-box; image-rendering: -webkit-optimize-contrast !important; width: 100%; min-height: 150px;", tabindex="0")
+                pre.hard.auto-wrap.cmd {{cube.history}}
+            div.ui.column
+                include partial/cube
+
+    div
+        script(src="#{cdn.host}bower_components/jquery/dist/jquery.min.js?#{cdn.version}")
+        script(src="#{cdn.host}semantic/dist/semantic.min.js?#{cdn.version}")
+        script(src="#{cdn.host}bower_components/angular/angular.min.js?#{cdn.version}")
+        script(src="#{cdn.host}virtual-scripts/cube/graph.js?#{cdn.version}")
+        script(src="#{cdn.host}virtual-scripts/cube/layout.js?#{cdn.version}")
+        script(src="#{cdn.host}virtual-scripts/cube/painter.js?#{cdn.version}")
+        script(src="#{cdn.host}virtual-scripts/cube/cube.js?#{cdn.version}")
+        script(type="text/javascript").
+            angular.module('cubeModule', [])
+                    .controller('cubeCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+                        $scope.$timeout = $timeout;
+                        
+                        var v = new GraphWorld.Vertex('v');
+                        var w = new GraphWorld.Vertex('w');
+                        var e = new GraphWorld.Edge(v, w);
+                        var g = new GraphWorld.Graph([v, w], e);
+                        var layout = new Layout.CircleLayout(g);
+                        var painter = new Painter('mycanvas', g, layout);
+
+                        $scope.cube = CubeWorld.Cube.getPristineCube();
+                        $scope.CubeWorld = CubeWorld;
+                    }])
+            ;

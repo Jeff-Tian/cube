@@ -16,22 +16,16 @@ mixin firstRow()
         td
 
 mixin secondRow()
-    tr
-        td
-        td
-            block
-        td
+    + firstRow
+        block
 
 mixin thirdRow()
     tr
         block
 
 mixin fourthRow()
-    tr
-        td
-        td
-            block
-        td
+    + firstRow
+        block
 
 mixin cubeTable()
     table&attributes(attributes)
@@ -63,22 +57,32 @@ mixin or
 
 mixin buttonCubeTable()
     + cubeTable&attributes(attributes)
-        + firstRow
-            + buttonRow
-                button.ui.button B
-                + or
-                button.ui.positive.button B'
-        + secondRow
-            + buttonRow
-                button.ui.button U
-                + or
-                button.ui.positive.button U'
+        tr
+            td
+                button.ui.button(ng-click="cube.perspectiveUp()") Perspective Up
+            td
+                + buttonRow
+                    button.ui.button(ng-click="cube.B()") B
+                    + or
+                    button.ui.positive.button(ng-click="cube.B_()") B'
+            td
+                button.ui.button(ng-click="cube.perspectiveDown()") Perspective Down
+        tr
+            td
+                button.ui.button(ng-click="cube.perspectiveLeft()") Perspective Left
+            td
+                + buttonRow
+                    button.ui.button(ng-click="cube.U()") U
+                    + or
+                    button.ui.positive.button(ng-click="cube.U_()") U'
+            td
+                button.ui.button(ng-click="cube.perspectiveRight()") Perspective Right
         + thirdRow
             td
                 + buttonRow
-                    button.ui.button L
+                    button.ui.button(ng-click="cube.L()") L
                     + or
-                    button.ui.positive.button L'
+                    button.ui.positive.button(ng-click="cube.L_()") L'
             td
                 + buttonRow
                     button.ui.button(ng-click="cube.F()") F
@@ -86,14 +90,19 @@ mixin buttonCubeTable()
                     button.ui.positive.button(ng-click="cube.F_()") F'
             td
                 + buttonRow
-                    button.ui.button R
+                    button.ui.button(ng-click="cube.R()") R
                     + or
-                    button.ui.positive.button R'
-        + fourthRow
-            + buttonRow
-                button.ui.button D
-                + or
-                button.ui.positive.button D'
+                    button.ui.positive.button(ng-click="cube.R_()") R'
+        tr
+            td
+                button.ui.button(ng-click="cube.reset($timeout, 500)") 还原
+            td
+                + buttonRow
+                    button.ui.button(ng-click="cube.D()") D
+                    + or
+                    button.ui.positive.button(ng-click="cube.D_()") D'
+            td
+                button.ui.button(ng-click="cube.randomize()") 随机化
 
 
 + realCubeTable

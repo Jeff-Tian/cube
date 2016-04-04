@@ -141,6 +141,7 @@ Surface.createPrimitiveSurface = function (side) {
 };
 
 function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface, backSurface) {
+    var self = this;
     this.blocks = [frontSurface, topSurface, leftSurface, rightSurface, underSurface, backSurface];
     this.front = frontSurface;
     this.top = topSurface;
@@ -149,9 +150,29 @@ function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface,
     this.under = underSurface;
     this.back = backSurface;
 
+    this.history = [];
+
     if (!Cube.__initialized__) {
-        Cube.prototype.F = function () {
-            var self = this;
+        function rotateSideClockwise(side) {
+            var t = self[side].blocks[0][0];
+
+            self[side].blocks[0][0] = self[side].blocks[1][0];
+            self[side].blocks[1][0].pos = new Pos(SIDE[side], 0, 0);
+            self[side].blocks[1][0] = self[side].blocks[1][1];
+            self[side].blocks[1][1].pos = new Pos(SIDE[side], 1, 0);
+            self[side].blocks[1][1] = self[side].blocks[0][1];
+            self[side].blocks[0][1].pos = new Pos(SIDE[side], 1, 1);
+            self[side].blocks[0][1] = t;
+            t.pos = new Pos(SIDE[side], 0, 1);
+        }
+
+        function rotateSideCounterClockwise(side) {
+            rotateSideClockwise(side);
+            rotateSideClockwise(side);
+            rotateSideClockwise(side);
+        }
+
+        function executeF() {
             var topRow1Col0 = self.top.blocks[1][0];
             var topRow1Col1 = self.top.blocks[1][1];
 
@@ -188,16 +209,7 @@ function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface,
             }
 
             function rotateFrontClockwise() {
-                var t = self.front.blocks[0][0];
-
-                self.front.blocks[0][0] = self.front.blocks[1][0];
-                self.front.blocks[1][0].pos = new Pos(SIDE.front, 0, 0);
-                self.front.blocks[1][0] = self.front.blocks[1][1];
-                self.front.blocks[1][1].pos = new Pos(SIDE.front, 1, 0);
-                self.front.blocks[1][1] = self.front.blocks[0][1];
-                self.front.blocks[0][1].pos = new Pos(SIDE.front, 1, 1);
-                self.front.blocks[0][1] = t;
-                t.pos = new Pos(SIDE.front, 0, 1);
+                rotateSideClockwise(SIDE.front);
             }
 
             rotateFrontClockwise();
@@ -205,67 +217,325 @@ function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface,
             underToLeft();
             rightToUnder();
             topToRight();
+        }
+
+        function executeF_() {
+            executeF();
+            executeF();
+            executeF();
+
+            //var topRow1Col0 = self.top.blocks[1][0];
+            //var topRow1Col1 = self.top.blocks[1][1];
+            //
+            //function rightToTop() {
+            //    self.top.blocks[1][0] = self.right.blocks[0][0];
+            //    self.right.blocks[0][0].pos = new Pos(SIDE.top, 1, 0);
+            //
+            //    self.top.blocks[1][1] = self.right.blocks[1][0];
+            //    self.right.blocks[1][0].pos = new Pos(SIDE.top, 1, 1);
+            //}
+            //
+            //function underToRight() {
+            //    self.right.blocks[0][0] = self.under.blocks[0][1];
+            //    self.under.blocks[0][1].pos = new Pos(SIDE.right, 0, 0);
+            //
+            //    self.right.blocks[1][0] = self.under.blocks[0][0];
+            //    self.under.blocks[0][0].pos = new Pos(SIDE.right, 1, 0);
+            //}
+            //
+            //function leftToUnder() {
+            //    self.under.blocks[0][0] = self.left.blocks[0][1];
+            //    self.left.blocks[0][1].pos = new Pos(SIDE.under, 0, 0);
+            //
+            //    self.under.blocks[0][1] = self.left.blocks[1][1];
+            //    self.left.blocks[1][1].pos = new Pos(SIDE.under, 0, 1);
+            //}
+            //
+            //function topToLeft() {
+            //    self.left.blocks[0][1] = topRow1Col1;
+            //    topRow1Col1.Pos = new Pos(SIDE.left, 0, 1);
+            //
+            //    self.left.blocks[1][1] = topRow1Col0;
+            //    topRow1Col0.Pos = new Pos(SIDE.left, 1, 1);
+            //}
+            //
+            //function rotateFrontCounterClockwise() {
+            //    var t = self.front.blocks[0][0];
+            //
+            //    self.front.blocks[0][0] = self.front.blocks[0][1];
+            //    self.front.blocks[0][1].pos = new Pos(SIDE.front, 0, 0);
+            //
+            //    self.front.blocks[0][1] = self.front.blocks[1][1];
+            //    self.front.blocks[1][1].pos = new Pos(SIDE.front, 0, 1);
+            //
+            //    self.front.blocks[1][1] = self.front.blocks[1][0];
+            //    self.front.blocks[1][0].pos = new Pos(SIDE.front, 1, 1);
+            //
+            //    self.front.blocks[1][0] = t;
+            //    t.pos = new Pos(SIDE.front, 1, 0);
+            //}
+            //
+            //rotateFrontCounterClockwise();
+            //rightToTop();
+            //underToRight();
+            //leftToUnder();
+            //topToLeft();
+        }
+
+        function executeB() {
+
+            self.perspectiveLeft();
+            self.perspectiveLeft();
+
+            executeF();
+
+            self.perspectiveLeft();
+            self.perspectiveLeft();
+        }
+
+        function executeB_() {
+            self.perspectiveLeft();
+            self.perspectiveLeft();
+
+            executeF_();
+
+            self.perspectiveLeft();
+            self.perspectiveLeft();
+        }
+
+        function executeL() {
+            self.perspectiveLeft();
+
+            executeF();
+
+            self.perspectiveRight();
+        }
+
+        function executeL_() {
+            self.perspectiveLeft();
+
+            executeF_();
+
+            self.perspectiveRight();
+        }
+
+        function executeR() {
+            self.perspectiveRight();
+
+            executeF();
+
+            self.perspectiveLeft();
+        }
+
+        function executeR_() {
+            self.perspectiveRight();
+
+            executeF_();
+
+            self.perspectiveLeft();
+        }
+
+        function executeU() {
+            self.perspectiveUp();
+
+            executeF();
+
+            self.perspectiveDown();
+        }
+
+        function executeU_() {
+            self.perspectiveUp();
+
+            executeF_();
+
+            self.perspectiveDown();
+        }
+
+        function executeD() {
+            self.perspectiveDown();
+
+            executeF();
+
+            self.perspectiveUp();
+        }
+
+        function executeD_() {
+            self.perspectiveDown();
+
+            executeF_();
+
+            self.perspectiveUp();
+        }
+
+        var player = {
+            'F': executeF,
+            'F`': executeF_,
+            "F'": executeF_,
+
+            'B': executeB,
+            'B`': executeB_,
+            "B'": executeB_,
+
+            'U': executeU,
+            'U`': executeU_,
+            "U'": executeU_,
+
+            'D': executeD,
+            'D`': executeD_,
+            "D'": executeD_,
+
+            'L': executeL,
+            'L`': executeL_,
+            "L'": executeL_,
+
+            'R': executeR,
+            'R`': executeR_,
+            "R'": executeR_
+        };
+
+        player.execute = function (step) {
+            player[step]();
+        };
+
+        player.reverseStep = function (step) {
+            return step.length === 1 ? step + '`' : step[0];
+        };
+
+        Cube.prototype.randomize = function (numberOfSteps) {
+            var availableSteps = ['F', 'F`', 'B', 'B`', 'L', 'L`', 'R', 'R`', 'U', 'U`', 'D', 'D`'];
+
+            var steps = [];
+            numberOfSteps = numberOfSteps || Math.floor(Math.random() * 100);
+
+            for (var i = 0; i < numberOfSteps; i++) {
+                steps.push(availableSteps[Math.floor(Math.random() * availableSteps.length)]);
+            }
+
+            while (steps.length) {
+                self[steps.shift()]();
+            }
+        };
+
+        Cube.prototype.reset = function ($timeout, interval) {
+            $timeout = $timeout || window.setTimeout;
+
+            while (self.history.length) {
+                var s = self.history.pop();
+                var rs = player.reverseStep(s);
+
+                console.log('reverse step ', s, ' by ', rs);
+
+                player[rs]();
+
+                if (interval) {
+                    $timeout(function () {
+                        self.reset($timeout, interval);
+                    }, interval);
+
+                    break;
+                }
+            }
+        };
+
+        Cube.prototype.F = function () {
+            executeF();
+            self.history.push('F');
         };
 
         Cube.prototype.F_ = function () {
+            executeF_();
+            self.history.push('F`');
+        };
 
-            var self = this;
-            var topRow1Col0 = self.top.blocks[1][0];
-            var topRow1Col1 = self.top.blocks[1][1];
+        Cube.prototype.B = function () {
+            executeB();
+            self.history.push('B');
+        };
 
-            function rightToTop() {
-                self.top.blocks[1][0] = self.right.blocks[0][0];
-                self.right.blocks[0][0].pos = new Pos(SIDE.top, 1, 0);
+        Cube.prototype.B_ = function () {
+            executeB_();
+            self.history.push('B`');
+        };
 
-                self.top.blocks[1][1] = self.right.blocks[1][0];
-                self.right.blocks[1][0].pos = new Pos(SIDE.top, 1, 1);
-            }
+        Cube.prototype.L = function () {
+            executeL();
+            self.history.push('L');
+        };
 
-            function underToRight() {
-                self.right.blocks[0][0] = self.under.blocks[0][1];
-                self.under.blocks[0][1].pos = new Pos(SIDE.right, 0, 0);
+        Cube.prototype.L_ = function () {
+            executeL_();
+            self.history.push('L`');
+        };
 
-                self.right.blocks[1][0] = self.under.blocks[0][0];
-                self.under.blocks[0][0].pos = new Pos(SIDE.right, 1, 0);
-            }
+        Cube.prototype.R = function () {
+            executeR();
+            self.history.push('R');
+        };
 
-            function leftToUnder() {
-                self.under.blocks[0][0] = self.left.blocks[0][1];
-                self.left.blocks[0][1].pos = new Pos(SIDE.under, 0, 0);
+        Cube.prototype.R_ = function () {
+            executeR_();
+            self.history.push('R`');
+        };
 
-                self.under.blocks[0][1] = self.left.blocks[1][1];
-                self.left.blocks[1][1].pos = new Pos(SIDE.under, 0, 1);
-            }
+        Cube.prototype.U = function () {
+            executeU();
+            self.history.push('U');
+        };
 
-            function topToLeft() {
-                self.left.blocks[0][1] = topRow1Col1;
-                topRow1Col1.Pos = new Pos(SIDE.left, 0, 1);
+        Cube.prototype.U_ = function () {
+            executeU_();
+            self.history.push('U`');
+        };
 
-                self.left.blocks[1][1] = topRow1Col0;
-                topRow1Col0.Pos = new Pos(SIDE.left, 1, 1);
-            }
+        Cube.prototype.D = function () {
+            executeD();
+            self.history.push('D');
+        };
 
-            function rotateFrontCounterClockwise() {
-                var t = self.front.blocks[0][0];
+        Cube.prototype.D_ = function () {
+            executeD_();
+            self.history.push('D`');
+        };
 
-                self.front.blocks[0][0] = self.front.blocks[0][1];
-                self.front.blocks[0][1].pos = new Pos(SIDE.front, 0, 0);
+        Cube.prototype['F`'] = Cube.prototype["F'"] = Cube.prototype.F_;
+        Cube.prototype['B`'] = Cube.prototype["B'"] = Cube.prototype.B_;
+        Cube.prototype['U`'] = Cube.prototype["U'"] = Cube.prototype.U_;
+        Cube.prototype['D`'] = Cube.prototype["D'"] = Cube.prototype.D_;
+        Cube.prototype['L`'] = Cube.prototype["L'"] = Cube.prototype.L_;
+        Cube.prototype['R`'] = Cube.prototype["R'"] = Cube.prototype.R_;
 
-                self.front.blocks[0][1] = self.front.blocks[1][1];
-                self.front.blocks[1][1].pos = new Pos(SIDE.front, 0, 1);
+        Cube.prototype.perspectiveLeft = function () {
+            var t = self.front;
+            self.front = self.left;
+            self.left = self.back;
+            self.back = self.right;
+            self.right = t;
 
-                self.front.blocks[1][1] = self.front.blocks[1][0];
-                self.front.blocks[1][0].pos = new Pos(SIDE.front, 1, 1);
+            rotateSideCounterClockwise(SIDE.top);
+            rotateSideClockwise(SIDE.under);
+        };
 
-                self.front.blocks[1][0] = t;
-                t.pos = new Pos(SIDE.front, 1, 0);
-            }
+        Cube.prototype.perspectiveRight = function () {
+            self.perspectiveLeft();
+            self.perspectiveLeft();
+            self.perspectiveLeft();
+        };
 
-            rotateFrontCounterClockwise();
-            rightToTop();
-            underToRight();
-            leftToUnder();
-            topToLeft();
+        Cube.prototype.perspectiveUp = function () {
+            var t = self.front;
+            self.front = self.top;
+            self.top = self.back;
+            self.back = self.under;
+            self.under = t;
+
+            rotateSideClockwise(SIDE.left);
+            rotateSideCounterClockwise(SIDE.right);
+        };
+
+        Cube.prototype.perspectiveDown = function () {
+            self.perspectiveUp();
+            self.perspectiveUp();
+            self.perspectiveUp();
         };
 
         Cube.__initialized__ = true;
