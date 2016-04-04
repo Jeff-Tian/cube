@@ -103,9 +103,75 @@ angular.module('cubeModule', [])
             }
         });
 
+        function toCytoscapeElements(g) {
+            var a = [];
+
+            var vs = g.vertices();
+            for (var i = 0; i < vs.length; i++) {
+                a.push({
+                    data: {
+                        id: vs[i].label
+                    }
+                });
+            }
+
+            var es = g.edges();
+            for (i = 0; i < es.length; i++) {
+                var e = es[i];
+                var source = e.getItem(0).label;
+                var target = e.getItem(1).label;
+
+                a.push({
+                    data: {
+                        id: source + ' -> ' + target,
+                        source: source,
+                        target: target
+                    }
+                });
+
+                a.push({
+                    data: {
+                        id: target + ' -> ' + source,
+                        source: target,
+                        target: source
+                    }
+                });
+            }
+
+            return a;
+        }
+
         $scope.traverseGraph = undefined;
         $scope.$watch('traverseGraph.toString()', function (newValue, oldValue) {
-            console.error(newValue);
+            if (!newValue) {
+                return;
+            }
+
+            cy = cytoscape({
+                container: document.getElementById('cy'),
+                elements: toCytoscapeElements($scope.traverseGraph),
+                style: [ // the stylesheet for the graph
+                    {
+                        selector: 'node',
+                        style: {
+                            'background-color': '#666',
+                            'label': 'data(id)'
+                        }
+                    },
+                    {
+                        selector: 'edge',
+                        style: {
+                            'width': 3,
+                            'line-color': '#ccc',
+                            'target-arrow-color': '#ccc',
+                            'target-arrow-shape': 'triangle'
+                        }
+                    }
+                ],
+                layout: {
+                    name: 'breadthfirst'
+                }
+            });
         });
         $scope.traverse = function () {
             var iter = new Iterator.CubeIterator();

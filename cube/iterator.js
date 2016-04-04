@@ -49,17 +49,30 @@ Iterator.CubeIterator = function () {
             return vs;
         };
 
-        Iterator.CubeIterator.prototype.traverse = function (cube, $timeout, interval) {
+        Iterator.CubeIterator.prototype.traverse = function (cube, $timeout, interval, callback) {
             if (!(cube instanceof CubeWorld.Cube)) {
+                callback();
+
                 throw new Error('期待一个 Cube 实例, 得到的是 ', JSON.stringify(cube));
             }
+            var recurseTimes = 0;
 
             $timeout = $timeout || window.setTimeout;
 
-            function traverse(c) {
+            function traverse(c, parentVertex) {
+                if (recurseTimes++ > 30) {
+                    return;
+                }
+
                 var v = new GraphWorld.Vertex(c.toString());
                 try {
                     g.addVertex(v);
+
+                    if (parentVertex) {
+                        var e = new GraphWorld.Edge(parentVertex, v);
+
+                        g.addEdge(e);
+                    }
                 } catch (ex) {
                     return;
                 }
@@ -68,16 +81,16 @@ Iterator.CubeIterator = function () {
 
                 if (interval) {
                     $timeout(function () {
-                        traverseNextGen(nextVertices);
+                        traverseNextGen(nextVertices, v);
                     }, interval);
                 } else {
-                    traverseNextGen(nextVertices);
+                    traverseNextGen(nextVertices, v);
                 }
             }
 
-            function traverseNextGen(nextVertices) {
+            function traverseNextGen(nextVertices, parentVertex) {
                 for (var i = 0; i < nextVertices.length; i++) {
-                    traverse(CubeWorld.Cube.fromState(nextVertices[i].label));
+                    traverse(CubeWorld.Cube.fromState(nextVertices[i].label), parentVertex);
                 }
             }
 
