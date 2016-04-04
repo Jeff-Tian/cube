@@ -32,4 +32,28 @@ describe('Graph World', function () {
         assert.deepStrictEqual(e, g.getEdge(v, w));
         assert.deepStrictEqual([e], g.edges());
     });
+
+    it('can not add the same vertex twice', function () {
+        var v = new GraphWorld.Vertex('test');
+        var w = new GraphWorld.Vertex('test');
+        var g = new GraphWorld.Graph([v], []);
+        assert.throws(function () {
+            g.addVertex(w);
+        }, Error)
+    });
+
+    it('can not add the same edge twice', function () {
+        var v = new GraphWorld.Vertex('v');
+        var w = new GraphWorld.Vertex('w');
+        var e = new GraphWorld.Edge(v, w);
+        var g = new GraphWorld.Graph([v, w], e);
+        assert.throws(function () {
+            g.addEdge(e);
+        }, Error);
+    });
+
+    it('can create empty graph', function () {
+        var g = new GraphWorld.Graph([], []);
+        assert.notEqual(null, g);
+    });
 });

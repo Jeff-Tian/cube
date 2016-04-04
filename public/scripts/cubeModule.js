@@ -47,14 +47,21 @@ angular.module('cubeModule', [])
             if ($scope.history.length) {
                 var source = $scope.history[$scope.history.length - 1];
                 var target = newValue;
-                var edge = source + ' -> ' + target;
 
                 try {
                     cy.add({
                         data: {
-                            id: edge,
+                            id: source + ' -> ' + target,
                             source: source,
                             target: target
+                        }
+                    });
+
+                    cy.add({
+                        data: {
+                            id: target + ' -> ' + source,
+                            source: target,
+                            target: source
                         }
                     });
                 } catch (ex) {
@@ -63,7 +70,7 @@ angular.module('cubeModule', [])
             }
 
             cy.layout({
-                name: 'grid'
+                name: 'breadthfirst'
             });
 
             $scope.history.push(newValue.toString());
@@ -92,9 +99,17 @@ angular.module('cubeModule', [])
                 }
             ],
             layout: {
-                name: 'grid',
-                rows: 1
+                name: 'breadthfirst'
             }
         });
+
+        $scope.traverseGraph = undefined;
+        $scope.$watch('traverseGraph.toString()', function (newValue, oldValue) {
+            console.error(newValue);
+        });
+        $scope.traverse = function () {
+            var iter = new Iterator.CubeIterator();
+            $scope.traverseGraph = iter.traverse($scope.cube);
+        };
     }])
 ;

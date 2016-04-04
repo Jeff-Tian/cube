@@ -48,6 +48,38 @@ var LABEL = {
     backRightBottomYellow: 'Ω ω'
 };
 
+var SIMPLE_LABEL = {
+    α: LABEL.frontLeftTopGreen,
+    β: LABEL.frontRightTopGreen,
+    γ: LABEL.frontLeftBottomGreen,
+    δ: LABEL.frontRightBottomGreen,
+
+    ε: LABEL.topLeftTopOrange,
+    ζ: LABEL.topRightTopOrange,
+    η: LABEL.topLeftBottomOrange,
+    θ: LABEL.topRightBottomOrange,
+
+    ι: LABEL.leftLeftTopBlue,
+    κ: LABEL.leftRightTopBlue,
+    λ: LABEL.leftLeftBottomBlue,
+    μ: LABEL.leftRightBottomBlue,
+
+    ν: LABEL.rightLeftTopRed,
+    ξ: LABEL.rightRightTopRed,
+    ο: LABEL.rightLeftBottomRed,
+    π: LABEL.rightRightBottomRed,
+
+    ρ: LABEL.underLeftTopWhite,
+    σ: LABEL.underRightTopWhite,
+    τ: LABEL.underLeftBottomWhite,
+    υ: LABEL.underRightBottomWhite,
+
+    φ: LABEL.backLeftTopYellow,
+    χ: LABEL.backRightTopYellow,
+    ψ: LABEL.backLeftBottomYellow,
+    ω: LABEL.backRightBottomYellow
+};
+
 function Pos(surface, x, y) {
     this.surface = surface;
     this.row = x;
@@ -102,6 +134,15 @@ function Surface(leftTopBlock, rightTopBlock, leftBottomBlock, rightBottomBlock)
     }
 }
 
+Surface.fromLabel = function (leftTop, rightTop, leftBottom, rightBottom) {
+    return new Surface(
+        Block.fromLabel(SIMPLE_LABEL[leftTop]),
+        Block.fromLabel(SIMPLE_LABEL[rightTop]),
+        Block.fromLabel(SIMPLE_LABEL[leftBottom]),
+        Block.fromLabel(SIMPLE_LABEL[rightBottom])
+    );
+};
+
 Surface.createPrimitiveSurface = function (side) {
     switch (side) {
         case SIDE.front:
@@ -140,43 +181,43 @@ Surface.createPrimitiveSurface = function (side) {
     }
 };
 
-function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface, backSurface) {
-    var self = this;
-    this.blocks = [frontSurface, topSurface, leftSurface, rightSurface, underSurface, backSurface];
+function Cube(frontSurface, backSurface, leftSurface, rightSurface, topSurface, underSurface) {
+    //this.blocks = [frontSurface, backSurface, leftSurface, rightSurface, topSurface, underSurface];
     this.front = frontSurface;
-    this.top = topSurface;
+    this.back = backSurface;
     this.left = leftSurface;
     this.right = rightSurface;
+    this.top = topSurface;
     this.under = underSurface;
-    this.back = backSurface;
-
-    self.sides = [frontSurface, topSurface, leftSurface, rightSurface, underSurface, backSurface];
+    this.sides = [frontSurface, backSurface, leftSurface, rightSurface, topSurface, underSurface];
 
     this.history = [];
 
     if (!Cube.__initialized__) {
-        function rotateSideClockwise(side) {
-            var t = self[side].blocks[0][0];
+        Cube.prototype.rotateSideClockwise = function (side) {
+            var t = this[side].blocks[0][0];
 
-            self[side].blocks[0][0] = self[side].blocks[1][0];
-            self[side].blocks[1][0].pos = new Pos(SIDE[side], 0, 0);
-            self[side].blocks[1][0] = self[side].blocks[1][1];
-            self[side].blocks[1][1].pos = new Pos(SIDE[side], 1, 0);
-            self[side].blocks[1][1] = self[side].blocks[0][1];
-            self[side].blocks[0][1].pos = new Pos(SIDE[side], 1, 1);
-            self[side].blocks[0][1] = t;
+            this[side].blocks[0][0] = this[side].blocks[1][0];
+            this[side].blocks[1][0].pos = new Pos(SIDE[side], 0, 0);
+            this[side].blocks[1][0] = this[side].blocks[1][1];
+            this[side].blocks[1][1].pos = new Pos(SIDE[side], 1, 0);
+            this[side].blocks[1][1] = this[side].blocks[0][1];
+            this[side].blocks[0][1].pos = new Pos(SIDE[side], 1, 1);
+            this[side].blocks[0][1] = t;
             t.pos = new Pos(SIDE[side], 0, 1);
-        }
+        };
 
-        function rotateSideCounterClockwise(side) {
-            rotateSideClockwise(side);
-            rotateSideClockwise(side);
-            rotateSideClockwise(side);
-        }
+        Cube.prototype.rotateSideCounterClockwise = function (side) {
+            this.rotateSideClockwise(side);
+            this.rotateSideClockwise(side);
+            this.rotateSideClockwise(side);
+        };
 
-        function executeF() {
-            var topRow1Col0 = self.top.blocks[1][0];
-            var topRow1Col1 = self.top.blocks[1][1];
+        Cube.prototype.executeF = function () {
+            var self = this;
+
+            var topRow1Col0 = this.top.blocks[1][0];
+            var topRow1Col1 = this.top.blocks[1][1];
 
             function leftToTop() {
                 self.top.blocks[1][0] = self.left.blocks[1][1];
@@ -211,7 +252,7 @@ function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface,
             }
 
             function rotateFrontClockwise() {
-                rotateSideClockwise(SIDE.front);
+                self.rotateSideClockwise(SIDE.front);
             }
 
             rotateFrontClockwise();
@@ -219,61 +260,61 @@ function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface,
             underToLeft();
             rightToUnder();
             topToRight();
-        }
+        };
 
-        function executeF_() {
-            executeF();
-            executeF();
-            executeF();
+        Cube.prototype.executeF_ = function () {
+            this.executeF();
+            this.executeF();
+            this.executeF();
 
-            //var topRow1Col0 = self.top.blocks[1][0];
-            //var topRow1Col1 = self.top.blocks[1][1];
+            //var topRow1Col0 = this.top.blocks[1][0];
+            //var topRow1Col1 = this.top.blocks[1][1];
             //
             //function rightToTop() {
-            //    self.top.blocks[1][0] = self.right.blocks[0][0];
-            //    self.right.blocks[0][0].pos = new Pos(SIDE.top, 1, 0);
+            //    this.top.blocks[1][0] = this.right.blocks[0][0];
+            //    this.right.blocks[0][0].pos = new Pos(SIDE.top, 1, 0);
             //
-            //    self.top.blocks[1][1] = self.right.blocks[1][0];
-            //    self.right.blocks[1][0].pos = new Pos(SIDE.top, 1, 1);
+            //    this.top.blocks[1][1] = this.right.blocks[1][0];
+            //    this.right.blocks[1][0].pos = new Pos(SIDE.top, 1, 1);
             //}
             //
             //function underToRight() {
-            //    self.right.blocks[0][0] = self.under.blocks[0][1];
-            //    self.under.blocks[0][1].pos = new Pos(SIDE.right, 0, 0);
+            //    this.right.blocks[0][0] = this.under.blocks[0][1];
+            //    this.under.blocks[0][1].pos = new Pos(SIDE.right, 0, 0);
             //
-            //    self.right.blocks[1][0] = self.under.blocks[0][0];
-            //    self.under.blocks[0][0].pos = new Pos(SIDE.right, 1, 0);
+            //    this.right.blocks[1][0] = this.under.blocks[0][0];
+            //    this.under.blocks[0][0].pos = new Pos(SIDE.right, 1, 0);
             //}
             //
             //function leftToUnder() {
-            //    self.under.blocks[0][0] = self.left.blocks[0][1];
-            //    self.left.blocks[0][1].pos = new Pos(SIDE.under, 0, 0);
+            //    this.under.blocks[0][0] = this.left.blocks[0][1];
+            //    this.left.blocks[0][1].pos = new Pos(SIDE.under, 0, 0);
             //
-            //    self.under.blocks[0][1] = self.left.blocks[1][1];
-            //    self.left.blocks[1][1].pos = new Pos(SIDE.under, 0, 1);
+            //    this.under.blocks[0][1] = this.left.blocks[1][1];
+            //    this.left.blocks[1][1].pos = new Pos(SIDE.under, 0, 1);
             //}
             //
             //function topToLeft() {
-            //    self.left.blocks[0][1] = topRow1Col1;
+            //    this.left.blocks[0][1] = topRow1Col1;
             //    topRow1Col1.Pos = new Pos(SIDE.left, 0, 1);
             //
-            //    self.left.blocks[1][1] = topRow1Col0;
+            //    this.left.blocks[1][1] = topRow1Col0;
             //    topRow1Col0.Pos = new Pos(SIDE.left, 1, 1);
             //}
             //
             //function rotateFrontCounterClockwise() {
-            //    var t = self.front.blocks[0][0];
+            //    var t = this.front.blocks[0][0];
             //
-            //    self.front.blocks[0][0] = self.front.blocks[0][1];
-            //    self.front.blocks[0][1].pos = new Pos(SIDE.front, 0, 0);
+            //    this.front.blocks[0][0] = this.front.blocks[0][1];
+            //    this.front.blocks[0][1].pos = new Pos(SIDE.front, 0, 0);
             //
-            //    self.front.blocks[0][1] = self.front.blocks[1][1];
-            //    self.front.blocks[1][1].pos = new Pos(SIDE.front, 0, 1);
+            //    this.front.blocks[0][1] = this.front.blocks[1][1];
+            //    this.front.blocks[1][1].pos = new Pos(SIDE.front, 0, 1);
             //
-            //    self.front.blocks[1][1] = self.front.blocks[1][0];
-            //    self.front.blocks[1][0].pos = new Pos(SIDE.front, 1, 1);
+            //    this.front.blocks[1][1] = this.front.blocks[1][0];
+            //    this.front.blocks[1][0].pos = new Pos(SIDE.front, 1, 1);
             //
-            //    self.front.blocks[1][0] = t;
+            //    this.front.blocks[1][0] = t;
             //    t.pos = new Pos(SIDE.front, 1, 0);
             //}
             //
@@ -282,125 +323,91 @@ function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface,
             //underToRight();
             //leftToUnder();
             //topToLeft();
-        }
-
-        function executeB() {
-
-            self.perspectiveLeft();
-            self.perspectiveLeft();
-
-            executeF();
-
-            self.perspectiveLeft();
-            self.perspectiveLeft();
-        }
-
-        function executeB_() {
-            self.perspectiveLeft();
-            self.perspectiveLeft();
-
-            executeF_();
-
-            self.perspectiveLeft();
-            self.perspectiveLeft();
-        }
-
-        function executeL() {
-            self.perspectiveLeft();
-
-            executeF();
-
-            self.perspectiveRight();
-        }
-
-        function executeL_() {
-            self.perspectiveLeft();
-
-            executeF_();
-
-            self.perspectiveRight();
-        }
-
-        function executeR() {
-            self.perspectiveRight();
-
-            executeF();
-
-            self.perspectiveLeft();
-        }
-
-        function executeR_() {
-            self.perspectiveRight();
-
-            executeF_();
-
-            self.perspectiveLeft();
-        }
-
-        function executeU() {
-            self.perspectiveUp();
-
-            executeF();
-
-            self.perspectiveDown();
-        }
-
-        function executeU_() {
-            self.perspectiveUp();
-
-            executeF_();
-
-            self.perspectiveDown();
-        }
-
-        function executeD() {
-            self.perspectiveDown();
-
-            executeF();
-
-            self.perspectiveUp();
-        }
-
-        function executeD_() {
-            self.perspectiveDown();
-
-            executeF_();
-
-            self.perspectiveUp();
-        }
-
-        var player = {
-            'F': executeF,
-            'F`': executeF_,
-            "F'": executeF_,
-
-            'B': executeB,
-            'B`': executeB_,
-            "B'": executeB_,
-
-            'U': executeU,
-            'U`': executeU_,
-            "U'": executeU_,
-
-            'D': executeD,
-            'D`': executeD_,
-            "D'": executeD_,
-
-            'L': executeL,
-            'L`': executeL_,
-            "L'": executeL_,
-
-            'R': executeR,
-            'R`': executeR_,
-            "R'": executeR_
         };
 
-        player.execute = function (step) {
-            player[step]();
+        Cube.prototype.executeB = function () {
+
+            this.perspectiveLeft();
+            this.perspectiveLeft();
+
+            this.executeF();
+
+            this.perspectiveLeft();
+            this.perspectiveLeft();
         };
 
-        player.reverseStep = function (step) {
-            return step.length === 1 ? step + '`' : step[0];
+        Cube.prototype.executeB_ = function () {
+            this.perspectiveLeft();
+            this.perspectiveLeft();
+
+            this.executeF_();
+
+            this.perspectiveLeft();
+            this.perspectiveLeft();
+        };
+
+        Cube.prototype.executeL = function () {
+            this.perspectiveLeft();
+
+            this.executeF();
+
+            this.perspectiveRight();
+        };
+
+        Cube.prototype.executeL_ = function () {
+            this.perspectiveLeft();
+
+            this.executeF_();
+
+            this.perspectiveRight();
+        };
+
+        Cube.prototype.executeR = function () {
+            this.perspectiveRight();
+
+            this.executeF();
+
+            this.perspectiveLeft();
+        };
+
+        Cube.prototype.executeR_ = function () {
+            this.perspectiveRight();
+
+            this.executeF_();
+
+            this.perspectiveLeft();
+        };
+
+        Cube.prototype.executeU = function () {
+            this.perspectiveUp();
+
+            this.executeF();
+
+            this.perspectiveDown();
+        };
+
+        Cube.prototype.executeU_ = function () {
+            this.perspectiveUp();
+
+            this.executeF_();
+
+            this.perspectiveDown();
+        };
+
+        Cube.prototype.executeD = function () {
+            this.perspectiveDown();
+
+            this.executeF();
+
+            this.perspectiveUp();
+        };
+
+        Cube.prototype.executeD_ = function () {
+            this.perspectiveDown();
+
+            this.executeF_();
+
+            this.perspectiveUp();
         };
 
         Cube.prototype.randomize = function ($timeout, interval, numberOfSteps) {
@@ -416,7 +423,7 @@ function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface,
 
             var doJob = function () {
                 while (steps.length) {
-                    self[steps.shift()]();
+                    this[steps.shift()]();
 
                     if (interval) {
                         $timeout(function () {
@@ -432,6 +439,41 @@ function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface,
         };
 
         Cube.prototype.reset = function ($timeout, interval) {
+            var player = {
+                'F': this.executeF,
+                'F`': this.executeF_,
+                "F'": this.executeF_,
+
+                'B': this.executeB,
+                'B`': this.executeB_,
+                "B'": this.executeB_,
+
+                'U': this.executeU,
+                'U`': this.executeU_,
+                "U'": this.executeU_,
+
+                'D': this.executeD,
+                'D`': this.executeD_,
+                "D'": this.executeD_,
+
+                'L': this.executeL,
+                'L`': this.executeL_,
+                "L'": this.executeL_,
+
+                'R': this.executeR,
+                'R`': this.executeR_,
+                "R'": this.executeR_
+            };
+
+            player.execute = function (step) {
+                player[step]();
+            };
+
+            player.reverseStep = function (step) {
+                return step.length === 1 ? step + '`' : step[0];
+            };
+
+            var self = this;
             $timeout = $timeout || window.setTimeout;
 
             while (self.history.length) {
@@ -453,63 +495,63 @@ function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface,
         };
 
         Cube.prototype.F = function () {
-            executeF();
-            self.history.push('F');
+            this.executeF();
+            this.history.push('F');
         };
 
         Cube.prototype.F_ = function () {
-            executeF_();
-            self.history.push('F`');
+            this.executeF_();
+            this.history.push('F`');
         };
 
         Cube.prototype.B = function () {
-            executeB();
-            self.history.push('B');
+            this.executeB();
+            this.history.push('B');
         };
 
         Cube.prototype.B_ = function () {
-            executeB_();
-            self.history.push('B`');
+            this.executeB_();
+            this.history.push('B`');
         };
 
         Cube.prototype.L = function () {
-            executeL();
-            self.history.push('L');
+            this.executeL();
+            this.history.push('L');
         };
 
         Cube.prototype.L_ = function () {
-            executeL_();
-            self.history.push('L`');
+            this.executeL_();
+            this.history.push('L`');
         };
 
         Cube.prototype.R = function () {
-            executeR();
-            self.history.push('R');
+            this.executeR();
+            this.history.push('R');
         };
 
         Cube.prototype.R_ = function () {
-            executeR_();
-            self.history.push('R`');
+            this.executeR_();
+            this.history.push('R`');
         };
 
         Cube.prototype.U = function () {
-            executeU();
-            self.history.push('U');
+            this.executeU();
+            this.history.push('U');
         };
 
         Cube.prototype.U_ = function () {
-            executeU_();
-            self.history.push('U`');
+            this.executeU_();
+            this.history.push('U`');
         };
 
         Cube.prototype.D = function () {
-            executeD();
-            self.history.push('D');
+            this.executeD();
+            this.history.push('D');
         };
 
         Cube.prototype.D_ = function () {
-            executeD_();
-            self.history.push('D`');
+            this.executeD_();
+            this.history.push('D`');
         };
 
         Cube.prototype['F`'] = Cube.prototype["F'"] = Cube.prototype.F_;
@@ -520,34 +562,38 @@ function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface,
         Cube.prototype['R`'] = Cube.prototype["R'"] = Cube.prototype.R_;
 
         Cube.prototype.perspectiveLeft = function () {
+            var self = this;
             var t = self.front;
             self.front = self.left;
             self.left = self.back;
             self.back = self.right;
             self.right = t;
 
-            rotateSideCounterClockwise(SIDE.top);
-            rotateSideClockwise(SIDE.under);
+            this.rotateSideCounterClockwise(SIDE.top);
+            this.rotateSideClockwise(SIDE.under);
         };
 
         Cube.prototype.perspectiveRight = function () {
+            var self = this;
             self.perspectiveLeft();
             self.perspectiveLeft();
             self.perspectiveLeft();
         };
 
         Cube.prototype.perspectiveUp = function () {
+            var self = this;
             var t = self.front;
             self.front = self.top;
             self.top = self.back;
             self.back = self.under;
             self.under = t;
 
-            rotateSideClockwise(SIDE.left);
-            rotateSideCounterClockwise(SIDE.right);
+            this.rotateSideClockwise(SIDE.left);
+            this.rotateSideCounterClockwise(SIDE.right);
         };
 
         Cube.prototype.perspectiveDown = function () {
+            var self = this;
             self.perspectiveUp();
             self.perspectiveUp();
             self.perspectiveUp();
@@ -557,6 +603,8 @@ function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface,
             var a = function (x, y) {
                 return x + y;
             };
+
+            var self = this;
 
             return self.sides
                 .map(function (s) {
@@ -580,11 +628,22 @@ function Cube(frontSurface, topSurface, leftSurface, rightSurface, underSurface,
 Cube.getPristineCube = function () {
     return new Cube(
         Surface.createPrimitiveSurface(SIDE.front),
-        Surface.createPrimitiveSurface(SIDE.top),
+        Surface.createPrimitiveSurface(SIDE.back),
         Surface.createPrimitiveSurface(SIDE.left),
         Surface.createPrimitiveSurface(SIDE.right),
-        Surface.createPrimitiveSurface(SIDE.under),
-        Surface.createPrimitiveSurface(SIDE.back)
+        Surface.createPrimitiveSurface(SIDE.top),
+        Surface.createPrimitiveSurface(SIDE.under)
+    );
+};
+
+Cube.fromState = function (state) {
+    return new Cube(
+        Surface.fromLabel(state[0], state[1], state[2], state[3]),
+        Surface.fromLabel(state[4], state[5], state[6], state[7]),
+        Surface.fromLabel(state[8], state[9], state[10], state[11]),
+        Surface.fromLabel(state[12], state[13], state[14], state[15]),
+        Surface.fromLabel(state[16], state[17], state[18], state[19]),
+        Surface.fromLabel(state[20], state[21], state[22], state[23])
     );
 };
 

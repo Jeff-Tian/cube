@@ -25,17 +25,17 @@ function Edge(v1, v2) {
         }
     }
 
-    var data = [v1, v2];
+    this.data = [v1, v2];
 
     if (typeof this.getItem !== 'function') {
         Edge.prototype.getItem = function (key) {
-            return data[key];
+            return this.data[key];
         }
     }
 
     if (!Edge.__initialized__) {
         Edge.prototype.toString = function () {
-            return 'Edge (' + data[0].toString() + ', ' + data[1].toString() + ')';
+            return 'Edge (' + this.data[0].toString() + ', ' + this.data[1].toString() + ')';
         };
 
         Edge.__initialized__ = true;
@@ -47,11 +47,16 @@ function Graph(vs, es) {
         es = [es];
     }
 
-    var data = {};
+    this.data = {};
 
     if (!Graph.__initialized__) {
         function addVertex(v) {
-            data[v] = {
+            if (typeof this.data[v] !== 'undefined') {
+                console.log('顶点已存在: ', this.data[v]);
+                throw new Error('不能重复添加顶点: ', JSON.stringify(v));
+            }
+
+            this.data[v] = {
                 self: v
             };
         }
@@ -61,27 +66,29 @@ function Graph(vs, es) {
                 w = e.getItem(1)
                 ;
 
-            data[v][w] = e;
-            console.log('added edge to ', data[v][w]);
-            data[w][v] = e;
-            console.log('added edge to ', data[w][v]);
+            if (this.data[v][w] || this.data[w][v]) {
+                throw new Error('已经存在边: ', JSON.stringify(e));
+            }
+
+            this.data[v][w] = e;
+            this.data[w][v] = e;
         }
 
         Graph.prototype.addVertex = addVertex;
         Graph.prototype.addEdge = addEdge;
         Graph.prototype.vertices = function () {
             var vs = [];
-            for (var v in data) {
-                vs.push(data[v].self);
+            for (var v in this.data) {
+                vs.push(this.data[v].self);
             }
 
             return vs;
         };
         Graph.prototype.getEdge = function (v, w) {
             edgeShouldContain2VerticesOnly([v, w]);
-            console.log('all data: ', data);
+            console.log('all data: ', this.data);
 
-            return data[v][w];
+            return this.data[v][w];
         };
         Graph.prototype.edges = function () {
             var es = [];
@@ -112,6 +119,10 @@ function Graph(vs, es) {
             return g;
         };
 
+        Graph.prototype.toString = function () {
+            return 'Vertices #' + this.vertices().length + ', Edges #' + this.edges().length;
+        };
+
         Graph.__initialized__ = true;
     }
 
@@ -120,7 +131,7 @@ function Graph(vs, es) {
         this.addVertex(vs[i]);
     }
 
-    console.log('done adding vertices.', data);
+    console.log('done adding vertices.', this.data);
 
     for (i = 0; i < es.length; i++) {
         this.addEdge(es[i]);

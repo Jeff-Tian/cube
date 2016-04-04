@@ -62,7 +62,7 @@ mixin buttonCubeTable()
                 button.ui.button(ng-click="cube.perspectiveUp()") Perspective Up
             td
                 + buttonRow
-                    button.ui.button(ng-click="cube.B()") B
+                    button.violet.ui.button(ng-click="cube.B()") B
                     + or
                     button.ui.positive.button(ng-click="cube.B_()") B'
             td
@@ -72,7 +72,7 @@ mixin buttonCubeTable()
                 button.ui.button(ng-click="cube.perspectiveLeft()") Perspective Left
             td
                 + buttonRow
-                    button.ui.button(ng-click="cube.U()") U
+                    button.violet.ui.button(ng-click="cube.U()") U
                     + or
                     button.ui.positive.button(ng-click="cube.U_()") U'
             td
@@ -80,17 +80,17 @@ mixin buttonCubeTable()
         + thirdRow
             td
                 + buttonRow
-                    button.ui.button(ng-click="cube.L()") L
+                    button.violet.ui.button(ng-click="cube.L()") L
                     + or
                     button.ui.positive.button(ng-click="cube.L_()") L'
             td
                 + buttonRow
-                    button.ui.button(ng-click="cube.F()") F
+                    button.violet.ui.button(ng-click="cube.F()") F
                     + or
                     button.ui.positive.button(ng-click="cube.F_()") F'
             td
                 + buttonRow
-                    button.ui.button(ng-click="cube.R()") R
+                    button.violet.ui.button(ng-click="cube.R()") R
                     + or
                     button.ui.positive.button(ng-click="cube.R_()") R'
         tr
@@ -98,7 +98,7 @@ mixin buttonCubeTable()
                 button.ui.button(ng-click="cube.reset($timeout, 500)") 还原
             td
                 + buttonRow
-                    button.ui.button(ng-click="cube.D()") D
+                    button.violet.ui.button(ng-click="cube.D()") D
                     + or
                     button.ui.positive.button(ng-click="cube.D_()") D'
             td
@@ -106,6 +106,11 @@ mixin buttonCubeTable()
 
 
 + realCubeTable
-div {{cube.toString()}}
+div.ui.horizontal divider
+div
+    | {{cube.toString()}}
+    | &nbsp;
+    button.ui.red.button(ng-click="traverse()") 遍历
+    button.ui.purple.button() 求解
 div.ui.divider
 + buttonCubeTable.ui.celled.padded.table

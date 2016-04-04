@@ -7,7 +7,7 @@ describe('Layout', function () {
         var sg = GraphWorld.Graph.simplestGraph();
         var cl = new Layout.CircleLayout(sg);
 
-        assert.deepStrictEqual(new Layout.Position(130, 0), cl.pos(sg.vertices()[0]));
+        assert.deepStrictEqual(new Layout.Position(50, 0), cl.pos(sg.vertices()[0]));
         //assert.deepStrictEqual(new Layout.Position(-130, 0), cl.pos(sg.vertices()[1]));
     });
 });
