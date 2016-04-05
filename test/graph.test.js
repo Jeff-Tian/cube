@@ -56,4 +56,10 @@ describe('Graph World', function () {
         var g = new GraphWorld.Graph([], []);
         assert.notEqual(null, g);
     });
+
+    it('can serialize graph to csv', function () {
+        var g = new GraphWorld.Graph.simplestGraph();
+
+        assert.equal(g.serializeToCSV(), 'source, target\nv, w');
+    });
 });

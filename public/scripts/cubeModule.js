@@ -142,6 +142,7 @@ angular.module('cubeModule', [])
         }
 
         $scope.traverseGraph = undefined;
+        window.$scope = $scope;
         $scope.$watch('traverseGraph.toString()', function (newValue, oldValue) {
             if (!newValue) {
                 return;

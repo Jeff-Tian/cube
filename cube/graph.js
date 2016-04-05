@@ -27,6 +27,12 @@ function Edge(v1, v2) {
 
     this.data = [v1, v2];
 
+    this.repr = {
+        label: v1.label + ' -> ' + v2.label,
+        from: v1.label,
+        to: v2.label
+    };
+
     if (typeof this.getItem !== 'function') {
         Edge.prototype.getItem = function (key) {
             return this.data[key];
@@ -52,7 +58,6 @@ function Graph(vs, es) {
     if (!Graph.__initialized__) {
         function addVertex(v) {
             if (typeof this.data[v] !== 'undefined') {
-                console.log('顶点已存在: ', this.data[v]);
                 throw new Error('不能重复添加顶点: ', JSON.stringify(v));
             }
 
@@ -86,37 +91,48 @@ function Graph(vs, es) {
         };
         Graph.prototype.getEdge = function (v, w) {
             edgeShouldContain2VerticesOnly([v, w]);
-            console.log('all data: ', this.data);
 
             return this.data[v][w];
         };
         Graph.prototype.edges = function () {
             var es = [];
+            var edgeDict = {};
+
             var vs = this.vertices();
 
             for (var i = 0; i < vs.length; i++) {
                 var v = vs[i];
-                console.log('|' + v);
                 for (var j = 0; j < vs.length; j++) {
                     var w = vs[j];
-                    console.log('--' + w);
                     var e = this.getEdge(v, w);
-                    if (e && es.indexOf(e) < 0) {
-                        es.push(e);
-                    }
+                    e && (edgeDict[e.repr.label] = e);
                 }
+            }
+
+            for (var e in edgeDict) {
+                es.push(edgeDict[e]);
             }
 
             return es;
         };
+        Graph.prototype.getOutEdges = function (v) {
 
-        Graph.simplestGraph = function () {
-            var v = new Vertex('v');
-            var w = new Vertex('w');
-            var e = new Edge(v, w);
-            var g = new Graph([v, w], [e]);
+        };
 
-            return g;
+        Graph.prototype.serializeToCSV = function () {
+            var es = this.edges();
+            var b = [['source', 'target']];
+
+            for (var i = 0; i < es.length; i++) {
+                b.push([es[i].getItem(0).label, es[i].getItem(1).label]);
+            }
+
+            return b.reduce(
+                function (x, y) {
+                    return x ? x + '\n' + y.join(', ') : y.join(', ');
+                },
+                ''
+            );
         };
 
         Graph.prototype.toString = function () {
@@ -127,16 +143,22 @@ function Graph(vs, es) {
     }
 
     for (var i = 0; i < vs.length; i++) {
-        console.log('adding ', vs[i]);
         this.addVertex(vs[i]);
     }
-
-    console.log('done adding vertices.', this.data);
 
     for (i = 0; i < es.length; i++) {
         this.addEdge(es[i]);
     }
 }
+
+Graph.simplestGraph = function () {
+    var v = new Vertex('v');
+    var w = new Vertex('w');
+    var e = new Edge(v, w);
+    var g = new Graph([v, w], [e]);
+
+    return g;
+};
 
 var GraphWorld = {
     Vertex: Vertex,

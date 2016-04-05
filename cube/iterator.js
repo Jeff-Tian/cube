@@ -1,29 +1,10 @@
+if (typeof module !== 'undefined' && module.exports) {
+    var CubeWorld = require('./cube');
+    var GraphWorld = require('./graph');
+    var window = {};
+}
+
 function Iterator() {
-
-    var vs = [];
-    var es = [];
-
-    var cubeHistory = [];
-
-    var rs = ['F', 'F`', 'B', 'B`', 'U', 'U`', 'D', 'D`', 'L', 'L`', 'R', 'R`'];
-
-    var traversor = {};
-
-    for (var i = 0; i < rs.length; i++) {
-        traversor[rs[i]] = function (cube) {
-            cube[rs[i]]();
-            cubeHistory.push(cube.toString());
-        }
-    }
-
-    var cube = CubeWorld.Cube.getPristineCube();
-    var v = new GraphWorld.Vertex(cube.toString());
-    v.marked = true;
-    cubeHistory.push(cube.toString());
-
-    vs.push(v);
-
-    traversor.F(cube);
 }
 
 Iterator.CubeIterator = function () {
@@ -60,7 +41,7 @@ Iterator.CubeIterator = function () {
             $timeout = $timeout || window.setTimeout;
 
             function traverse(c, parentVertex) {
-                if (recurseTimes++ > 30) {
+                if (recurseTimes++ > 13) {
                     return;
                 }
 
@@ -74,6 +55,7 @@ Iterator.CubeIterator = function () {
                         g.addEdge(e);
                     }
                 } catch (ex) {
+                    console.error(ex);
                     return;
                 }
 

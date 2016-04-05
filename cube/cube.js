@@ -1,3 +1,7 @@
+if (typeof module !== 'undefined' && module.exports) {
+    var window = {};
+}
+
 var SIDE = {
     front: 'front',
     top: 'top',
@@ -109,7 +113,6 @@ Block.fromLabel = function (label) {
     }
 
     var parts = labelName.match(/[A-Z]?[a-z]+/g);
-    console.log('label parts: ', parts);
     var surface = parts[0];
     var col = {Left: 0, Right: 1}[parts[1]];
     var row = {Top: 0, Bottom: 1}[parts[2]];
@@ -480,8 +483,6 @@ function Cube(frontSurface, backSurface, leftSurface, rightSurface, topSurface, 
             while (self.history.length) {
                 var s = self.history.pop();
                 var rs = player.reverseStep(s);
-
-                console.log('reverse step ', s, ' by ', rs);
 
                 player[rs].call(self);
 

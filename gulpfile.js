@@ -42,3 +42,18 @@ gulp.task('replace', function (done) {
 
     done();
 });
+
+gulp.task('saveGraph', function (done) {
+    var GraphWorld = require('./cube/graph.js');
+    var CubeWorld = require('./cube/cube.js');
+    var Iterator = require('./cube/iterator.js');
+
+    var cube = CubeWorld.Cube.getPristineCube();
+    var iter = new Iterator.CubeIterator();
+    var g = iter.traverse(cube);
+
+    var fs = require('fs');
+    fs.writeFileSync('./cube.csv', g.serializeToCSV());
+
+    done();
+});
