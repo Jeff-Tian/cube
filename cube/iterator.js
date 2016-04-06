@@ -30,6 +30,50 @@ Iterator.CubeIterator = function () {
             return vs;
         };
 
+        Iterator.CubeIterator.prototype.breadthFirstTraverse = function (cube) {
+            if (!(cube instanceof CubeWorld.Cube)) {
+                throw new Error('期待一个 Cube 实例, 得到的是 ', JSON.stringify(cube));
+            }
+
+            var self = this;
+
+            var g = new GraphWorld.Graph([], []);
+
+            var v = new GraphWorld.Vertex(cube.toString());
+
+            var unmarked = [{
+                parent: null,
+                me: v
+            }];
+
+            function mark() {
+                var node = unmarked.shift();
+
+                try {
+                    g.addVertex(node.me);
+
+                    if (node.parent) {
+                        g.addEdge(new GraphWorld.Edge(node.parent, node.me));
+                    }
+
+                    unmarked = unmarked.concat(self.getAdjacentVertices(CubeWorld.Cube.fromState(node.me.label)).map(function (me) {
+                        return {
+                            parent: node.me,
+                            me: me
+                        };
+                    }));
+                } catch (ex) {
+                    console.error(ex);
+                }
+            }
+
+            while (unmarked.length) {
+                mark();
+            }
+
+            return g;
+        };
+
         Iterator.CubeIterator.prototype.traverse = function (cube, $timeout, interval, callback) {
             if (!(cube instanceof CubeWorld.Cube)) {
                 callback();
