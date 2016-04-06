@@ -1,7 +1,7 @@
 #!/bin/sh
 
-PORT="60002"
-APP_NAME="geek"
+PORT="60003"
+APP_NAME="cube"
 #NODE_ENV="prd"
 
 ################################

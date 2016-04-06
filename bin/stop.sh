@@ -1,6 +1,6 @@
 #!/bin/sh
 
-APP_NAME="geek"
+APP_NAME="cube"
 
 
 ################################
