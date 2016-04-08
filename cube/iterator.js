@@ -30,6 +30,50 @@ Iterator.CubeIterator = function () {
             return vs;
         };
 
+        Iterator.CubeIterator.prototype.breadthFirstTraverseLite = function (cube) {
+            var start = cube.toString();
+            console.log('starting ...', start);
+
+            var self = this;
+
+            var network = {nodes: {}, edges: {}};
+            var unmarked = [start];
+
+            var i = 1;
+            var fs = require('fs');
+            while (unmarked.length) {
+
+                var current = unmarked.shift();
+                delete cube;
+                cube = CubeWorld.Cube.fromState(current);
+
+                network.nodes[current] = self.getAdjacentVertices(cube).map(function (v) {
+                    network.edges[current + '-' + v.label] = [current, v.label];
+                    network.edges[v.label + '-' + current] = [v.label, current];
+
+                    return v.label
+                });
+
+                console.log('marked ', i++);
+
+                var beforeAdded = unmarked.length;
+                unmarked = unmarked.concat(network.nodes[current].filter(function (l) {
+                    return !network.nodes[l];
+                }));
+                var afterAdded = unmarked.length;
+                console.log('beforeAdded: ', beforeAdded, '; afterAdded: ', afterAdded, '; added ', afterAdded - beforeAdded);
+            }
+
+            console.log(network);
+            fs.writeFileSync('./cube.csv', 'source, target\n', 'utf-8');
+
+            for (var key in network.edges) {
+                fs.appendFileSync('./cube.csv', network.edges[key].join(', ') + '\n', 'utf-8');
+            }
+
+            return network;
+        };
+
         Iterator.CubeIterator.prototype.breadthFirstTraverse = function (cube) {
             if (!(cube instanceof CubeWorld.Cube)) {
                 throw new Error('期待一个 Cube 实例, 得到的是 ', JSON.stringify(cube));
@@ -56,12 +100,21 @@ Iterator.CubeIterator = function () {
                         g.addEdge(new GraphWorld.Edge(node.parent, node.me));
                     }
 
-                    unmarked = unmarked.concat(self.getAdjacentVertices(CubeWorld.Cube.fromState(node.me.label)).map(function (me) {
-                        return {
-                            parent: node.me,
-                            me: me
-                        };
-                    }));
+                    unmarked = unmarked.concat(
+                        self.getAdjacentVertices(
+                            CubeWorld.Cube.fromState(node.me.label)
+                            )
+                            .filter(function (me) {
+                                return !(g.data[me]);
+                            })
+                            .map(function (me) {
+                                    return {
+                                        parent: node.me,
+                                        me: me
+                                    };
+                                }
+                            )
+                    );
                 } catch (ex) {
                     console.error(ex);
                 }

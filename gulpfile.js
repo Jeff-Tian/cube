@@ -58,17 +58,34 @@ gulp.task('saveGraph', function (done) {
     done();
 });
 
-gulp.task('breathFirst', function(done){
-    var GraphWorld = require('./cube/graph.js');
+gulp.task('breathFirst', function (done) {
+    // var GraphWorld = require('./cube/graph.js');
+    // var CubeWorld = require('./cube/cube.js');
+    // var Iterator = require('./cube/iterator.js');
+    //
+    // var cube = CubeWorld.Cube.getPristineCube();
+    // var iter = new Iterator.CubeIterator();
+    // var g = iter.breadthFirstTraverse(cube);
+    //
+    // var fs = require('fs');
+    // fs.writeFileSync('./cube.csv', g.serializeToCSV());
+    //
+    // done();
+
+
     var CubeWorld = require('./cube/cube.js');
     var Iterator = require('./cube/iterator.js');
-
-    var cube = CubeWorld.Cube.getPristineCube();
     var iter = new Iterator.CubeIterator();
-    var g = iter.breadthFirstTraverse(cube);
+    iter.breadthFirstTraverseLite(CubeWorld.Cube.getPristineCube());
 
-    var fs = require('fs');
-    fs.writeFileSync('./cube.csv', g.serializeToCSV());
+    done();
+});
+
+gulp.task('bfl', function (done) {
+    var CubeWorld = require('./cube/cube.js');
+    var Iterator = require('./cube/iterator.js');
+    var iter = new Iterator.CubeIterator();
+    iter.breadthFirstTraverseLite(CubeWorld.Cube.getPristineCube());
 
     done();
 });
