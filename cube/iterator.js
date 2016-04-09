@@ -1,5 +1,6 @@
 if (typeof module !== 'undefined' && module.exports) {
     var CubeWorld = require('./cube');
+    var CubeLite = require('./cube-lite');
     var GraphWorld = require('./graph');
     var window = {};
 }
@@ -31,7 +32,47 @@ Iterator.CubeIterator = function () {
         };
 
         Iterator.CubeIterator.prototype.breadthFirstTraverseQuick = function (cube) {
-            
+            var start = cube.toString();
+            console.log('starting ...', start);
+
+            var self = this;
+
+            var network = {nodes: {}, edges: {}};
+            var unmarked = [start];
+
+            var i = 1;
+            var fs = require('fs');
+            while (unmarked.length) {
+
+                var current = unmarked.shift();
+                delete cube;
+                cube = new CubeLite(current);
+
+                network.nodes[current] = self.getAdjacentVertices(cube).map(function (v) {
+                    network.edges[current + '-' + v.label] = [current, v.label];
+                    network.edges[v.label + '-' + current] = [v.label, current];
+
+                    return v.label
+                });
+
+                console.log('marked ', i++);
+
+                var beforeAdded = unmarked.length;
+                unmarked = unmarked.concat(network.nodes[current].filter(function (l) {
+                    return !network.nodes[l];
+                }));
+                var afterAdded = unmarked.length;
+                console.log('beforeAdded: ', beforeAdded, '; afterAdded: ', afterAdded, '; added ', afterAdded - beforeAdded);
+            }
+
+            console.log(network);
+            fs.writeFileSync('./cube.csv', 'source, target\n', 'utf-8');
+
+            for (var key in network.edges) {
+                fs.appendFileSync('./cube.csv', network.edges[key].join(', ') + '\n', 'utf-8');
+            }
+
+            return network;
         };
 
         Iterator.CubeIterator.prototype.breadthFirstTraverseLite = function (cube) {

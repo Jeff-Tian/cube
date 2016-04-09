@@ -73,10 +73,17 @@ gulp.task('breathFirst', function (done) {
     // done();
 
 
-    var CubeWorld = require('./cube/cube.js');
-    var Iterator = require('./cube/iterator.js');
+    // var CubeWorld = require('./cube/cube.js');
+    // var Iterator = require('./cube/iterator.js');
+    // var iter = new Iterator.CubeIterator();
+    // iter.breadthFirstTraverseLite(CubeWorld.Cube.getPristineCube());
+    //
+    // done();
+
+    var CubeLite = require('./cube/cube-lite');
+    var Iterator = require('./cube/iterator');
     var iter = new Iterator.CubeIterator();
-    iter.breadthFirstTraverseLite(CubeWorld.Cube.getPristineCube());
+    iter.breadthFirstTraverseQuick(CubeLite.getPristineCube());
 
     done();
 });
@@ -86,6 +93,15 @@ gulp.task('bfl', function (done) {
     var Iterator = require('./cube/iterator.js');
     var iter = new Iterator.CubeIterator();
     iter.breadthFirstTraverseLite(CubeWorld.Cube.getPristineCube());
+
+    done();
+});
+
+gulp.task('fast', function (done) {
+    var CubeLite = require('./cube/cube-lite');
+    var Iterator = require('./cube/iterator');
+    var iter = new Iterator.CubeIterator();
+    iter.breadthFirstTraverseQuick(CubeLite.getPristineCube());
 
     done();
 });
