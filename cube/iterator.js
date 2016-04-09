@@ -30,6 +30,10 @@ Iterator.CubeIterator = function () {
             return vs;
         };
 
+        Iterator.CubeIterator.prototype.breadthFirstTraverseQuick = function (cube) {
+            
+        };
+
         Iterator.CubeIterator.prototype.breadthFirstTraverseLite = function (cube) {
             var start = cube.toString();
             console.log('starting ...', start);
