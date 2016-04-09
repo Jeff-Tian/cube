@@ -80,20 +80,13 @@ gulp.task('breathFirst', function (done) {
     //
     // done();
 
-    // var CubeLite = require('./cube/cube-lite');
-    // var Iterator = require('./cube/iterator');
-    // var iter = new Iterator.CubeIterator();
-    // iter.breadthFirstTraverseFile(CubeLite.getPristineCube());
-    //
-    // done();
-
-
     var CubeLite = require('./cube/cube-lite');
     var Iterator = require('./cube/iterator');
     var iter = new Iterator.CubeIterator();
-    iter.breadthFirstTraverseQuick(CubeLite.getPristineCube());
+    iter.breadthFirstTraverseFile(CubeLite.getPristineCube());
 
     done();
+
 });
 
 gulp.task('bfl', function (done) {

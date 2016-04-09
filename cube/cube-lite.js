@@ -34,7 +34,7 @@ function CubeLite(label) {
         };
 
         CubeLite.prototype.F = function () {
-            console.log('before F: ', this.label.toString());
+            console.log('before F: ', this.toString());
             // this.change([[0, 2, 3, 1, 0], [9, 20, 14, 19, 9], [11, 21, 12, 18, 11]]);
             this.change({
                 0: 2,

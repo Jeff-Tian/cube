@@ -63,6 +63,13 @@ Iterator.CubeIterator = function () {
 
             while (unmarked.length) {
                 var current = unmarked.shift();
+
+                if (network.nodes[current]) {
+                    continue;
+                    // console.error(network);
+                    // throw new Error(current + ' 已经在第 ' + network.nodes[current] + ' 轮添加过了! i = ' + i + '.');
+                }
+
                 delete cube;
                 cube = new CubeLite(current);
 
@@ -72,26 +79,34 @@ Iterator.CubeIterator = function () {
                     throw new Error('每个顶点应该连接另外的 12 个顶点, 而这个状态"' + cube.toString() + '"连接了 ', adj.length, ' 个.');
                 }
 
-                network.nodes[current] = true;
-
-                for (var j = 0; j < adj.length; j++) {
-                    var v = adj[j];
-                    fs.appendFileSync(filePath, current + ', ' + v + '\n', option);
-                }
-
-                fs.appendFileSync(filePath, '\n', option);
+                network.nodes[current] = i;
 
                 console.log('marked ', i++, current);
 
-                var beforeAdded = unmarked.length;
-                for (var k = 0; k < adj.length; k++) {
-                    if (!network.nodes[adj[k]]) {
-                        unmarked.push(adj[k]);
+                // var beforeAdded = unmarked.length;
+                for (var j = 0; j < adj.length; j++) {
+                    var v = adj[j];
+                    fs.appendFileSync(filePath, current + ', ' + v + '\n', option);
+
+                    if (i === 25) {
+                        console.log(v, ': ', network.nodes[v]);
+                    }
+
+                    if (!network.nodes[v]) {
+                        // if (v === 'δγβαφχψωιολνμξκπεζσρθητυ') {
+                        //     console.log('===================');
+                        // }
+                        // console.log(i, ': ', v);
+                        // if (v === 'δγβαφχψωιολνμξκπεζσρθητυ') {
+                        //     console.log('====================');
+                        // }
+                        unmarked.push(v);
                     }
                 }
+                // var afterAdded = unmarked.length;
+                // console.log('beforeAdded: ', beforeAdded, '; afterAdded: ', afterAdded, '; added ', afterAdded - beforeAdded);
 
-                var afterAdded = unmarked.length;
-                console.log('beforeAdded: ', beforeAdded, '; afterAdded: ', afterAdded, '; added ', afterAdded - beforeAdded);
+                fs.appendFileSync(filePath, '\n', option);
             }
 
             console.log(network);
