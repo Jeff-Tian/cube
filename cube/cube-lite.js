@@ -3,7 +3,8 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 
 function CubeLite(label) {
-    this.label = label.split('');
+    this.original = label.split('');
+    this.label = this.original.slice(0);
 
     if (!CubeLite.__initialized__) {
         CubeLite.prototype.change = function (changeDef) {
@@ -244,7 +245,7 @@ function CubeLite(label) {
         };
 
         CubeLite.prototype.reset = function () {
-            this.label = CubeLite.getPristineCube().label;
+            this.label = this.original.slice(0);
         };
 
         CubeLite.prototype.toString = function () {

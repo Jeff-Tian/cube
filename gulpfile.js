@@ -80,6 +80,14 @@ gulp.task('breathFirst', function (done) {
     //
     // done();
 
+    // var CubeLite = require('./cube/cube-lite');
+    // var Iterator = require('./cube/iterator');
+    // var iter = new Iterator.CubeIterator();
+    // iter.breadthFirstTraverseFile(CubeLite.getPristineCube());
+    //
+    // done();
+
+
     var CubeLite = require('./cube/cube-lite');
     var Iterator = require('./cube/iterator');
     var iter = new Iterator.CubeIterator();
@@ -102,6 +110,15 @@ gulp.task('fast', function (done) {
     var Iterator = require('./cube/iterator');
     var iter = new Iterator.CubeIterator();
     iter.breadthFirstTraverseQuick(CubeLite.getPristineCube());
+
+    done();
+});
+
+gulp.task('saveMemory', function (done) {
+    var CubeLite = require('./cube/cube-lite');
+    var Iterator = require('./cube/iterator');
+    var iter = new Iterator.CubeIterator();
+    iter.breadthFirstTraverseFile(CubeLite.getPristineCube());
 
     done();
 });

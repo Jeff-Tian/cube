@@ -33,6 +33,14 @@ angular.module('cubeModule', [])
         $scope.cube = CubeWorld.Cube.getPristineCube();
         $scope.CubeWorld = CubeWorld;
 
+        $scope.state = {
+            label: $scope.cube.toString()
+        };
+
+        $scope.generate = function () {
+            $scope.cube = CubeWorld.Cube.fromState($scope.state.label);
+        };
+
         //drawStateChanges();
 
         $scope.$watch('cube.toString()', function (newValue, oldValue) {

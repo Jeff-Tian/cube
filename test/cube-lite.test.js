@@ -2,7 +2,9 @@ var assert = require('assert');
 var CubeLite = require('../cube/cube-lite.js');
 var CubeWorld = require('../cube/cube.js');
 
-function test() {
+var turnMethods = ['F', 'F`', 'B', 'B`', 'L', 'L`', 'R', 'R`', 'U', 'U`', 'D', 'D`'];
+
+function testFromPristine() {
     var rs = {
         'can turn front side clockwise': {
             turn: 'F',
@@ -64,12 +66,106 @@ function test() {
     }
 }
 
+function testFrom_γαδβφχψωιρλσηξθπεζμκοντυ() {
+
+    var rs = {
+        'can turn front side clockwise': {
+            turn: 'F',
+            result: 'δγβαφχψωιολνμξκπεζσρθητυ'
+        },
+        'can turn front side anti-clockwise': {
+            turn: 'F`',
+            result: 'αβγδφχψωικλμνξοπεζηθρστυ'
+        },
+        'can turn back side clockwise': {
+            turn: 'B',
+            result: 'γαδβψφωχζρεσηυθτξπμκονιλ'
+        },
+        'can turn back side anti-clockwise': {
+            turn: 'B`',
+            result: 'γαδβχωφψτρυσηεθζλιμκονπξ'
+        },
+        'can turn left side clockwise': {
+            turn: 'L',
+            result: 'εαμβφτψολισρηξθπωζχκγνδυ'
+        },
+        'can turn left side anti-clockwise': {
+            turn: 'L`',
+            result: 'οατβφμψερσιληξθπγζδκωνχυ'
+        },
+        'can turn right side clockwise': {
+            turn: 'R',
+            result: 'γνδυκχζωιρλσθηπξεαμβοψτφ'
+        },
+        'can turn right side anti-clockwise': {
+            turn: 'R`',
+            result: 'γζδκυχνωιρλσξπηθεψμφοατβ'
+        },
+        'can turn up side clockwise': {
+            turn: 'U',
+            result: 'ηξδβφχριγαλσωψθπμεκζοντυ'
+        },
+        'can turn up side anti-clockwise': {
+            turn: 'U`',
+            result: 'ιρδβφχξηωψλσγαθπζκεμοντυ'
+        },
+        'can turn down side clockwise': {
+            turn: 'D',
+            result: 'γαλσπθψωιρχφηξδβεζμκτουν'
+        },
+        'can turn down side anti-clockwise': {
+            turn: 'D`',
+            result: 'γαθπσλψωιρδβηξχφεζμκνυοτ'
+        }
+    };
+
+    for (var r in rs) {
+        it(r + ' from ' + 'γαδβφχψωιρλσηξθπεζμκοντυ', function () {
+            var cube = new CubeLite('γαδβφχψωιρλσηξθπεζμκοντυ');
+            cube[rs[r].turn]();
+
+            assert.equal(cube.toString(), rs[r].result);
+        });
+    }
+}
+
 describe('Cube Lite', function () {
-    test();
+    testFromPristine();
+
+    testFrom_γαδβφχψωιρλσηξθπεζμκοντυ();
 
     it('can reset', function () {
-        var cube = CubeLite.getPristineCube();
+        var cube = new CubeLite('αβοπμλψωικγδνξχφεζηθσυρτ');
+        cube.reset();
 
+        assert.equal(cube.toString(), 'αβοπμλψωικγδνξχφεζηθσυρτ');
+
+        cube = new CubeLite('βδαγφχψωιθλησξρπεζνοκμτυ');
+        cube.F();
+        cube.reset();
+        assert.equal(cube.toString(), 'βδαγφχψωιθλησξρπεζνοκμτυ');
+    });
+
+    it('should back to original state after 4 continuous turns', function () {
+        for (var i = 0; i < turnMethods.length; i++) {
+            var m = turnMethods[i];
+            var cube = new CubeLite('αβγδφχψωικλμνξοπεζηθρστυ');
+            console.log('doing ', m, ' 4 times');
+            cube[m]()[m]()[m]()[m]();
+
+            assert.equal(cube.toString(), 'αβγδφχψωικλμνξοπεζηθρστυ');
+        }
+    });
+
+    it('can go to left turn state by right turn 3 times', function () {
+        var cube = new CubeLite('αβγδφχψωικλμνξοπεζηθρστυ');
+        cube['F`']();
+        var label1 = cube.toString();
+        cube.reset();
+        cube.F().F().F();
+        var label2 = cube.toString();
+
+        assert.equal(label2, label1);
     });
 
     it('can get change method', function () {

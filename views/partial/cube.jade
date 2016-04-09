@@ -106,7 +106,14 @@ mixin buttonCubeTable()
 
 
 + realCubeTable
-div.ui.horizontal divider
+div.ui.horizontal.divider
+div
+    form.ui.form
+        div.inline.field
+            label 状态:
+            input(type="text", style="width: 230px;", ng-model="state.label")
+            | &nbsp;
+            button.ui.red.button(type="submit", ng-click="generate()") 生成
 div
     | {{cube.toString()}}
     | &nbsp;
