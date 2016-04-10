@@ -20,7 +20,7 @@ function Edge(v1, v2) {
     edgeShouldContain2VerticesOnly(arguments);
 
     for (var i = 0; i < arguments.length; i++) {
-        if (!(arguments[i] instanceof  Vertex)) {
+        if (!(arguments[i] instanceof Vertex)) {
             throw new Error('期待一个顶点，得到的却是 ' + JSON.stringify(arguments[i]));
         }
     }
@@ -49,7 +49,7 @@ function Edge(v1, v2) {
 }
 
 function Graph(vs, es) {
-    if (!(es instanceof  Array)) {
+    if (!(es instanceof Array)) {
         es = [es];
     }
 

@@ -336,6 +336,58 @@ Iterator.CubeIterator.getAdjacents = function (cube, turns) {
     return ret;
 };
 
+Iterator.CubeIterator.iterateTo = function (cube, endState) {
+    var start = cube.toString();
+    console.log('starting ...', start);
+
+    var self = Iterator.CubeIterator;
+
+    var network = {nodes: {}};
+    var unmarked = [start];
+
+    var i = 1;
+
+    var found = false;
+
+    while (unmarked.length && !found) {
+        var current = unmarked.shift();
+
+        if (network.nodes[current]) {
+            continue;
+        }
+
+        delete cube;
+        cube = new CubeLite(current);
+
+        var adj = self.getAdjacents(cube, Iterator.CubeIterator.restrictedTurns);
+
+        if (adj.length !== 3) {
+            throw new Error('每个顶点应该连接另外的 3 个顶点, 而这个状态"' + cube.toString() + '"连接了 ', adj.length, ' 个.');
+        }
+
+        network.nodes[current] = adj;
+
+        console.log(i++, ';');
+
+        for (var j = 0; j < adj.length; j++) {
+            var v = adj[j];
+
+            if (!network.nodes[v]) {
+                unmarked.push(v);
+            }
+
+            if (v === endState) {
+                found = true;
+                break;
+            }
+        }
+    }
+
+    console.log(network);
+
+    return network;
+};
+
 Iterator.CubeIterator.iterate = function (cube) {
     var start = cube.toString();
     console.log('starting ...', start);

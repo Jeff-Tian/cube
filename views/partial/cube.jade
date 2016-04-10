@@ -124,7 +124,7 @@ div
     | &nbsp;
     form.ui.form(ng-class="{'loading': doing}")
         button.ui.red.button(ng-click="traverse()") 遍历
-        button.ui.purple.button() 求解
+        button.ui.purple.button(ng-click="solve()") 求解
 div.ui.divider
 form.ui.form(ng-class="{'loading': doing}")
     + buttonCubeTable.ui.celled.padded.table

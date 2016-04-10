@@ -244,9 +244,16 @@ angular.module('cubeModule', [])
                 }
             });
         });
+
         $scope.traverse = function () {
             var iter = new Iterator.CubeIterator();
             $scope.traverseGraph = iter.traverse($scope.cube, $timeout, 3000);
+        };
+
+        $scope.solve = function () {
+            $scope.doing = true;
+            console.log(Solver.CubeSolver.solve($scope.history[0], $scope.history[$scope.history.length - 1]));
+            $scope.doing = false;
         };
     }])
 ;

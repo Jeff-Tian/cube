@@ -501,7 +501,7 @@ function Cube(frontSurface, backSurface, leftSurface, rightSurface, topSurface, 
             }
 
             if (!self.history.length) {
-                callback();
+                callback && callback();
             }
         };
 
