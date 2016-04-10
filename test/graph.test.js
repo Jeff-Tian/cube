@@ -4,13 +4,13 @@ var GraphWorld = require('../cube/graph');
 describe('Graph World', function () {
     it('should display itself', function () {
         var v1 = new GraphWorld.Vertex('test');
-        assert.equal('Vertex (test)', v1.toString());
+        assert.equal('test', v1.toString());
         assert.equal('test', v1.label);
 
         var v2 = new GraphWorld.Vertex('again');
-        assert.equal('Vertex (again)', v2.toString());
+        assert.equal('again', v2.toString());
         var e = new GraphWorld.Edge(v1, v2);
-        assert.equal('Edge (Vertex (test), Vertex (again))', e.toString());
+        assert.equal('Edge (test, again)', e.toString());
 
         var g = new GraphWorld.Graph([v1, v2], e);
         assert.deepStrictEqual([v1, v2], g.vertices());

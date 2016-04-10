@@ -252,7 +252,9 @@ angular.module('cubeModule', [])
 
         $scope.solve = function () {
             $scope.doing = true;
-            console.log(Solver.CubeSolver.solve($scope.history[0], $scope.history[$scope.history.length - 1]));
+            $scope.result = Solver.CubeSolver.solve($scope.history[0], $scope.history[$scope.history.length - 1]);
+
+            $scope.state.steps = Solver.CubeSolver.convertToSteps($scope.result);
             $scope.doing = false;
         };
     }])

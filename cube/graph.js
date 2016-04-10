@@ -3,7 +3,8 @@ function Vertex(label) {
 
     if (!Vertex.__initialized__) {
         Vertex.prototype.toString = function () {
-            return 'Vertex (' + this.label + ')';
+            // return 'Vertex (' + this.label + ')';
+            return this.label;
         };
 
         Vertex.__initialized__ = true;

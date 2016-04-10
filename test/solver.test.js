@@ -52,4 +52,21 @@ describe('Solver', function () {
 
         assert.deepStrictEqual(solver.shortestPath(g, v, z), expected);
     });
+
+    it('can find the shortest path for simplest graph', function () {
+        var a = new GraphWorld.Vertex('a');
+        var b = new GraphWorld.Vertex('b');
+        var c = new GraphWorld.Vertex('c');
+        var d = new GraphWorld.Vertex('d');
+
+        var g = new GraphWorld.Graph([a, b, c, d], [
+            new GraphWorld.Edge(a, b),
+            new GraphWorld.Edge(a, c),
+            new GraphWorld.Edge(a, d)
+        ]);
+
+        var expected = {l: 1, path: [a, c]};
+
+        assert.deepStrictEqual(solver.shortestPath(g, a, c), expected);
+    });
 });

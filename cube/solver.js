@@ -88,8 +88,25 @@ Solver.CubeSolver = function () {
 
 Solver.CubeSolver.solve = function (start, target) {
     var cube = new CubeLite(start);
-    var network = Iterator.CubeIterator.iterateTo(cube, target);
-    return network;
+    var g = Iterator.CubeIterator.iterateTo(cube, target);
+
+    var result = Solver.shortestPath(g, g.data[start].self, g.data[target].self);
+
+    return result;
+};
+
+Solver.CubeSolver.convertToSteps = function (result) {
+    var steps = [];
+
+    for (var i = 0; i < result.path.length - 1; i++) {
+        var changeMethod = CubeLite.getChangeMethod(result.path[i].toString(), result.path[i + 1].toString());
+
+        steps.push(CubeLite.getStepByChangeMethod(changeMethod));
+    }
+
+    return steps.reverse().map(function (step) {
+        return step.length === 1 ? step + '`' : step[0];
+    });
 };
 
 if (typeof module !== 'undefined' && module.exports) {
