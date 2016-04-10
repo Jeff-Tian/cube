@@ -367,15 +367,12 @@ Iterator.CubeIterator.iterateTo = function (cube, endState) {
         }
 
         network.nodes[current] = adj;
-        var parent = new GraphWorld.Vertex(current);
-        g.addVertex(parent);
 
-        for (var k = 0; k < adj.length; k++) {
-            if (!g.data[adj[k]]) {
-                var newVertex = new GraphWorld.Vertex(adj[k]);
-                g.addVertex(newVertex);
-                g.addEdge(new GraphWorld.Edge(parent, newVertex));
-            }
+        if (!g.data[current]) {
+            var parent = new GraphWorld.Vertex(current);
+            g.addVertex(parent);
+        } else {
+            parent = g.data[current].self;
         }
 
         console.log(i++, ';');
@@ -385,6 +382,10 @@ Iterator.CubeIterator.iterateTo = function (cube, endState) {
 
             if (!network.nodes[v] && !g.data[v]) {
                 unmarked.push(v);
+
+                var newVertex = new GraphWorld.Vertex(v);
+                g.addVertex(newVertex);
+                g.addEdge(new GraphWorld.Edge(parent, newVertex));
             }
 
             if (v === endState) {

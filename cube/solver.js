@@ -90,6 +90,10 @@ Solver.CubeSolver.solve = function (start, target) {
     var cube = new CubeLite(start);
     var g = Iterator.CubeIterator.iterateTo(cube, target);
 
+    if (!g.data[target]) {
+        throw new Error('求解失败');
+    }
+
     var result = Solver.shortestPath(g, g.data[start].self, g.data[target].self);
 
     return result;
