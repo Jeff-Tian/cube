@@ -80,12 +80,12 @@ gulp.task('breathFirst', function (done) {
     //
     // done();
 
-    var CubeLite = require('./cube/cube-lite');
-    var Iterator = require('./cube/iterator');
-    var iter = new Iterator.CubeIterator();
-    iter.breadthFirstTraverseFile(CubeLite.getPristineCube());
-
-    done();
+    // var CubeLite = require('./cube/cube-lite');
+    // var Iterator = require('./cube/iterator');
+    // var iter = new Iterator.CubeIterator();
+    // iter.breadthFirstTraverseFile(CubeLite.getPristineCube());
+    //
+    // done();
 
 });
 
@@ -113,5 +113,39 @@ gulp.task('saveMemory', function (done) {
     var iter = new Iterator.CubeIterator();
     iter.breadthFirstTraverseFile(CubeLite.getPristineCube());
 
+    done();
+});
+
+gulp.task('restricted-search', function (done) {
+    var CubeLite = require('./cube/cube-lite');
+    var Iterator = require('./cube/iterator');
+    Iterator.CubeIterator.iterateAndSaveFile(CubeLite.getPristineCube(), 'restricted-cube.csv');
+
+    done();
+});
+
+gulp.task('restricted-search-only', function (done) {
+    var CubeLite = require('./cube/cube-lite');
+    var Iterator = require('./cube/iterator');
+    var n = Iterator.CubeIterator.iterate(CubeLite.getPristineCube());
+
+    var fs = require('fs');
+    var filePath = 'nodes.csv';
+    var option = 'utf-8';
+    fs.writeFileSync(filePath, 'source, target\n', option);
+
+    for (var p in n.nodes) {
+        fs.appendFileSync(filePath, n.nodes[p] + '\n', option);
+    }
+
+    done();
+});
+
+gulp.task('read', function (done) {
+    var fs = require('fs');
+
+    var t = fs.readFileSync('./cube.csv', 'utf-8');
+    var r = t.split('\n');
+    console.log(r.length);
     done();
 });

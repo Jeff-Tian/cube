@@ -12,8 +12,8 @@ Iterator.CubeIterator = function () {
     var self = this;
 
     if (!Iterator.CubeIterator.__initialized__) {
-        Iterator.CubeIterator.prototype.getAdjacents = function (cube) {
-            var turns = Iterator.CubeIterator.turns;
+        Iterator.CubeIterator.prototype.getAdjacents = function (cube, turns) {
+            turns = turns || Iterator.CubeIterator.turns;
             var ret = [];
 
             for (var i = 0; i < turns.length; i++) {
@@ -86,11 +86,6 @@ Iterator.CubeIterator = function () {
                 // var beforeAdded = unmarked.length;
                 for (var j = 0; j < adj.length; j++) {
                     var v = adj[j];
-                    fs.appendFileSync(filePath, current + ', ' + v + '\n', option);
-
-                    if (i === 25) {
-                        console.log(v, ': ', network.nodes[v]);
-                    }
 
                     if (!network.nodes[v]) {
                         // if (v === 'δγβαφχψωιολνμξκπεζσρθητυ') {
@@ -100,13 +95,15 @@ Iterator.CubeIterator = function () {
                         // if (v === 'δγβαφχψωιολνμξκπεζσρθητυ') {
                         //     console.log('====================');
                         // }
+
+                        fs.appendFileSync(filePath, current + ', ' + v + '\n', option);
                         unmarked.push(v);
                     }
                 }
                 // var afterAdded = unmarked.length;
                 // console.log('beforeAdded: ', beforeAdded, '; afterAdded: ', afterAdded, '; added ', afterAdded - beforeAdded);
 
-                fs.appendFileSync(filePath, '\n', option);
+                // fs.appendFileSync(filePath, '\n', option);
             }
 
             console.log(network);
@@ -322,6 +319,116 @@ Iterator.CubeIterator = function () {
 };
 
 Iterator.CubeIterator.turns = ['F', 'F`', 'B', 'B`', 'U', 'U`', 'D', 'D`', 'L', 'L`', 'R', 'R`'];
+Iterator.CubeIterator.restrictedTurns = ['F', 'U', 'R'];
+
+Iterator.CubeIterator.getAdjacents = function (cube, turns) {
+    turns = turns || Iterator.CubeIterator.turns;
+    var ret = [];
+
+    for (var i = 0; i < turns.length; i++) {
+        var turn = turns[i];
+        cube[turn]();
+        ret.push(cube.toString());
+
+        cube.reset();
+    }
+
+    return ret;
+};
+
+Iterator.CubeIterator.iterate = function (cube) {
+    var start = cube.toString();
+    console.log('starting ...', start);
+
+    var self = Iterator.CubeIterator;
+
+    var network = {nodes: {}};
+    var unmarked = [start];
+
+    var i = 1;
+
+    while (unmarked.length) {
+        var current = unmarked.shift();
+
+        if (network.nodes[current]) {
+            continue;
+        }
+
+        delete cube;
+        cube = new CubeLite(current);
+
+        var adj = self.getAdjacents(cube, Iterator.CubeIterator.restrictedTurns);
+
+        if (adj.length !== 3) {
+            throw new Error('每个顶点应该连接另外的 3 个顶点, 而这个状态"' + cube.toString() + '"连接了 ', adj.length, ' 个.');
+        }
+
+        network.nodes[current] = i;
+
+        console.log(i++, ';');
+
+        for (var j = 0; j < adj.length; j++) {
+            var v = adj[j];
+
+            if (!network.nodes[v]) {
+                unmarked.push(v);
+            }
+        }
+    }
+
+    console.log(network);
+
+    return network;
+};
+
+Iterator.CubeIterator.iterateAndSaveFile = function (cube, filePath) {
+    var start = cube.toString();
+    console.log('starting ...', start);
+
+    var self = Iterator.CubeIterator;
+
+    var network = {nodes: {}};
+    var unmarked = [start];
+
+    var i = 1;
+    var fs = require('fs');
+    var option = 'utf-8';
+    fs.writeFileSync(filePath, 'source, target\n', option);
+
+    while (unmarked.length) {
+        var current = unmarked.shift();
+
+        if (network.nodes[current]) {
+            continue;
+        }
+
+        delete cube;
+        cube = new CubeLite(current);
+
+        var adj = self.getAdjacents(cube, Iterator.CubeIterator.restrictedTurns);
+
+        if (adj.length !== 3) {
+            throw new Error('每个顶点应该连接另外的 3 个顶点, 而这个状态"' + cube.toString() + '"连接了 ', adj.length, ' 个.');
+        }
+
+        network.nodes[current] = i;
+
+        console.log(i++, ';');
+
+        for (var j = 0; j < adj.length; j++) {
+            var v = adj[j];
+
+            if (!network.nodes[v]) {
+                fs.appendFileSync(filePath, current + ', ' + v + '\n', option);
+                unmarked.push(v);
+            }
+        }
+    }
+
+    console.log(network);
+
+    return network;
+};
 
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = Iterator;

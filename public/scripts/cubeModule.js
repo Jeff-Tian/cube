@@ -34,7 +34,69 @@ angular.module('cubeModule', [])
         $scope.CubeWorld = CubeWorld;
 
         $scope.state = {
-            label: $scope.cube.toString()
+            label: $scope.cube.toString(),
+            steps: []
+        };
+
+        $scope.executeButtonValid = false;
+        $scope.$watch('state.steps', function (newValue, oldValue) {
+            if (typeof newValue === 'string') {
+                newValue = newValue.replace(' ', '').split(/[,，]/);
+            }
+
+            $scope.executeButtonValid = true;
+            for (var i = 0; i < newValue.length; i++) {
+                var t = newValue[i];
+                if (Iterator.CubeIterator.turns.indexOf(t) < 0) {
+                    $scope.executeButtonValid = false;
+                    break;
+                }
+            }
+
+            if ($scope.executeButtonValid) {
+                $scope.state.steps = newValue;
+            }
+
+            // console.log(oldValue, '-->', newValue);
+        });
+
+        $scope.resetCube = function () {
+            $scope.doing = true;
+            $scope.cube.reset($timeout, 100, function () {
+                $scope.doing = false;
+            });
+        };
+
+        $scope.randomizeCube = function () {
+            $scope.doing = true;
+            $scope.cube.randomize($timeout, 100, undefined, function () {
+                $scope.doing = false;
+            });
+        };
+
+        $scope.doing = false;
+        $scope.execute = function () {
+            function oneByOne(callback) {
+                if ($scope.state.steps.length) {
+                    var s = $scope.state.steps.shift();
+                    $scope.cube[s]();
+                    if ($scope.state.steps.length) {
+                        $timeout(function () {
+                            oneByOne(callback);
+                        }, 500);
+                    } else {
+                        callback();
+                    }
+                } else {
+                    callback();
+                }
+            }
+
+            $scope.doing = true;
+            oneByOne(function () {
+                $scope.state.steps = [];
+                $scope.doing = false;
+            });
         };
 
         $scope.generate = function () {

@@ -413,7 +413,8 @@ function Cube(frontSurface, backSurface, leftSurface, rightSurface, topSurface, 
             this.perspectiveUp();
         };
 
-        Cube.prototype.randomize = function ($timeout, interval, numberOfSteps) {
+        Cube.prototype.randomize = function ($timeout, interval, numberOfSteps, callback) {
+            var self = this;
             $timeout = $timeout || window.setTimeout;
             var availableSteps = ['F', 'F`', 'B', 'B`', 'L', 'L`', 'R', 'R`', 'U', 'U`', 'D', 'D`'];
 
@@ -426,22 +427,26 @@ function Cube(frontSurface, backSurface, leftSurface, rightSurface, topSurface, 
 
             var doJob = function () {
                 while (steps.length) {
-                    this[steps.shift()]();
+                    self[steps.shift()]();
 
                     if (interval) {
                         $timeout(function () {
-                            doJob();
+                            doJob(callback);
                         }, interval);
 
                         break;
                     }
                 }
+
+                if (!steps.length) {
+                    callback && callback();
+                }
             };
 
-            doJob();
+            doJob(callback);
         };
 
-        Cube.prototype.reset = function ($timeout, interval) {
+        Cube.prototype.reset = function ($timeout, interval, callback) {
             var self = this;
 
             var player = {
@@ -488,11 +493,15 @@ function Cube(frontSurface, backSurface, leftSurface, rightSurface, topSurface, 
 
                 if (interval) {
                     $timeout(function () {
-                        self.reset($timeout, interval);
+                        self.reset($timeout, interval, callback);
                     }, interval);
 
                     break;
                 }
+            }
+
+            if (!self.history.length) {
+                callback();
             }
         };
 

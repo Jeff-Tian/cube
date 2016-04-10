@@ -95,29 +95,36 @@ mixin buttonCubeTable()
                     button.ui.positive.button(ng-click="cube.R_()") R'
         tr
             td
-                button.ui.button(ng-click="cube.reset($timeout, 500)") 还原
+                button.ui.button(ng-click="resetCube()") 还原
             td
                 + buttonRow
                     button.violet.ui.button(ng-click="cube.D()") D
                     + or
                     button.ui.positive.button(ng-click="cube.D_()") D'
             td
-                button.ui.button(ng-click="cube.randomize($timeout, 1000)") 随机化
+                button.ui.button(ng-click="randomizeCube()") 随机化
 
 
 + realCubeTable
 div.ui.horizontal.divider
 div
-    form.ui.form
+    form.ui.form(ng-class="{'loading': doing}")
         div.inline.field
             label 状态:
             input(type="text", style="width: 230px;", ng-model="state.label")
             | &nbsp;
             button.ui.red.button(type="submit", ng-click="generate()") 生成
+        div.inline.field
+            label 步骤:
+            input(type="text", style="width: 230px;", ng-model="state.steps")
+            | &nbsp;
+            button.ui.red.button(type="submit", ng-click="execute()", ng-disabled="!executeButtonValid") 运行
 div
     | {{cube.toString()}}
     | &nbsp;
-    button.ui.red.button(ng-click="traverse()") 遍历
-    button.ui.purple.button() 求解
+    form.ui.form(ng-class="{'loading': doing}")
+        button.ui.red.button(ng-click="traverse()") 遍历
+        button.ui.purple.button() 求解
 div.ui.divider
-+ buttonCubeTable.ui.celled.padded.table
+form.ui.form(ng-class="{'loading': doing}")
+    + buttonCubeTable.ui.celled.padded.table

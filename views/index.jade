@@ -31,28 +31,10 @@ html
             }
 
 body
-    div(class="ui large top fixed hidden menu")
-        div(class="ui container")
-            a(class="active item") Home
-            a(class="item") Work
-            div(class="right menu")
-                div(class="item")
-                    a(class="ui button") Log in
-                div(class="item")
-                    a(class="ui primary button") Sign up
-
     div(ng-app="cubeModule", ng-controller="cubeCtrl")
-        div.ui.horizontal.divider
-        div.ui.horizontal.divider
-        div.ui.horizontal.divider
-        div.ui.horizontal.divider
-        div.ui.horizontal.divider
         div.ui.two.column.grid
             div.ui.column
-                canvas#mycanvas.cmd(style="padding: 0px; box-sizing: border-box; image-rendering: -webkit-optimize-contrast !important; width: 100%; min-height: 150px;", tabindex="0", ng-show="false")
-                div#cy.cmd(style="padding: 0px; box-sizing: border-box; image-rendering: -webkit-optimize-contrast !important; width: 100%; min-height: 300px; display: block;, background-color: #aaa;", tabindex="0")
-                pre.hard.auto-wrap.cmd {{cube.history}}
-                pre.hard.auto-wrap.cmd {{history}}
+                include partial/dash
             div.ui.column
                 include partial/cube
 
