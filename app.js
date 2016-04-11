@@ -20,10 +20,10 @@ var staticSetting = {
 app.use(express.static(staticFolder, staticSetting));
 app.use('/virtual-scripts/cube', express.static(__dirname + '/cube', staticSetting));
 
-app.set('port', (process.env.PORT || 60002));
+app.set('port', (process.env.PORT || 60003));
 
 app.use(require('./routes/index.js'));
 
 app.listen(app.get('port'), function () {
-    console.log('geek application is running on port ', app.get('port'));
+    console.log('cube application is running on port ', app.get('port'));
 });

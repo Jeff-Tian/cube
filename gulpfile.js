@@ -2,13 +2,14 @@ var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var sh = require('shelljs');
 var karma = require('karma').server;
+var bump = require('gulp-bump');
 
 gulp.task('jshint', function () {
     gulp
         .src(['./www/js/**/*.js', './tests/**/*.js'])
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'))
-        .pipe(jshint.reporter('fail'));
+        .pipe(jshint.reporter('fail'))
     ;
 });
 
@@ -27,7 +28,14 @@ gulp.task('test', function (done) {
     }, done);
 });
 
-gulp.task('release', ['jshint', 'mocha', 'test']);
+gulp.task('bump', function () {
+    gulp.src(['./package.json', './bower.json'])
+        .pipe(bump())
+        .pipe(gulp.dest('./'))
+    ;
+});
+
+gulp.task('release', ['jshint', 'bump', 'mocha', 'test']);
 
 gulp.task('default', ['jshint', 'mocha', 'test', 'start']);
 
@@ -138,14 +146,5 @@ gulp.task('restricted-search-only', function (done) {
         fs.appendFileSync(filePath, n.nodes[p] + '\n', option);
     }
 
-    done();
-});
-
-gulp.task('read', function (done) {
-    var fs = require('fs');
-
-    var t = fs.readFileSync('./cube.csv', 'utf-8');
-    var r = t.split('\n');
-    console.log(r.length);
     done();
 });

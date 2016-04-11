@@ -1,14 +1,14 @@
 {
-  "name": "geek",
-  "version": "1.0.0",
-  "description": "Whatever geek tools.",
+  "name": "cube",
+  "version": "1.0.5",
+  "description": "Play cube online. 在线玩魔方.",
   "main": "app.js",
   "scripts": {
     "test": "gulp mocha && gulp test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Jeff-Tian/geek.git"
+    "url": "git+https://github.com/Jeff-Tian/cube.git"
   },
   "keywords": [
     "geek"
@@ -16,9 +16,9 @@
   "author": "http://zizhujy.com",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Jeff-Tian/geek/issues"
+    "url": "https://github.com/Jeff-Tian/cube/issues"
   },
-  "homepage": "https://github.com/Jeff-Tian/geek#readme",
+  "homepage": "https://github.com/Jeff-Tian/cube#readme",
   "dependencies": {
     "body-parser": "^1.15.0",
     "connect-busboy": "0.0.2",
@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "gulp": "^3.9.1",
+    "gulp-bump": "^2.1.0",
     "gulp-jshint": "^2.0.0",
     "gulp-replace": "^0.5.4",
     "jasmine-core": "^2.4.1",

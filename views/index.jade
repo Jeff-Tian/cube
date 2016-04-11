@@ -3,8 +3,9 @@ html
         meta(charset="utf-8")
         meta(http-quiv="X-UA-Compatible", content="IE=edge,chrome=1")
         meta(name="view-port", content="width=device-width, initial-scale=1.0, maximum-scale=1.0")
+        meta(name="description", content="在线玩二阶魔方, 查看状态图, 随机化二阶魔方并求解还原公式.")
         title!= title
-        link(rel="stylesheet", type="text/css", href="#{cdn.host}semantic/dist/semantic.min.css?#{cdn.version}")
+        link(rel="stylesheet", type="text/css", href="#{cdn.cdnify('semantic/dist/semantic.min.css')}")
         style(type="text/css").
             .cmd {
                 -moz-border-radius: 5px;
@@ -39,16 +40,16 @@ body
                 include partial/cube
 
     div
-        script(src="#{cdn.host}bower_components/jquery/dist/jquery.min.js?#{cdn.version}")
-        script(src="#{cdn.host}semantic/dist/semantic.min.js?#{cdn.version}")
-        script(src="#{cdn.host}bower_components/angular/angular.min.js?#{cdn.version}")
-        script(src="#{cdn.host}virtual-scripts/cube/graph.js?#{cdn.version}")
-        script(src="#{cdn.host}virtual-scripts/cube/layout.js?#{cdn.version}")
-        script(src="#{cdn.host}virtual-scripts/cube/painter.js?#{cdn.version}")
-        script(src="#{cdn.host}virtual-scripts/cube/cube.js?#{cdn.version}")
-        script(src="#{cdn.host}virtual-scripts/cube/cube-lite.js?#{cdn.version}")
-        script(src="#{cdn.host}virtual-scripts/cube/iterator.js?#{cdn.version}")
-        script(src="#{cdn.host}virtual-scripts/cube/solver.js?#{cdn.version}")
-        script(src="#{cdn.host}bower_components/cytoscape/dist/cytoscape.min.js?#{cdn.version}")
-        script(src="#{cdn.host}scripts/cubeModule.js?#{cdn.version}")
+        script(src="#{cdn.cdnify('bower_components/jquery/dist/jquery.min.js')}")
+        script(src="#{cdn.cdnify('semantic/dist/semantic.min.js')}")
+        script(src="#{cdn.cdnify('bower_components/angular/angular.min.js')}")
+        script(src="#{cdn.cdnify('virtual-scripts/cube/graph.js')}")
+        script(src="#{cdn.cdnify('virtual-scripts/cube/layout.js')}")
+        script(src="#{cdn.cdnify('virtual-scripts/cube/painter.js')}")
+        script(src="#{cdn.cdnify('virtual-scripts/cube/cube.js')}")
+        script(src="#{cdn.cdnify('virtual-scripts/cube/cube-lite.js')}")
+        script(src="#{cdn.cdnify('virtual-scripts/cube/iterator.js')}")
+        script(src="#{cdn.cdnify('virtual-scripts/cube/solver.js')}")
+        script(src="#{cdn.cdnify('bower_components/cytoscape/dist/cytoscape.min.js')}")
+        script(src="#{cdn.cdnify('scripts/cubeModule.js')}")
         script(type="text/javascript").

@@ -1,15 +1,16 @@
 {
-  "name": "geek",
-  "description": "Whatever geek tools.",
+  "name": "cube",
+  "version": "1.0.4",
+  "description": "Play cube online. 在线玩魔方.",
   "main": "app.js",
   "authors": [
     "http://zizhujy.com"
   ],
   "license": "ISC",
   "keywords": [
-    "geek"
+    "cube"
   ],
-  "homepage": "http://geek.zizhujy.com",
+  "homepage": "http://cube.zizhujy.com",
   "moduleType": [],
   "ignore": [
     "**/.*",
