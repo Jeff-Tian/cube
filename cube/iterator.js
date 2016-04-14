@@ -319,7 +319,8 @@ Iterator.CubeIterator = function () {
 };
 
 Iterator.CubeIterator.turns = ['F', 'F`', 'B', 'B`', 'U', 'U`', 'D', 'D`', 'L', 'L`', 'R', 'R`'];
-Iterator.CubeIterator.restrictedTurns = ['F', 'U', 'R'];
+// Fix the front right bottom block
+Iterator.CubeIterator.restrictedTurns = ['L', 'U', 'B'];
 
 Iterator.CubeIterator.getAdjacents = function (cube, turns) {
     turns = turns || Iterator.CubeIterator.turns;

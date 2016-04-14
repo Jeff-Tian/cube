@@ -148,3 +148,22 @@ gulp.task('restricted-search-only', function (done) {
 
     done();
 });
+
+gulp.task('dict', function (done) {
+    var fs = require('fs');
+    var filepath = 'dict.txt';
+    var option = 'utf-8';
+
+    for (var i = 0; i < 9; i++) {
+        for (var j = 0; j < 9; j++) {
+            for (var k = 0; k < 9; k++) {
+                for (var l = 0; l < 9; l++) {
+                    var pass = i + '' + j + '' + k + '' + l + '\n';
+                    fs.appendFileSync(filepath, pass, option);
+                }
+            }
+        }
+    }
+
+    done();
+});
