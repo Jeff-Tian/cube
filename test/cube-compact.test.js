@@ -21,4 +21,48 @@ describe('Cube Compact', function () {
 
         assert.equal(lite.toString(), CubeLite.getPristineCube().toString());
     });
+
+    it('can turn left', function () {
+        var compact = CubeCompact.getPristineCube();
+        compact.L();
+
+        var lite = CubeLite.getPristineCube();
+        lite.L();
+
+        assert.equal(compact.toLiteString(), lite.toString());
+    });
+
+    it('can turn left twice', function () {
+        var compact = CubeCompact.getPristineCube();
+        compact.L().L();
+
+        var lite = CubeLite.getPristineCube();
+        lite.L().L();
+
+        assert.equal(compact.toLiteString(), lite.toString());
+    });
+
+    it('can turn left triple', function () {
+        var compact = CubeCompact.getPristineCube();
+        compact.L().L().L();
+
+        assert.equal(compact.toString(), '0, 1, 5, 2, 4, 6, 3; 0, 0, 2, 1, 0, 1, 2');
+
+        var lite = CubeLite.getPristineCube();
+        lite.L().L().L();
+
+        assert.equal(compact.toLiteString(), lite.toString());
+    });
+
+    it('can turn left four times and reset to the original state', function () {
+        var compact = CubeCompact.getPristineCube();
+        compact.L().L().L().L();
+
+        assert.equal(compact.toString(), '0, 1, 2, 3, 4, 5, 6; 0, 0, 0, 0, 0, 0, 0');
+
+        var lite = CubeLite.getPristineCube();
+        lite.L().L().L().L();
+
+        assert.equal(compact.toLiteString(), lite.toString());
+    });
 });

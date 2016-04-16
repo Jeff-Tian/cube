@@ -94,25 +94,65 @@ function CubeCompact(directions, positions) {
             labels[1] = CornerReverseMap[this.directions[1]][1];
             labels[12] = CornerReverseMap[this.directions[1]][2];
 
-            labels[18] = CornerReverseMap[this.directions[2]][0];
-            labels[9] = CornerReverseMap[this.directions[2]][1];
-            labels[0] = CornerReverseMap[this.directions[2]][2];
+            if (this.positions[2] === 0) {
+                labels[18] = CornerReverseMap[this.directions[2]][0];
+                labels[9] = CornerReverseMap[this.directions[2]][1];
+                labels[0] = CornerReverseMap[this.directions[2]][2];
+            } else if (this.positions[2] === 1) {
+                labels[18] = CornerReverseMap[this.directions[2]][2];
+                labels[9] = CornerReverseMap[this.directions[2]][0];
+                labels[0] = CornerReverseMap[this.directions[2]][1];
+            } else {
+                labels[18] = CornerReverseMap[this.directions[2]][1];
+                labels[9] = CornerReverseMap[this.directions[2]][2];
+                labels[0] = CornerReverseMap[this.directions[2]][0];
+            }
 
-            labels[16] = CornerReverseMap[this.directions[3]][0];
-            labels[6] = CornerReverseMap[this.directions[3]][1];
-            labels[8] = CornerReverseMap[this.directions[3]][2];
+            if (this.positions[3] === 0) {
+                labels[16] = CornerReverseMap[this.directions[3]][0];
+                labels[6] = CornerReverseMap[this.directions[3]][1];
+                labels[8] = CornerReverseMap[this.directions[3]][2];
+            } else if (this.positions[3] === 1) {
+                labels[16] = CornerReverseMap[this.directions[3]][2];
+                labels[6] = CornerReverseMap[this.directions[3]][0];
+                labels[8] = CornerReverseMap[this.directions[3]][1];
+            } else {
+                labels[16] = CornerReverseMap[this.directions[3]][1];
+                labels[6] = CornerReverseMap[this.directions[3]][2];
+                labels[8] = CornerReverseMap[this.directions[3]][0];
+            }
 
             labels[23] = CornerReverseMap[this.directions[4]][0];
             labels[5] = CornerReverseMap[this.directions[4]][1];
             labels[15] = CornerReverseMap[this.directions[4]][2];
 
-            labels[20] = CornerReverseMap[this.directions[5]][0];
-            labels[2] = CornerReverseMap[this.directions[5]][1];
-            labels[11] = CornerReverseMap[this.directions[5]][2];
+            if (this.positions[5] === 0) {
+                labels[20] = CornerReverseMap[this.directions[5]][0];
+                labels[2] = CornerReverseMap[this.directions[5]][1];
+                labels[11] = CornerReverseMap[this.directions[5]][2];
+            } else if (this.positions[5] === 1) {
+                labels[20] = CornerReverseMap[this.directions[5]][2];
+                labels[2] = CornerReverseMap[this.directions[5]][0];
+                labels[11] = CornerReverseMap[this.directions[5]][1];
+            } else {
+                labels[20] = CornerReverseMap[this.directions[5]][1];
+                labels[2] = CornerReverseMap[this.directions[5]][2];
+                labels[11] = CornerReverseMap[this.directions[5]][0];
+            }
 
-            labels[22] = CornerReverseMap[this.directions[6]][0];
-            labels[10] = CornerReverseMap[this.directions[6]][1];
-            labels[4] = CornerReverseMap[this.directions[6]][2];
+            if (this.positions[6] === 0) {
+                labels[22] = CornerReverseMap[this.directions[6]][0];
+                labels[10] = CornerReverseMap[this.directions[6]][1];
+                labels[4] = CornerReverseMap[this.directions[6]][2];
+            } else if (this.positions[6] === 1) {
+                labels[22] = CornerReverseMap[this.directions[6]][2];
+                labels[10] = CornerReverseMap[this.directions[6]][0];
+                labels[4] = CornerReverseMap[this.directions[6]][1];
+            } else {
+                labels[22] = CornerReverseMap[this.directions[6]][1];
+                labels[10] = CornerReverseMap[this.directions[6]][2];
+                labels[4] = CornerReverseMap[this.directions[6]][0];
+            }
 
             labels[21] = CornerReverseMap[7][0];
             labels[14] = CornerReverseMap[7][1];
@@ -125,8 +165,28 @@ function CubeCompact(directions, positions) {
             return new CubeLite(labels.join(''));
         };
 
+        CubeCompact.prototype.L = function () {
+            var t = this.directions[2];
+            this.directions[2] = this.directions[3];
+            this.directions[3] = this.directions[6];
+            this.directions[6] = this.directions[5];
+            this.directions[5] = t;
+
+            t = this.positions[2];
+            this.positions[2] = (this.positions[3] + 2) % 3;
+            this.positions[3] = (this.positions[6] + 1) % 3;
+            this.positions[6] = (this.positions[5] + 2) % 3;
+            this.positions[5] = (t + 1) % 3;
+
+            return this;
+        };
+
         CubeCompact.prototype.toString = function () {
             return this.directions.join(', ') + '; ' + this.positions.join(', ');
+        };
+
+        CubeCompact.prototype.toLiteString = function () {
+            return this.toCubeLite().toString();
         };
 
         CubeCompact.__initialized__ = true;
