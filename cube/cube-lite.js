@@ -1,6 +1,49 @@
 if (typeof module !== 'undefined' && module.exports) {
     var window = {};
+
+    var CubeCompact = require('./cube-compact');
 }
+
+var Colors = {
+    yellow: 'Yellow',
+    white: 'White',
+    blue: 'Blue',
+    green: 'Green',
+    orange: 'Orange',
+    red: 'Red'
+};
+
+var LabelColorMapping = {
+    'α': Colors.blue,
+    'β': Colors.blue,
+    'γ': Colors.blue,
+    'δ': Colors.blue,
+
+    'φ': Colors.green,
+    'χ': Colors.green,
+    'ψ': Colors.green,
+    'ω': Colors.green,
+
+    'ι': Colors.orange,
+    'κ': Colors.orange,
+    'λ': Colors.orange,
+    'μ': Colors.orange,
+
+    'ν': Colors.red,
+    'ξ': Colors.red,
+    'ο': Colors.red,
+    'π': Colors.red,
+
+    'ε': Colors.yellow,
+    'ζ': Colors.yellow,
+    'η': Colors.yellow,
+    'θ': Colors.yellow,
+
+    'ρ': Colors.white,
+    'σ': Colors.white,
+    'τ': Colors.white,
+    'υ': Colors.white
+};
 
 function CubeLite(label) {
     this.original = label.split('');
@@ -106,6 +149,23 @@ function CubeLite(label) {
         };
 
         CubeLite.prototype.toCubeCompact = function () {
+            function mapLabelToColor(l) {
+                return LabelColorMapping[l];
+            }
+
+            var directions = [
+                CubeCompact.Corners[this.getBackLeftTopCorner().map(mapLabelToColor).join('')],
+                CubeCompact.Corners[this.getFrontRightTopCorner().map(mapLabelToColor).join('')],
+                CubeCompact.Corners[this.getFrontLeftTopCorner().map(mapLabelToColor).join('')],
+                CubeCompact.Corners[this.getBackRightTopCorner().map(mapLabelToColor).join('')],
+                CubeCompact.Corners[this.getBackLeftBottomCorner().map(mapLabelToColor).join('')],
+                CubeCompact.Corners[this.getFrontLeftBottomCorner().map(mapLabelToColor).join('')],
+                CubeCompact.Corners[this.getBackRightBottomCorner().map(mapLabelToColor).join('')]
+            ];
+
+            var positions = [0, 0, 0, 0, 0, 0, 0];
+
+            return new CubeCompact(directions, positions);
         };
 
         CubeLite.prototype.getFrontLeftTopCorner = function () {
@@ -125,7 +185,19 @@ function CubeLite(label) {
         };
 
         CubeLite.prototype.getBackLeftTopCorner = function () {
+            return [this.label[13], this.label[7], this.label[17]];
+        };
 
+        CubeLite.prototype.getBackRightTopCorner = function () {
+            return [this.label[6], this.label[8], this.label[16]];
+        };
+
+        CubeLite.prototype.getBackLeftBottomCorner = function () {
+            return [this.label[15], this.label[23], this.label[5]];
+        };
+
+        CubeLite.prototype.getBackRightBottomCorner = function () {
+            return [this.label[22], this.label[10], this.label[4]]
         };
 
         CubeLite.__initialized__ = true;

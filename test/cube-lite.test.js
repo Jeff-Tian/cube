@@ -421,5 +421,6 @@ describe('Cube Lite', function () {
 
         assert.deepStrictEqual(cube.getFrontLeftTopCorner(), [cube.label[9], cube.label[0], cube.label[18]]);
 
+        assert.deepStrictEqual(cube.getFrontRightBottomCorner().join(''), 'σοδ');
     });
 });
