@@ -14,9 +14,11 @@ describe('Cube Compact', function () {
     });
 
     it('can change to cube lite', function () {
-        // var compact = new CubeCompact([0, 1, 2, 3, 4, 5, 6], [0, 0, 0, 0, 0, 0, 0]);
-        // var lite = compact.toCubeLite();
-        //
-        // assert.equal(lite.toString(), CubeLite.getPristineCube().toString());
+        var compact = new CubeCompact([0, 1, 2, 3, 4, 5, 6], [0, 0, 0, 0, 0, 0, 0]);
+        var lite = compact.toCubeLite();
+
+        console.log('get cube lite pristine cube:', CubeLite.getPristineCube().toString());
+
+        assert.equal(lite.toString(), CubeLite.getPristineCube().toString());
     });
 });

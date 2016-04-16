@@ -419,7 +419,7 @@ describe('Cube Lite', function () {
     it('can get the 8 corners', function () {
         var cube = CubeLite.getPristineCube();
 
-        assert.deepStrictEqual(cube.getFrontLeftTopCorner(), [cube.label[9], cube.label[0], cube.label[18]]);
+        assert.deepStrictEqual(cube.getFrontLeftTopCorner(), [cube.label[18], cube.label[9], cube.label[0]]);
 
         assert.deepStrictEqual(cube.getFrontRightBottomCorner().join(''), 'σοδ');
     });
