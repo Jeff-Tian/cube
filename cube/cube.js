@@ -21,35 +21,35 @@ var COLOR = {
 };
 
 var LABEL = {
-    frontLeftTopGreen: 'Α α',
-    frontRightTopGreen: 'Β β',
-    frontLeftBottomGreen: 'Γ γ',
-    frontRightBottomGreen: 'Δ δ',
+    frontLeftTopGreen: 'Α α 0',
+    frontRightTopGreen: 'Β β 1',
+    frontLeftBottomGreen: 'Γ γ 2',
+    frontRightBottomGreen: 'Δ δ 3',
 
-    topLeftTopOrange: 'Ε ε',
-    topRightTopOrange: 'Ζ ζ',
-    topLeftBottomOrange: 'Η η',
-    topRightBottomOrange: 'Θ θ',
+    topLeftTopOrange: 'Ε ε 16',
+    topRightTopOrange: 'Ζ ζ 17',
+    topLeftBottomOrange: 'Η η 18',
+    topRightBottomOrange: 'Θ θ 19',
 
-    leftLeftTopBlue: 'Ι ι',
-    leftRightTopBlue: 'Κ κ',
-    leftLeftBottomBlue: '∧ λ',
-    leftRightBottomBlue: 'Μ μ',
+    leftLeftTopBlue: 'Ι ι 8',
+    leftRightTopBlue: 'Κ κ 9',
+    leftLeftBottomBlue: '∧ λ 10',
+    leftRightBottomBlue: 'Μ μ 11',
 
-    rightLeftTopRed: 'Ν ν',
-    rightRightTopRed: 'Ξ ξ',
-    rightLeftBottomRed: 'Ο ο',
-    rightRightBottomRed: '∏ π',
+    rightLeftTopRed: 'Ν ν 12',
+    rightRightTopRed: 'Ξ ξ 13',
+    rightLeftBottomRed: 'Ο ο 14',
+    rightRightBottomRed: '∏ π 15',
 
-    underLeftTopWhite: 'Ρ ρ',
-    underRightTopWhite: '∑ σ',
-    underLeftBottomWhite: 'Τ τ',
-    underRightBottomWhite: 'Υ υ',
+    underLeftTopWhite: 'Ρ ρ 20',
+    underRightTopWhite: '∑ σ 21',
+    underLeftBottomWhite: 'Τ τ 22',
+    underRightBottomWhite: 'Υ υ 23',
 
-    backLeftTopYellow: 'Φ φ',
-    backRightTopYellow: 'Χ χ',
-    backLeftBottomYellow: 'Ψ ψ',
-    backRightBottomYellow: 'Ω ω'
+    backLeftTopYellow: 'Φ φ 4',
+    backRightTopYellow: 'Χ χ 5',
+    backLeftBottomYellow: 'Ψ ψ 6',
+    backRightBottomYellow: 'Ω ω 7'
 };
 
 var SIMPLE_LABEL = {
@@ -582,6 +582,12 @@ function Cube(frontSurface, backSurface, leftSurface, rightSurface, topSurface, 
 
             this.rotateSideCounterClockwise(SIDE.top);
             this.rotateSideClockwise(SIDE.under);
+
+            this.rotateSideCounterClockwise(SIDE.left);
+            this.rotateSideCounterClockwise(SIDE.left);
+
+            this.rotateSideCounterClockwise(SIDE.back);
+            this.rotateSideCounterClockwise(SIDE.back);
         };
 
         Cube.prototype.perspectiveRight = function () {
@@ -623,7 +629,7 @@ function Cube(frontSurface, backSurface, leftSurface, rightSurface, topSurface, 
                         .map(function (row) {
                             return row
                                 .map(function (col) {
-                                    return col.label[col.label.length - 1];
+                                    return col.label.split(' ')[1];
                                 })
                                 .reduce(a);
                         })

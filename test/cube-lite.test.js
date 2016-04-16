@@ -165,6 +165,7 @@ describe('Cube Lite', function () {
         cube.F().F().F();
         var label2 = cube.toString();
 
+        assert.equal(label2, 'βδαγφχψωιθλησξρπεζνοκμτυ');
         assert.equal(label2, label1);
     });
 
@@ -187,6 +188,26 @@ describe('Cube Lite', function () {
             19: 14,
             20: 9,
             21: 11
+        });
+
+        cube = CubeLite.getPristineCube();
+        label1 = cube.label.slice(0);
+        cube.F();
+        label2 = cube.label.slice(0);
+
+        assert.deepStrictEqual(cube.getChangeMethod(label1, label2), {
+            "0": 2,
+            "1": 0,
+            "2": 3,
+            "3": 1,
+            "9": 20,
+            "11": 21,
+            "12": 18,
+            "14": 19,
+            "18": 11,
+            "19": 9,
+            "20": 14,
+            "21": 12
         });
     });
 
@@ -239,14 +260,14 @@ describe('Cube Lite', function () {
         assert.deepStrictEqual(CubeLite.getChangeMethod(label1, label2), {
             0: 16,
             2: 18,
-            5: 22,
-            7: 20,
+            4: 20,
+            6: 22,
             8: 10,
             9: 8,
             10: 11,
             11: 9,
-            16: 7,
-            18: 5,
+            16: 4,
+            18: 6,
             20: 0,
             22: 2
         });
@@ -259,16 +280,16 @@ describe('Cube Lite', function () {
         assert.deepStrictEqual(CubeLite.getChangeMethod(label1, label2), {
             0: 20,
             2: 22,
-            5: 18,
-            7: 16,
+            4: 16,
+            6: 18,
             8: 9,
             9: 11,
             10: 8,
             11: 10,
             16: 0,
             18: 2,
-            20: 7,
-            22: 5
+            20: 4,
+            22: 6
         });
 
 
@@ -280,16 +301,16 @@ describe('Cube Lite', function () {
         assert.deepStrictEqual(CubeLite.getChangeMethod(label1, label2), {
             1: 21,
             3: 23,
-            4: 19,
-            6: 17,
+            5: 17,
+            7: 19,
             12: 14,
             13: 12,
             14: 15,
             15: 13,
             17: 1,
             19: 3,
-            21: 6,
-            23: 4
+            21: 5,
+            23: 7
         });
 
         cube = CubeWorld.Cube.getPristineCube();
@@ -300,14 +321,14 @@ describe('Cube Lite', function () {
         assert.deepStrictEqual(CubeLite.getChangeMethod(label1, label2), {
             1: 17,
             3: 19,
-            4: 23,
-            6: 21,
+            5: 21,
+            7: 23,
             12: 13,
             13: 15,
             14: 12,
             15: 14,
-            17: 6,
-            19: 4,
+            17: 5,
+            19: 7,
             21: 1,
             23: 3
         });
@@ -393,5 +414,12 @@ describe('Cube Lite', function () {
             22: 20,
             23: 22
         });
+    });
+
+    it('can get the 8 corners', function () {
+        var cube = CubeLite.getPristineCube();
+
+        assert.deepStrictEqual(cube.getFrontLeftTopCorner(), [cube.label[9], cube.label[0], cube.label[18]]);
+
     });
 });

@@ -33,6 +33,17 @@ function CubeLite(label) {
             return CubeLite.getChangeMethod(label1, label2);
         };
 
+        // TODO: why the following not work
+        // var rs = ['F', 'F`', 'B', 'B`', 'L', 'L`', 'R', 'R`', 'U', 'U`', 'D', 'D`'];
+        //
+        // for (var i = 0; i < rs.length; i++) {
+        //     var r = rs[i];
+        //
+        //     CubeLite.prototype[r] = function () {
+        //         return this.change(CubeLite.rotateMapping[r]);
+        //     };
+        // }
+
         CubeLite.prototype.F = function () {
             // console.log('before F: ', this.toString());
             // this.change([[0, 2, 3, 1, 0], [9, 20, 14, 19, 9], [11, 21, 12, 18, 11]]);
@@ -94,6 +105,29 @@ function CubeLite(label) {
             return this.label.join('');
         };
 
+        CubeLite.prototype.toCubeCompact = function () {
+        };
+
+        CubeLite.prototype.getFrontLeftTopCorner = function () {
+            return [this.label[9], this.label[0], this.label[18]];
+        };
+
+        CubeLite.prototype.getFrontRightTopCorner = function () {
+            return [this.label[1], this.label[12], this.label[19]];
+        };
+
+        CubeLite.prototype.getFrontLeftBottomCorner = function () {
+            return [this.label[11], this.label[20], this.label[2]];
+        };
+
+        CubeLite.prototype.getFrontRightBottomCorner = function () {
+            return [this.label[21], this.label[14], this.label[3]];
+        };
+
+        CubeLite.prototype.getBackLeftTopCorner = function () {
+
+        };
+
         CubeLite.__initialized__ = true;
     }
 }
@@ -130,19 +164,17 @@ CubeLite.getStepByChangeMethod = function (changeMethod) {
 CubeLite.rotateMapping = {
     F: {
         0: 2,
+        1: 0,
         2: 3,
         3: 1,
-        1: 0,
-
         9: 20,
-        20: 14,
-        14: 19,
-        19: 9,
-
         11: 21,
-        21: 12,
         12: 18,
-        18: 11
+        14: 19,
+        18: 11,
+        19: 9,
+        20: 14,
+        21: 12
     },
     'F`': {
         0: 1,
@@ -189,56 +221,56 @@ CubeLite.rotateMapping = {
     L: {
         0: 16,
         2: 18,
-        5: 22,
-        7: 20,
+        4: 20,
+        6: 22,
         8: 10,
         9: 8,
         10: 11,
         11: 9,
-        16: 7,
-        18: 5,
+        16: 4,
+        18: 6,
         20: 0,
         22: 2
     },
     'L`': {
         0: 20,
         2: 22,
-        5: 18,
-        7: 16,
+        4: 16,
+        6: 18,
         8: 9,
         9: 11,
         10: 8,
         11: 10,
         16: 0,
         18: 2,
-        20: 7,
-        22: 5
+        20: 4,
+        22: 6
     },
     R: {
         1: 21,
         3: 23,
-        4: 19,
-        6: 17,
+        5: 17,
+        7: 19,
         12: 14,
         13: 12,
         14: 15,
         15: 13,
         17: 1,
         19: 3,
-        21: 6,
-        23: 4
+        21: 5,
+        23: 7
     },
     'R`': {
         1: 17,
         3: 19,
-        4: 23,
-        6: 21,
+        5: 21,
+        7: 23,
         12: 13,
         13: 15,
         14: 12,
         15: 14,
-        17: 6,
-        19: 4,
+        17: 5,
+        19: 7,
         21: 1,
         23: 3
     },

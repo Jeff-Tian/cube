@@ -25,25 +25,30 @@ describe('Cube Iterator Lite', function () {
         var adj = new Iterator.CubeIterator().getAdjacents(cube);
 
         // assertArrayEqualIgnoreOrder(adj, []);
-        assert.deepStrictEqual(adj, [
-            "γαδβφχψωιρλσηξθπεζμκοντυ",
-            "βδαγφχψωιθλησξρπεζνοκμτυ",
-            "αβγδψφωχζκεμνυοτξπηθρσιλ",
-            "αβγδχωφψτκυμνεοζλιηθρσπξ",
-            "νξγδφχκιαβλμωψοπηεθζρστυ",
-            "ικγδφχξνωψλμαβοπζθεηρστυ",
-            "αβλμποψωικχφνξγδεζηθτρυσ",
-            "αβοπμλψωικγδνξχφεζηθσυρτ",
-            "εβηδφτψρλιμκνξοπωζχθασγυ",
-            "ρβτδφηψεκμιλνξοπαζγθωσχυ",
-            "ασγυθχζωικλμονπξεβηδρψτφ",
-            "αζγθυχσωικλμξπνοεψηφρβτδ"
-        ]);
+        var expected = [
+            'γαδβφχψωιρλσηξθπεζμκοντυ',
+            'βδαγφχψωιθλησξρπεζνοκμτυ',
+            'αβγδψφωχζκεμνυοτξπηθρσιλ',
+            'αβγδχωφψτκυμνεοζλιηθρσπξ',
+            'νξγδφχκιαβλμωψοπηεθζρστυ',
+            'ικγδφχξνωψλμαβοπζθεηρστυ',
+            'αβλμποψωικχφνξγδεζηθτρυσ',
+            'αβοπμλψωικγδνξχφεζηθσυρτ',
+            'εβηδρχτωλιμκνξοπφζψθασγυ',
+            'ρβτδεχηωκμιλνξοπαζγθφσψυ',
+            'ασγυφζψθικλμονπξεβηδρχτω',
+            'αζγθφσψυικλμξπνοεχηωρβτδ'
+        ];
+
+        assert.deepStrictEqual(adj, expected);
 
         var theCube = CubeWorld.Cube.getPristineCube();
         var theAdj = new Iterator.CubeIterator().getAdjacentVertices(theCube).map(function (v) {
             return v.label;
         });
+
+        console.log('expected: ');
+        console.log(theAdj);
 
         assert.deepStrictEqual(adj, theAdj);
 
