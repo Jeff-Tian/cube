@@ -273,5 +273,5 @@ CubeCompact.Corners = CORNER;
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = CubeCompact;
 } else {
-    window.CuteCompact = CubeCompact;
+    window.CubeCompact = CubeCompact;
 }
