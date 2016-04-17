@@ -65,4 +65,45 @@ describe('Cube Compact', function () {
 
         assert.equal(compact.toLiteString(), lite.toString());
     });
+
+    it('can turn left counter clockwise', function () {
+        var compact = CubeCompact.getPristineCube();
+        compact['L`']();
+
+        var lite = CubeLite.getPristineCube();
+        lite['L`']();
+
+        assert.equal(compact.toLiteString(), lite.toString());
+    });
+
+    it('can turn left counter clockwise twice', function () {
+        var compact = CubeCompact.getPristineCube();
+        compact['L`']()['L`']();
+
+        var lite = CubeLite.getPristineCube();
+        lite['L`']()['L`']();
+
+        assert.equal(compact.toLiteString(), lite.toString());
+    });
+
+    it('can turn left counter clockwise triple', function () {
+        var compact = CubeCompact.getPristineCube();
+        compact['L`']()['L`']()['L`']();
+
+        var lite = CubeLite.getPristineCube();
+        lite['L`']()['L`']()['L`']();
+
+        assert.equal(compact.toLiteString(), lite.toString());
+    });
+
+    it('can turn left counter clockwise four times and reset to the original state', function () {
+        var compact = CubeCompact.getPristineCube();
+        compact['L`']()['L`']()['L`']()['L`']();
+
+        var lite = CubeLite.getPristineCube();
+        lite['L`']()['L`']()['L`']()['L`']();
+
+        assert.equal(compact.toString(), '0, 1, 2, 3, 4, 5, 6; 0, 0, 0, 0, 0, 0, 0');
+        assert.equal(compact.toLiteString(), lite.toString());
+    })
 });

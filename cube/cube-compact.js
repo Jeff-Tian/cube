@@ -181,6 +181,23 @@ function CubeCompact(directions, positions) {
             return this;
         };
 
+        CubeCompact.prototype['L`'] = function () {
+            // 2 --> 3 --> 6 --> 5 --> 2
+            var t = this.directions[2];
+            this.directions[2] = this.directions[5];
+            this.directions[5] = this.directions[6];
+            this.directions[6] = this.directions[3];
+            this.directions[3] = t;
+
+            t = this.positions[2];
+            this.positions[2] = (this.positions[5] + 2) % 3;
+            this.positions[5] = (this.positions[6] + 1) % 3;
+            this.positions[6] = (this.positions[3] + 2) % 3;
+            this.positions[3] = (t + 1) % 3;
+
+            return this;
+        };
+
         CubeCompact.prototype.toString = function () {
             return this.directions.join(', ') + '; ' + this.positions.join(', ');
         };
