@@ -165,37 +165,52 @@ function CubeCompact(directions, positions) {
             return new CubeLite(labels.join(''));
         };
 
-        CubeCompact.prototype.L = function () {
-            var t = this.directions[2];
-            this.directions[2] = this.directions[3];
-            this.directions[3] = this.directions[6];
-            this.directions[6] = this.directions[5];
-            this.directions[5] = t;
+        CubeCompact.prototype.turn = function (a, side) {
+            if (a.length !== 5) {
+                throw new Error('循环赋值需要且仅需要5个元素的下标数组!');
+            }
 
-            t = this.positions[2];
-            this.positions[2] = (this.positions[3] + 2) % 3;
-            this.positions[3] = (this.positions[6] + 1) % 3;
-            this.positions[6] = (this.positions[5] + 2) % 3;
-            this.positions[5] = (t + 1) % 3;
+            if (a[0] !== a[a.length - 1]) {
+                throw new Error('循环赋值需要第一个元素[' + a[0] + ']与最后一个元素[' + a[a.length - 1] + ']是同一个块!');
+            }
+
+            var sidesThatDontChangePositions = ['U', 'U`'];
+            var DontChangePosition = sidesThatDontChangePositions.indexOf(side) >= 0;
+
+            var d = this.directions[a[0]];
+            var p = this.positions[a[0]];
+
+            for (var i = 0; i < a.length - 2; i++) {
+                this.directions[a[i]] = this.directions[a[i + 1]];
+
+                if (!DontChangePosition) {
+                    this.positions[a[i]] = (this.positions[a[i + 1]] + (i % 2 === 0 ? 2 : 1)) % 3;
+                }
+            }
+
+            this.directions[a[i]] = d;
+
+            if (!DontChangePosition) {
+                this.positions[a[i]] = (p + 1) % 3;
+            }
 
             return this;
         };
 
+        CubeCompact.prototype.L = function () {
+            return this.turn([2, 3, 6, 5, 2]);
+        };
+
         CubeCompact.prototype['L`'] = function () {
-            // 2 --> 3 --> 6 --> 5 --> 2
-            var t = this.directions[2];
-            this.directions[2] = this.directions[5];
-            this.directions[5] = this.directions[6];
-            this.directions[6] = this.directions[3];
-            this.directions[3] = t;
+            return this.turn([2, 5, 6, 3, 2]);
+        };
 
-            t = this.positions[2];
-            this.positions[2] = (this.positions[5] + 2) % 3;
-            this.positions[5] = (this.positions[6] + 1) % 3;
-            this.positions[6] = (this.positions[3] + 2) % 3;
-            this.positions[3] = (t + 1) % 3;
+        CubeCompact.prototype.U = function () {
+            return this.turn([0, 3, 2, 1, 0], 'U');
+        };
 
-            return this;
+        CubeCompact.prototype['U`'] = function () {
+            return this.turn([0, 1, 2, 3, 0], 'U`');
         };
 
         CubeCompact.prototype.toString = function () {
