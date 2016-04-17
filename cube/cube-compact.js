@@ -86,13 +86,33 @@ function CubeCompact(directions, positions) {
         CubeCompact.prototype.toCubeLite = function () {
             var labels = [];
 
-            labels[17] = CornerReverseMap[this.directions[0]][0];
-            labels[13] = CornerReverseMap[this.directions[0]][1];
-            labels[7] = CornerReverseMap[this.directions[0]][2];
+            if (this.positions[0] === 0) {
+                labels[17] = CornerReverseMap[this.directions[0]][0];
+                labels[13] = CornerReverseMap[this.directions[0]][1];
+                labels[7] = CornerReverseMap[this.directions[0]][2];
+            } else if (this.positions[0] === 1) {
+                labels[17] = CornerReverseMap[this.directions[0]][2];
+                labels[13] = CornerReverseMap[this.directions[0]][0];
+                labels[7] = CornerReverseMap[this.directions[0]][1];
+            } else {
+                labels[17] = CornerReverseMap[this.directions[0]][1];
+                labels[13] = CornerReverseMap[this.directions[0]][2];
+                labels[7] = CornerReverseMap[this.directions[0]][0];
+            }
 
-            labels[19] = CornerReverseMap[this.directions[1]][0];
-            labels[1] = CornerReverseMap[this.directions[1]][1];
-            labels[12] = CornerReverseMap[this.directions[1]][2];
+            if (this.positions[1] === 0) {
+                labels[19] = CornerReverseMap[this.directions[1]][0];
+                labels[1] = CornerReverseMap[this.directions[1]][1];
+                labels[12] = CornerReverseMap[this.directions[1]][2];
+            } else if (this.positions[1] === 1) {
+                labels[19] = CornerReverseMap[this.directions[1]][2];
+                labels[1] = CornerReverseMap[this.directions[1]][0];
+                labels[12] = CornerReverseMap[this.directions[1]][1];
+            } else {
+                labels[19] = CornerReverseMap[this.directions[1]][1];
+                labels[1] = CornerReverseMap[this.directions[1]][2];
+                labels[12] = CornerReverseMap[this.directions[1]][0];
+            }
 
             if (this.positions[2] === 0) {
                 labels[18] = CornerReverseMap[this.directions[2]][0];
@@ -122,9 +142,19 @@ function CubeCompact(directions, positions) {
                 labels[8] = CornerReverseMap[this.directions[3]][0];
             }
 
-            labels[23] = CornerReverseMap[this.directions[4]][0];
-            labels[5] = CornerReverseMap[this.directions[4]][1];
-            labels[15] = CornerReverseMap[this.directions[4]][2];
+            if (this.positions[4] === 0) {
+                labels[23] = CornerReverseMap[this.directions[4]][0];
+                labels[5] = CornerReverseMap[this.directions[4]][1];
+                labels[15] = CornerReverseMap[this.directions[4]][2];
+            } else if (this.positions[4] === 1) {
+                labels[23] = CornerReverseMap[this.directions[4]][2];
+                labels[5] = CornerReverseMap[this.directions[4]][0];
+                labels[15] = CornerReverseMap[this.directions[4]][1];
+            } else {
+                labels[23] = CornerReverseMap[this.directions[4]][1];
+                labels[5] = CornerReverseMap[this.directions[4]][2];
+                labels[15] = CornerReverseMap[this.directions[4]][0];
+            }
 
             if (this.positions[5] === 0) {
                 labels[20] = CornerReverseMap[this.directions[5]][0];
@@ -211,6 +241,14 @@ function CubeCompact(directions, positions) {
 
         CubeCompact.prototype['U`'] = function () {
             return this.turn([0, 1, 2, 3, 0], 'U`');
+        };
+
+        CubeCompact.prototype.B = function () {
+            return this.turn([3, 0, 4, 6, 3]);
+        };
+
+        CubeCompact.prototype['B`'] = function () {
+            return this.turn([3, 6, 4, 0, 3]);
         };
 
         CubeCompact.prototype.toString = function () {

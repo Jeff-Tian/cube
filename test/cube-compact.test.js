@@ -107,50 +107,36 @@ describe('Cube Compact', function () {
         assert.equal(compact.toLiteString(), lite.toString());
     });
 
-    it('can turn upper side clockwise', function () {
-        var compact = CubeCompact.getPristineCube();
-        compact.U();
+    testTurn('can turn upper side clockwise', 'U');
 
-        var lite = CubeLite.getPristineCube();
-        lite.U();
+    testTurn('can turn upper side counter clockwise', 'U`');
 
-        assert.equal(compact.toLiteString(), lite.toString());
+    testTurn('can turn back side clockwise', 'B');
 
-        compact.U();
-        lite.U();
-        assert.equal(compact.toLiteString(), lite.toString());
+    testTurn('can turn back side counter clockwise', 'B`');
 
-        compact.U();
-        lite.U();
-        assert.equal(compact.toLiteString(), lite.toString());
+    function testTurn(descr, turn) {
+        it(descr, function () {
+            var compact = CubeCompact.getPristineCube();
+            compact[turn]();
 
-        compact.U();
-        lite.U();
-        assert.equal(compact.toLiteString(), lite.toString());
+            var lite = CubeLite.getPristineCube();
+            lite[turn]();
 
-        assert.equal(compact.toString(), CubeCompact.getPristineCube().toString());
-    });
+            assert.equal(compact.toLiteString(), lite.toString());
 
-    it('can turn upper side counter clockwise', function () {
-        var compact = CubeCompact.getPristineCube();
-        compact['U`']();
+            compact[turn]();
+            lite[turn]();
+            assert.equal(compact.toLiteString(), lite.toString());
 
-        var lite = CubeLite.getPristineCube();
-        lite['U`']();
+            compact[turn]();
+            lite[turn]();
+            assert.equal(compact.toLiteString(), lite.toString());
 
-        assert.equal(compact.toLiteString(), lite.toString());
-
-        compact['U`']();
-        lite['U`']();
-        assert.equal(compact.toLiteString(), lite.toString());
-
-        compact['U`']();
-        lite['U`']();
-        assert.equal(compact.toLiteString(), lite.toString());
-
-        compact['U`']();
-        lite['U`']();
-        assert.equal(compact.toLiteString(), lite.toString());
-        assert.equal(compact.toString(), CubeCompact.getPristineCube().toString());
-    });
+            compact[turn]();
+            lite[turn]();
+            assert.equal(compact.toLiteString(), lite.toString());
+            assert.equal(compact.toString(), CubeCompact.getPristineCube().toString());
+        });
+    }
 });

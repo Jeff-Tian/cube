@@ -354,7 +354,6 @@ describe('Cube Lite', function () {
             19: 17
         });
 
-
         cube = CubeWorld.Cube.getPristineCube();
         label1 = cube.toString().split('');
         cube['U`']();
