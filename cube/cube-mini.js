@@ -23,7 +23,7 @@ function CubeMini(data) {
                 // 并未存储, 进行脑补:
                 var all = {0: true, 1: true, 2: true, 3: true, 4: true, 5: true, 6: true};
 
-                for (var i = 0; i < 7; i++) {
+                for (var i = 1; i < 7; i++) {
                     delete all[this.getCornerDirection(i)];
                 }
 
@@ -37,8 +37,53 @@ function CubeMini(data) {
             return (this.data & parseInt(CubeMini.getCornerDirectionRepresent(7, rank))) >> cornerDirectionBit(rank);
         };
 
-        CubeMini.prototype.toCubeCompact = function () {
+        CubeMini.prototype.getCornerPosition = function (rank) {
+            if (rank === 7) {
+                var stored = [];
+                for (var i = 1; i < 7; i++) {
+                    stored.push(this.getCornerPosition(i));
+                }
 
+                var sum = stored.reduce(function (x, y) {
+                    return x + y;
+                }, 0);
+
+                var mod = sum % 3;
+
+                if (mod === 0) {
+                    return 0;
+                } else if (mod === 1) {
+                    return 2;
+                } else if (mod === 2) {
+                    return 1;
+                }
+            }
+
+            return (this.data & parseInt(CubeMini.getCornerPositionRepresent(3, rank))) >> cornerPositionBit(rank);
+        };
+
+        CubeMini.prototype.toCubeCompact = function () {
+            if (typeof require === 'function') {
+                var CubeCompact = require('./cube-compact');
+            }
+
+            return new CubeCompact([
+                this.getCornerDirection(1),
+                this.getCornerDirection(2),
+                this.getCornerDirection(3),
+                this.getCornerDirection(4),
+                this.getCornerDirection(5),
+                this.getCornerDirection(6),
+                this.getCornerDirection(7),
+            ], [
+                this.getCornerPosition(1),
+                this.getCornerPosition(2),
+                this.getCornerPosition(3),
+                this.getCornerPosition(4),
+                this.getCornerPosition(5),
+                this.getCornerPosition(6),
+                this.getCornerPosition(7)
+            ]);
         };
 
         CubeMini.__initialized__ = true;

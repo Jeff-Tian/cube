@@ -81,6 +81,17 @@ describe('Cube Mini: ', function () {
         assert.equal(mini.getCornerDirection(7), 6);
     });
 
+    it('can get corner position', function () {
+        var mini = CubeMini.getPristineCube();
+        assert.equal(mini.getCornerPosition(1), 0);
+        assert.equal(mini.getCornerPosition(2), 0);
+        assert.equal(mini.getCornerPosition(3), 0);
+        assert.equal(mini.getCornerPosition(4), 0);
+        assert.equal(mini.getCornerPosition(5), 0);
+        assert.equal(mini.getCornerPosition(6), 0);
+        assert.equal(mini.getCornerPosition(7), 0);
+    });
+
     it('can convert to Cube Lite', function () {
         assert.equal(CubeMini.getPristineCube().toCubeCompact().toString(), CubeCompact.getPristineCube().toString());
     });
