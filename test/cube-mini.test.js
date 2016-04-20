@@ -100,4 +100,42 @@ describe('Cube Mini: ', function () {
         var c = CubeMini.getPristineCube();
         assert.equal(c.toString(), '0000 0010|1001 1100|1010 0000|0000 0000');
     });
+
+    it('can get lite representation', function () {
+        var c = CubeMini.getPristineCube();
+        assert.equal(c.toLiteString(), CubeLite.getPristineCube().toString());
+    });
+
+    function testTurn(descr, turn) {
+        it(descr, function () {
+            var c = CubeMini.getPristineCube();
+            c[turn]();
+
+            var l = CubeLite.getPristineCube();
+            l[turn]();
+
+            assert.equal(c.toLiteString(), l.toString());
+
+            c.L();
+            l.L();
+
+            assert.equal(c.toLiteString(), l.toString());
+
+            c.L();
+            l.L();
+
+            assert.equal(c.toLiteString(), l.toString());
+            c.L();
+            l.L();
+
+            assert.equal(c.toLiteString(), l.toString());
+        });
+    }
+
+    testTurn('can turn left', 'L');
+    testTurn('can turn left', 'L`');
+    testTurn('can turn left', 'B');
+    testTurn('can turn left', 'B`');
+    testTurn('can turn left', 'U');
+    testTurn('can turn left', 'U`');
 });

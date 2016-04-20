@@ -263,6 +263,8 @@ function CubeCompact(directions, positions) {
     }
 }
 
+CubeCompact.turns = ['L', 'L`', 'U', 'U`', 'B', 'B`'];
+
 CubeCompact.getPristineCube = function () {
     return new CubeCompact([0, 1, 2, 3, 4, 5, 6], [0, 0, 0, 0, 0, 0, 0]);
 };

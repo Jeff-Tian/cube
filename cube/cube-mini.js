@@ -14,6 +14,10 @@ function CubeMini(data) {
     this.data = data || new Array(32);
 
     if (!CubeMini.__initialized__) {
+        if (typeof require === 'function') {
+            var CubeCompact = require('./cube-compact');
+        }
+
         CubeMini.prototype.toString = function () {
             return CubeMini.padFormat(this.data.toString(2));
         };
@@ -63,28 +67,36 @@ function CubeMini(data) {
         };
 
         CubeMini.prototype.toCubeCompact = function () {
-            if (typeof require === 'function') {
-                var CubeCompact = require('./cube-compact');
+            var ds = [];
+            var ps = [];
+
+            for (var i = 1; i <= 7; i++) {
+                ds.push(this.getCornerDirection(i));
+                ps.push(this.getCornerPosition(i));
             }
 
-            return new CubeCompact([
-                this.getCornerDirection(1),
-                this.getCornerDirection(2),
-                this.getCornerDirection(3),
-                this.getCornerDirection(4),
-                this.getCornerDirection(5),
-                this.getCornerDirection(6),
-                this.getCornerDirection(7),
-            ], [
-                this.getCornerPosition(1),
-                this.getCornerPosition(2),
-                this.getCornerPosition(3),
-                this.getCornerPosition(4),
-                this.getCornerPosition(5),
-                this.getCornerPosition(6),
-                this.getCornerPosition(7)
-            ]);
+            return new CubeCompact(ds, ps);
         };
+
+        CubeMini.prototype.toLiteString = function () {
+            return this.toCubeCompact().toLiteString();
+        };
+
+        function makeTurn(t) {
+            CubeMini.prototype[t] = (function (turn) {
+                return function () {
+                    var c = this.toCubeCompact();
+                    c[turn]();
+
+                    this.data = CubeMini.fromCubeCompact(c).data;
+                    return this;
+                }
+            })(t);
+        }
+
+        for (var i = 0; i < CubeCompact.turns.length; i++) {
+            makeTurn(CubeCompact.turns[i]);
+        }
 
         CubeMini.__initialized__ = true;
     }
