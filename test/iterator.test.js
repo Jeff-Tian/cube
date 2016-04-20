@@ -2,6 +2,7 @@ var assert = require('assert');
 var CubeLite = require('../cube/cube-lite.js');
 var CubeWorld = require('../cube/cube');
 var Iterator = require('../cube/iterator');
+var CubeMini = require('../cube/cube-mini');
 
 var turnMethods = ['F', 'F`', 'B', 'B`', 'L', 'L`', 'R', 'R`', 'U', 'U`', 'D', 'D`'];
 

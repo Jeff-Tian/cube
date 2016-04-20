@@ -138,4 +138,23 @@ describe('Cube Mini: ', function () {
     testTurn('can turn left', 'B`');
     testTurn('can turn left', 'U');
     testTurn('can turn left', 'U`');
+
+    it('can randomize a cube', function () {
+        var c = CubeMini.getPristineCube();
+        c.randomize();
+
+        assert.notEqual(c.data, 0);
+    });
+
+    it('can be created from a state', function () {
+        var c = CubeMini.fromState(CubeMini.getPristineCube().data);
+
+        assert.equal(c.toLiteString(), CubeLite.getPristineCube().toString());
+
+        c = CubeMini.fromState(55885969);
+        assert.equal(c.toLiteString(), 'ρβτδεχηωκμιλνξοπαζγθφσψυ');
+
+        c = CubeMini.fromState(49561745);
+        assert.equal(c.toLiteString(), 'εβηδρχτωλιμκνξοπφζψθασγυ');
+    });
 });

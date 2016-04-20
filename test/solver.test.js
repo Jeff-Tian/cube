@@ -1,6 +1,7 @@
-var solver = require('../cube/solver');
+var Solver = require('../cube/solver');
 var GraphWorld = require('../cube/graph');
 var assert = require('assert');
+var CubeMini = require('../cube/cube-mini');
 
 describe('Solver', function () {
     it('can find shortest path', function () {
@@ -10,14 +11,14 @@ describe('Solver', function () {
         var g = new GraphWorld.Graph([v, w], [e]);
 
         var expected = {l: 1, path: [v, w]};
-        assert.deepStrictEqual(solver.shortestPath(g, v, w), expected);
+        assert.deepStrictEqual(Solver.shortestPath(g, v, w), expected);
 
         var x = new GraphWorld.Vertex('x');
         g.addVertex(x);
         g.addEdge(new GraphWorld.Edge(w, x));
         expected = {l: 2, path: [v, w, x]};
 
-        assert.deepStrictEqual(solver.shortestPath(g, v, x), expected);
+        assert.deepStrictEqual(Solver.shortestPath(g, v, x), expected);
 
         var y = new GraphWorld.Vertex('y');
         var z = new GraphWorld.Vertex('z');
@@ -30,7 +31,7 @@ describe('Solver', function () {
 
         expected = {l: 3, path: [v, w, x, z]};
 
-        assert.deepStrictEqual(solver.shortestPath(g, v, z), expected);
+        assert.deepStrictEqual(Solver.shortestPath(g, v, z), expected);
     });
 
     it('can find the 1st shortest path', function () {
@@ -50,7 +51,7 @@ describe('Solver', function () {
 
         var expected = {l: 3, path: [v, w, x, z]};
 
-        assert.deepStrictEqual(solver.shortestPath(g, v, z), expected);
+        assert.deepStrictEqual(Solver.shortestPath(g, v, z), expected);
     });
 
     it('can find the shortest path for simplest graph', function () {
@@ -67,6 +68,64 @@ describe('Solver', function () {
 
         var expected = {l: 1, path: [a, c]};
 
-        assert.deepStrictEqual(solver.shortestPath(g, a, c), expected);
+        assert.deepStrictEqual(Solver.shortestPath(g, a, c), expected);
+    });
+});
+
+describe('Cube Mini Solver', function () {
+    it('can get adjacents states', function () {
+        var c = CubeMini.getPristineCube();
+
+        assert.deepStrictEqual(Solver.CubeMiniSolver.getAdjacents(c.data), [49561745, 55885969, 810852352, 348430336, 1116120104, 850437160]);
+
+        c = CubeMini.fromState(49561745);
+        assert.equal(Solver.CubeMiniSolver.getAdjacents(c.data).indexOf(55885969), -1);
+
+        c = CubeMini.fromState(55885969);
+        assert.equal(Solver.CubeMiniSolver.getAdjacents(c.data).indexOf(49561745), -1);
+    });
+
+    it('can get steps by path', function () {
+        assert.deepStrictEqual(Solver.CubeMiniSolver.getSteps([43819008, 49561745]), ['L']);
+    });
+
+    it('can solve a path to reset cube', function () {
+        var c = CubeMini.getPristineCube();
+        var from = c.data;
+        var to = c.data;
+
+        assert.deepStrictEqual(Solver.CubeMiniSolver.solve(from, to), {
+            path: [from],
+            steps: []
+        });
+
+        c.L();
+        to = c.data;
+        assert.deepStrictEqual(Solver.CubeMiniSolver.solve(from, to), {
+            path: [from, to],
+            steps: ['L']
+        });
+
+        console.log('中间状态是 ' + to);
+
+        c.U();
+        to = c.data;
+        assert.deepStrictEqual(Solver.CubeMiniSolver.solve(from, to).steps, ['L', 'U']);
+
+        c.B();
+        to = c.data;
+        assert.deepStrictEqual(Solver.CubeMiniSolver.solve(from, to).steps, ['L', 'U', 'B']);
+
+        c['L`']();
+        to = c.data;
+        assert.deepStrictEqual(Solver.CubeMiniSolver.solve(from, to).steps, ['L', 'U', 'B', 'L`']);
+
+        c['B`']();
+        to = c.data;
+        assert.deepStrictEqual(Solver.CubeMiniSolver.solve(from, to).steps, ['L', 'U', 'B', 'L`', 'B`']);
+
+        c['U`']();
+        to = c.data;
+        assert.deepStrictEqual(Solver.CubeMiniSolver.solve(from, to).steps, ['L', 'U', 'B', 'L`', 'B`', 'U`']);
     });
 });

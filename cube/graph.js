@@ -161,10 +161,84 @@ Graph.simplestGraph = function () {
     return g;
 };
 
+var GraphMini = function (vs, es) {
+    if (!(vs instanceof Array)) {
+        throw new Error('要创建一个图, 第一个参数必须是顶点数组');
+    }
+
+    if (!(es instanceof Array)) {
+        throw new Error('要创建一个图, 第二参数必须是边数组');
+    }
+
+    if (es.length > 0 && !(es[0] instanceof Array)) {
+        throw new Error('第二个数组边中每个元素都应该是一个数组');
+    }
+
+    if (!GraphMini.__initialized__) {
+        GraphMini.prototype.addVertex = function (v) {
+            if (!v) {
+                throw new Error('要添加顶点,必须传入一个顶点');
+            }
+
+            if (this.data[v]) {
+                throw new Error('顶点 ' + v + ' 已经存在,不能重复添加.');
+            }
+
+            this.data[v] = {};
+        };
+
+        GraphMini.prototype.addEdge = function (v, w) {
+            if (!v || !w) {
+                throw new Error('要添加边,必须传入两个顶点');
+            }
+
+            if (!this.data[v]) {
+                throw new Error('顶点 ' + v + ' 还不存在, 所以不能添加从 ' + v + ' 到 ' + w + ' 的边.');
+            }
+
+            if (!this.data[w]) {
+                throw new Error('顶点 ' + w + ' 还不存在, 所以不能添加从 ' + v + ' 到 ' + w + ' 的边.');
+            }
+
+            if (this.data[v][w]) {
+                throw new Error('从顶点 ' + v + ' 到 ' + w + ' 的边已经存在, 不能重复添加.');
+            }
+
+            // if (this.data[w][v]) {
+            //     throw new Error('从顶点 ' + w + ' 到 ' + v + ' 的边已经存在, 不能重复添加.');
+            // }
+
+            this.data[v][w] = {};
+            // this.data[w][v] = {};
+        };
+
+        GraphMini.prototype.getVertices = function () {
+            return Object.keys(this.data);
+        };
+
+        GraphMini.prototype.getEdges = function () {
+
+        };
+
+        GraphMini.__initialized__ = true;
+    }
+
+    this.data = {};
+
+    for (var i = 0; i < vs.length; i++) {
+        this.addVertex(vs[i]);
+    }
+
+    for (var j = 0; j < es.length; j++) {
+        this.addEdge(es[j][0], es[j][1]);
+    }
+};
+
 var GraphWorld = {
     Vertex: Vertex,
     Edge: Edge,
-    Graph: Graph
+    Graph: Graph,
+    GraphMini: GraphMini
 };
 
 if (typeof module !== 'undefined' && module.exports) {

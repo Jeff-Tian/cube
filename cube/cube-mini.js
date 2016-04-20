@@ -98,6 +98,39 @@ function CubeMini(data) {
             makeTurn(CubeCompact.turns[i]);
         }
 
+        CubeMini.prototype.randomize = function ($timeout, interval, numberOfSteps, callback) {
+            var self = this;
+            $timeout = $timeout || window.setTimeout;
+            var availableSteps = ['B', 'B`', 'L', 'L`', 'U', 'U`'];
+
+            var steps = [];
+            numberOfSteps = numberOfSteps || Math.floor(Math.random() * 100);
+
+            for (var i = 0; i < numberOfSteps; i++) {
+                steps.push(availableSteps[Math.floor(Math.random() * availableSteps.length)]);
+            }
+
+            var doJob = function () {
+                while (steps.length) {
+                    self[steps.shift()]();
+
+                    if (interval) {
+                        $timeout(function () {
+                            doJob(callback);
+                        }, interval);
+
+                        break;
+                    }
+                }
+
+                if (!steps.length) {
+                    callback && callback();
+                }
+            };
+
+            doJob(callback);
+        };
+
         CubeMini.__initialized__ = true;
     }
 }
@@ -108,6 +141,10 @@ CubeMini.getPristineCube = function () {
 
 CubeMini.fromCubeCompact = function (compact) {
     return new CubeMini(CubeMini.getCornerRepresent(compact.directions.slice(0, compact.directions.length - 1), compact.positions.slice(0, compact.positions.length - 1)));
+};
+
+CubeMini.fromState = function (state) {
+    return new CubeMini(state);
 };
 
 CubeMini.getCornerDirectionRepresent = function (n, rank) {

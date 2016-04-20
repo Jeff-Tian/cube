@@ -2,6 +2,7 @@ if (typeof module !== 'undefined' && module.exports) {
     var CubeWorld = require('./cube');
     var CubeLite = require('./cube-lite');
     var GraphWorld = require('./graph');
+    var CubeMini = require('./cube-mini');
     var window = {};
 }
 
@@ -339,7 +340,7 @@ Iterator.CubeIterator.getAdjacents = function (cube, turns) {
 
 Iterator.CubeIterator.iterateTo = function (cube, endState) {
     var start = cube.toString();
-    console.log('starting ...', start);
+    // console.log('starting ...', start);
 
     var self = Iterator.CubeIterator;
 
@@ -396,7 +397,7 @@ Iterator.CubeIterator.iterateTo = function (cube, endState) {
         }
     }
 
-    console.log(network);
+    // console.log(network);
 
     // return network;
     return g;
