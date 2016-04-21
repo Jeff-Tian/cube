@@ -76,13 +76,24 @@ describe('Cube Mini Solver', function () {
     it('can get adjacents states', function () {
         var c = CubeMini.getPristineCube();
 
-        assert.deepStrictEqual(Solver.CubeMiniSolver.getAdjacents(c.data), [49561745, 55885969, 810852352, 348430336, 1116120104, 850437160]);
+        assert.deepStrictEqual(Solver.CubeMiniSolver.getAdjacents(c.data), [{
+            turn: 'L',
+            data: 49561745
+        }, {turn: 'L`', data: 55885969},
+            {turn: 'U', data: 810852352},
+            {turn: 'U`', data: 348430336},
+            {turn: 'B', data: 1116120104},
+            {turn: 'B`', data: 850437160}
+        ]);
 
         c = CubeMini.fromState(49561745);
         assert.equal(Solver.CubeMiniSolver.getAdjacents(c.data).indexOf(55885969), -1);
 
         c = CubeMini.fromState(55885969);
         assert.equal(Solver.CubeMiniSolver.getAdjacents(c.data).indexOf(49561745), -1);
+
+        c = CubeMini.fromState(1355563008);
+        assert.equal(Solver.CubeMiniSolver.getAdjacents(c.data).indexOf(281363496), -1);
     });
 
     it('can get steps by path', function () {
@@ -96,36 +107,52 @@ describe('Cube Mini Solver', function () {
 
         assert.deepStrictEqual(Solver.CubeMiniSolver.solve(from, to), {
             path: [from],
-            steps: []
+            turns: [],
+            // steps: []
         });
 
         c.L();
         to = c.data;
         assert.deepStrictEqual(Solver.CubeMiniSolver.solve(from, to), {
             path: [from, to],
-            steps: ['L']
+            turns: ['L'],
+            // steps: ['L']
         });
 
         console.log('中间状态是 ' + to);
 
         c.U();
         to = c.data;
-        assert.deepStrictEqual(Solver.CubeMiniSolver.solve(from, to).steps, ['L', 'U']);
+        var solved = Solver.CubeMiniSolver.solve(from, to);
+        // assert.deepStrictEqual(solved.steps, ['L', 'U']);
+        assert.deepStrictEqual(solved.turns, ['L', 'U']);
 
         c.B();
         to = c.data;
-        assert.deepStrictEqual(Solver.CubeMiniSolver.solve(from, to).steps, ['L', 'U', 'B']);
+        solved = Solver.CubeMiniSolver.solve(from, to);
+        // assert.deepStrictEqual(solved.steps, ['L', 'U', 'B']);
+        assert.deepStrictEqual(solved.turns, ['L', 'U', 'B']);
 
         c['L`']();
         to = c.data;
-        assert.deepStrictEqual(Solver.CubeMiniSolver.solve(from, to).steps, ['L', 'U', 'B', 'L`']);
+        solved = Solver.CubeMiniSolver.solve(from, to);
+        // assert.deepStrictEqual(solved.steps, ['L', 'U', 'B', 'L`']);
+        assert.deepStrictEqual(solved.turns, ['L', 'U', 'B', 'L`']);
 
         c['B`']();
         to = c.data;
-        assert.deepStrictEqual(Solver.CubeMiniSolver.solve(from, to).steps, ['L', 'U', 'B', 'L`', 'B`']);
+        solved = Solver.CubeMiniSolver.solve(from, to);
+        // assert.deepStrictEqual(solved.steps, ['L', 'U', 'B', 'L`', 'B`']);
+        assert.deepStrictEqual(solved.turns, ['L', 'U', 'B', 'L`', 'B`']);
 
         c['U`']();
         to = c.data;
-        assert.deepStrictEqual(Solver.CubeMiniSolver.solve(from, to).steps, ['L', 'U', 'B', 'L`', 'B`', 'U`']);
+        solved = Solver.CubeMiniSolver.solve(from, to);
+        // assert.deepStrictEqual(solved.steps, ['L', 'U', 'B', 'L`', 'B`', 'U`']);
+        assert.deepStrictEqual(solved.turns, ['L', 'U', 'B', 'L`', 'B`', 'U`']);
+    });
+
+    it('can solve greek state changes', function () {
+        assert.notEqual(Solver.CubeMiniSolver.solveGreek('αβγδφχψωικλμνξοπεζηθρστυ', 'ψτωδπβκραεχζλμονηγιφξσυθ').turns.length, 0);
     });
 });

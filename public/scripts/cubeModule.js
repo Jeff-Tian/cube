@@ -1,35 +1,9 @@
 angular.module('cubeModule', [])
     .controller('cubeCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
-        var drawing = false;
-
-        function drawStateChanges() {
-            if (drawing) {
-                return false;
-            }
-
-            drawing = true;
-            var vs = $scope.history.map(function (h) {
-                return new GraphWorld.Vertex(h);
-            });
-
-            var es = [];
-
-            for (var i = 0; i < vs.length - 1; i++) {
-                es.push(new Edge(vs[i], vs[i + 1]));
-            }
-
-            var g = new GraphWorld.Graph(vs, es);
-            var canvas = document.getElementById('mycanvas');
-            var layout = new Layout.CircleLayout(g, Math.min(canvas.width, canvas.height) / 2 - 20);
-            var painter = new Painter('mycanvas', g, layout);
-            drawing = false;
-
-            return true;
-        }
-
         $scope.$timeout = $timeout;
 
         $scope.history = [];
+        $scope.miniHistory = [];
         $scope.cube = CubeWorld.Cube.getPristineCube();
         $scope.CubeWorld = CubeWorld;
 
@@ -103,8 +77,6 @@ angular.module('cubeModule', [])
             $scope.cube = CubeWorld.Cube.fromState($scope.state.label);
         };
 
-        //drawStateChanges();
-
         $scope.$watch('cube.toString()', function (newValue, oldValue) {
             if ($scope.history.indexOf(newValue) < 0) {
                 cy.add({
@@ -144,6 +116,7 @@ angular.module('cubeModule', [])
             });
 
             $scope.history.push(newValue.toString());
+            $scope.miniHistory.push($scope.getMiniString(newValue.toString()));
             //drawStateChanges();
         });
 
@@ -250,12 +223,32 @@ angular.module('cubeModule', [])
             $scope.traverseGraph = iter.traverse($scope.cube, $timeout, 3000);
         };
 
+        function convertCubeStateToMiniState(cubeState) {
+            var l = new CubeLite(cubeState);
+            var compact = l.toCubeCompact();
+            var m = CubeMini.fromCubeCompact(compact);
+            return m.data;
+        }
+
         $scope.solve = function () {
             $scope.doing = true;
-            $scope.result = Solver.CubeSolver.solve($scope.history[0], $scope.history[$scope.history.length - 1]);
 
-            $scope.state.steps = Solver.CubeSolver.convertToSteps($scope.result);
-            $scope.doing = false;
+            $timeout(function () {
+                var from = ($scope.history[0]);
+                var to = ($scope.history[$scope.history.length - 1]);
+
+                $scope.result = Solver.CubeMiniSolver.solveGreek(from, to);
+
+                $scope.state.steps = $scope.result.steps.reverse();
+                $scope.doing = false;
+            }, 100);
+        };
+
+        $scope.getMiniString = function (cubeState) {
+            cubeState = cubeState || $scope.cube.toString();
+            var cubeMini = CubeMini.fromCubeCompact(new CubeLite(cubeState).toCubeCompact());
+
+            return cubeMini.data;
         };
     }])
 ;

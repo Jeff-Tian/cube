@@ -49,7 +49,7 @@ mixin realCubeTable()
             + surface('under')
 
 mixin buttonRow
-    div.ui.buttons
+    div.ui.buttons&attributes(attributes)
         block
 
 mixin or
@@ -59,24 +59,24 @@ mixin buttonCubeTable()
     + cubeTable&attributes(attributes)
         tr
             td
-                button.ui.button(ng-click="cube.perspectiveUp()") Perspective Up
+                button.ui.button(ng-click="cube.perspectiveUp()", ng-show="false") Perspective Up
             td
                 + buttonRow
                     button.violet.ui.button(ng-click="cube.B()") B
                     + or
                     button.ui.positive.button(ng-click="cube.B_()") B'
             td
-                button.ui.button(ng-click="cube.perspectiveDown()") Perspective Down
+                button.ui.button(ng-click="cube.perspectiveDown()", ng-show="false") Perspective Down
         tr
             td
-                button.ui.button(ng-click="cube.perspectiveLeft()") Perspective Left
+                button.ui.button(ng-click="cube.perspectiveLeft()", ng-show="false") Perspective Left
             td
                 + buttonRow
                     button.violet.ui.button(ng-click="cube.U()") U
                     + or
                     button.ui.positive.button(ng-click="cube.U_()") U'
             td
-                button.ui.button(ng-click="cube.perspectiveRight()") Perspective Right
+                button.ui.button(ng-click="cube.perspectiveRight()", ng-show="false") Perspective Right
         + thirdRow
             td
                 + buttonRow
@@ -84,12 +84,12 @@ mixin buttonCubeTable()
                     + or
                     button.ui.positive.button(ng-click="cube.L_()") L'
             td
-                + buttonRow
+                + buttonRow(ng-show="false")
                     button.violet.ui.button(ng-click="cube.F()") F
                     + or
                     button.ui.positive.button(ng-click="cube.F_()") F'
             td
-                + buttonRow
+                + buttonRow(ng-show="false")
                     button.violet.ui.button(ng-click="cube.R()") R
                     + or
                     button.ui.positive.button(ng-click="cube.R_()") R'
@@ -97,7 +97,7 @@ mixin buttonCubeTable()
             td
                 button.ui.button(ng-click="resetCube()") 还原
             td
-                + buttonRow
+                + buttonRow(ng-show="false")
                     button.violet.ui.button(ng-click="cube.D()") D
                     + or
                     button.ui.positive.button(ng-click="cube.D_()") D'
@@ -120,10 +120,10 @@ div
             | &nbsp;
             button.ui.red.button(type="submit", ng-click="execute()", ng-disabled="!executeButtonValid") 运行
 div
-    | {{cube.toString()}}
+    | {{cube.toString()}} <--> {{getMiniString()}}
     | &nbsp;
     form.ui.form(ng-class="{'loading': doing}")
-        button.ui.red.button(ng-click="traverse()") 遍历
+        button.ui.red.button(ng-click="traverse()", ng-show="false") 遍历
         button.ui.purple.button(ng-click="solve()") 求解
         span(ng-show="result") 共需 {{result.l}} 步还原
 div.ui.divider

@@ -157,4 +157,10 @@ describe('Cube Mini: ', function () {
         c = CubeMini.fromState(49561745);
         assert.equal(c.toLiteString(), 'εβηδρχτωλιμκνξοπφζψθασγυ');
     });
+
+    it('can be created from a greek state', function () {
+        var c = CubeMini.fromGreekState(CubeLite.getPristineCube().toString());
+        assert.equal(c.toString(), CubeMini.getPristineCube().toString());
+        assert.equal(c.data, 43819008);
+    });
 });
