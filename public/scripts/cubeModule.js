@@ -239,7 +239,9 @@ angular.module('cubeModule', [])
 
                 $scope.result = Solver.CubeMiniSolver.solveGreek(from, to);
 
-                $scope.state.steps = $scope.result.turns.reverse();
+                $scope.state.steps = $scope.result.turns.reverse().map(function (s) {
+                    return Solver.CubeMiniSolver.reverseStepMap[s];
+                });
                 $scope.doing = false;
             }, 100);
         };

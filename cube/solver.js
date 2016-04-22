@@ -179,6 +179,16 @@
         return found;
     }
 
+
+    var reverseStepMap = {
+        'L': 'L`',
+        'L`': 'L',
+        'U': 'U`',
+        'U`': 'U',
+        'B': 'B`',
+        'B`': 'B'
+    };
+
     Solver.CubeMiniSolver.twoWaySearch = function (from, to) {
         console.log('search from ', from, ' to ', to);
         var tree1 = {};
@@ -245,15 +255,6 @@
                 start = parent;
                 parent = tree1[start.data];
             }
-
-            var reverseStepMap = {
-                'L': 'L`',
-                'L`': 'L',
-                'U': 'U`',
-                'U`': 'U',
-                'B': 'B`',
-                'B`': 'B'
-            };
 
             start = found;
             parent = tree2[start.data];
@@ -325,6 +326,7 @@
     };
 
     Solver.CubeMiniSolver.turns = ['L', 'L`', 'U', 'U`', 'B', 'B`'];
+    Solver.CubeMiniSolver.reverseStepMap = reverseStepMap;
 
 
     if (typeof module !== 'undefined' && module.exports) {

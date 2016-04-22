@@ -153,6 +153,12 @@ describe('Cube Mini Solver', function () {
     });
 
     it('can solve greek state changes', function () {
-        // assert.notEqual(Solver.CubeMiniSolver.solveGreek('αβγδφχψωικλμνξοπεζηθρστυ', 'ψτωδπβκραεχζλμονηγιφξσυθ').turns.length, 0);
+        var steps = Solver.CubeMiniSolver.solveGreek('αβγδφχψωικλμνξοπεζηθρστυ', 'ρξτδηχθιβμαλωψοπνεγζφσκυ').turns;
+        assert.notEqual(steps.length, 0);
+        assert.deepStrictEqual(steps, ['U', 'L`']);
+
+        var cube = CubeMini.getPristineCube();
+        cube.randomize();
+        // assert.notEqual(Solver.CubeMiniSolver)
     });
 });
