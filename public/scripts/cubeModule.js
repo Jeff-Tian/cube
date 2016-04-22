@@ -77,7 +77,38 @@ angular.module('cubeModule', [])
             $scope.cube = CubeWorld.Cube.fromState($scope.state.label);
         };
 
+        var solved = false;
         $scope.$watch('cube.toString()', function (newValue, oldValue) {
+            if (solved) {
+                cy = cytoscape({
+                    container: document.getElementById('cy'),
+                    elements: [],
+                    style: [ // the stylesheet for the graph
+                        {
+                            selector: 'node',
+                            style: {
+                                'background-color': '#666',
+                                'label': 'data(id)'
+                            }
+                        },
+                        {
+                            selector: 'edge',
+                            style: {
+                                'width': 3,
+                                'line-color': '#ccc',
+                                'target-arrow-color': '#ccc',
+                                'target-arrow-shape': 'triangle'
+                            }
+                        }
+                    ],
+                    layout: {
+                        name: 'breadthfirst'
+                    }
+                });
+            }
+
+            solved = false;
+
             if ($scope.history.indexOf(newValue) < 0) {
                 cy.add({
                     data: {
@@ -145,6 +176,62 @@ angular.module('cubeModule', [])
                 name: 'breadthfirst'
             }
         });
+
+        function convertToCytoscapeElements(tree1, tree2, unmarked1, unmarked2) {
+            var a = [];
+
+            for (var n in tree1) {
+                a.push({
+                    data: {
+                        id: n.toString()
+                    }
+                });
+            }
+
+            for (n in tree1) {
+                var c = n;
+                var p = tree1[c];
+                while (p.data != c) {
+                    a.push({
+                        data: {
+                            id: p.data + '-->' + c,
+                            source: p.data.toString(),
+                            target: c.toString()
+                        }
+                    });
+
+                    c = p.data;
+                    p = tree1[c];
+                }
+            }
+
+            for (var m in tree2) {
+                a.push({
+                    data: {
+                        id: m.toString()
+                    }
+                });
+            }
+
+            for (m in tree2) {
+                var c = m;
+                var p = tree2[c];
+                while (p.data != c) {
+                    a.push({
+                        data: {
+                            id: p.data + '-->' + c,
+                            source: p.data.toString(),
+                            target: c.toString()
+                        }
+                    });
+
+                    c = p.data;
+                    p = tree2[c];
+                }
+            }
+
+            return a;
+        }
 
         function toCytoscapeElements(g) {
             var a = [];
@@ -237,12 +324,41 @@ angular.module('cubeModule', [])
                 var from = ($scope.history[0]);
                 var to = ($scope.history[$scope.history.length - 1]);
 
-                $scope.result = Solver.CubeMiniSolver.solveGreek(from, to);
+                Solver.CubeMiniSolver.solveGreek(from, to, $timeout, 1000, function (tree1, tree2, unmarked1, unmarked2) {
+                    cy = cytoscape({
+                        container: document.getElementById('cy'),
+                        elements: convertToCytoscapeElements(tree1, tree2, unmarked1, unmarked2),
+                        style: [ // the stylesheet for the graph
+                            {
+                                selector: 'node',
+                                style: {
+                                    'background-color': '#666',
+                                    'label': 'data(id)'
+                                }
+                            },
+                            {
+                                selector: 'edge',
+                                style: {
+                                    'width': 3,
+                                    'line-color': '#ccc',
+                                    'target-arrow-color': '#ccc',
+                                    'target-arrow-shape': 'triangle'
+                                }
+                            }
+                        ],
+                        layout: {
+                            name: 'breadthfirst'
+                        }
+                    });
+                }, function (result) {
+                    $scope.result = result;
+                    $scope.state.steps = $scope.result.turns.reverse().map(function (s) {
+                        return Solver.CubeMiniSolver.reverseStepMap[s];
+                    });
 
-                $scope.state.steps = $scope.result.turns.reverse().map(function (s) {
-                    return Solver.CubeMiniSolver.reverseStepMap[s];
+                    $scope.doing = false;
+                    solved = true;
                 });
-                $scope.doing = false;
             }, 100);
         };
 

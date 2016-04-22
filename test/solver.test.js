@@ -157,8 +157,11 @@ describe('Cube Mini Solver', function () {
         assert.notEqual(steps.length, 0);
         assert.deepStrictEqual(steps, ['U', 'L`']);
 
-        var cube = CubeMini.getPristineCube();
-        cube.randomize();
+        // steps = Solver.CubeMiniSolver.solveGreek('αβγδφχψωικλμνξοπεζηθρστυ', 'ψμφδξυηβκεζτρθοχανιγλσωπ');
+        // assert.notEqual(steps.length, 0);
+        //
+        // var cube = CubeMini.getPristineCube();
+        // cube.randomize();
         // assert.notEqual(Solver.CubeMiniSolver)
     });
 });

@@ -1,4 +1,4 @@
-(function (CubeLite, Iterator, CubeMini) {
+(function (window, CubeLite, Iterator, CubeMini) {
     function Solver() {
     }
 
@@ -146,10 +146,6 @@
                     parent: {data: current.self.data, turn: current.self.turn}
                 };
 
-                if (t.self.data == 49561745) {
-                    console.log(direction, ' will mark: ', t);
-                }
-
                 leftUnmarked.push(t);
             } else {
                 continue;
@@ -158,23 +154,16 @@
             if (rightTree[adj[i].data]) {
                 found = adj[i];
 
-                if (found.data == 1616658577) {
-                    console.log(direction, ': ', current.self.data, '-->', '1616658577: ', found.turn);
-                }
-
                 leftTree[found.data] = {data: current.self.data};
                 leftTree[found.data].turn = adj[i].turn;
 
                 console.log(direction, ': 找到啦! 关键结点是: ' + JSON.stringify(found) + ', 起始点是 ' + from + ', 终点是: ' + to);
                 break;
-            } else {
-                if (adj[i].data == '49561745') {
-                    console.log(direction, ': ', current.self.data, '-->', adj[i].data, ': ', adj[i].turn);
-                }
             }
         }
         var afterAdd = leftUnmarked.length;
 
+        console.log(direction, ' - ', loop, 'found = ', found);
         // console.log('第 ' + loop + ' 代新增结点: ' + (afterAdd - beforeAdd) + ' 个.');
         return found;
     }
@@ -189,7 +178,7 @@
         'B`': 'B'
     };
 
-    Solver.CubeMiniSolver.twoWaySearch = function (from, to) {
+    Solver.CubeMiniSolver.twoWaySearch = function (from, to, $timeout, interval, notify, done) {
         console.log('search from ', from, ' to ', to);
         var tree1 = {};
         tree1[from] = {data: from, turn: ''};
@@ -213,7 +202,8 @@
         var found = tree2[from] || tree1[to];
 
         var loop = 0;
-        while (!found && (unmarked1.length || unmarked2.length)) {
+
+        function searchOneRound() {
             loop++;
             // console.log('第 ' + loop + ' 次循环:');
 
@@ -224,67 +214,86 @@
             if (!found && unmarked2.length) {
                 found = search(unmarked2, tree2, tree1, found, to, from, loop, 'right');
             }
+        }
 
-            if (found) {
-                console.log('found by: ');
-                console.log('tree1 ? : ', tree1[found.data]);
-                console.log('tree2 ? : ', tree2[found.data]);
+        function asyncSearch() {
+            searchOneRound();
+            notify && notify(tree1, tree2, unmarked1, unmarked2);
+
+            if (!found && (unmarked1.length || unmarked2.length)) {
+                $timeout(asyncSearch, interval);
+            } else {
+                done && done(getResult());
             }
         }
 
-        if (!found) {
-            return {
-                path: [],
-                turns: [],
-                steps: []
-            };
+        if (!interval) {
+            while (!found && (unmarked1.length || unmarked2.length)) {
+                searchOneRound();
+            }
         } else {
-            var path = [found.data];
-            var turns = [];
+            $timeout = $timeout || window.setTimeout;
 
-            var start = found;
-            var parent = tree1[start.data];
-
-            while (parent && (parent.data !== start.data)) {
-                path.unshift(parent.data);
-                turns.unshift(parent.turn);
-
-                console.log('tree1 start = ' + start.data + ', parent = ' + parent.data, ' through inverse ', parent.turn);
-                console.log('turns = ', turns);
-
-                start = parent;
-                parent = tree1[start.data];
-            }
-
-            start = found;
-            parent = tree2[start.data];
-
-            while (parent && (parent.data !== start.data)) {
-                path.push(parent.data);
-                turns.push(reverseStepMap[parent.turn]);
-
-                console.log('tree2 from ' + start.data + ' parent = ' + parent.data, ' through ', reverseStepMap[parent.turn]);
-
-                console.log('turns = ', turns);
-
-                start = parent;
-                parent = tree2[start.data];
-            }
-
-            // console.log('tree1 = ', tree1);
-            // console.log('tree2 = ', tree2);
-            console.log('path = ', path);
-            console.log('turns = ', turns);
-
-            return {
-                // loops: loop,
-                path: path,
-                turns: turns.filter(function (t) {
-                    return t !== '';
-                })
-                // steps: Solver.CubeMiniSolver.getSteps(path)
-            };
+            asyncSearch();
         }
+
+        function getResult() {
+            if (!found) {
+                return {
+                    path: [],
+                    turns: [],
+                    steps: []
+                };
+            } else {
+                var path = [found.data];
+                var turns = [];
+
+                var start = found;
+                var parent = tree1[start.data];
+
+                while (parent && (parent.data !== start.data)) {
+                    path.unshift(parent.data);
+                    turns.unshift(parent.turn);
+
+                    console.log('tree1 start = ' + start.data + ', parent = ' + parent.data, ' through inverse ', parent.turn);
+                    console.log('turns = ', turns);
+
+                    start = parent;
+                    parent = tree1[start.data];
+                }
+
+                start = found;
+                parent = tree2[start.data];
+
+                while (parent && (parent.data !== start.data)) {
+                    path.push(parent.data);
+                    turns.push(reverseStepMap[parent.turn]);
+
+                    console.log('tree2 from ' + start.data + ' parent = ' + parent.data, ' through ', reverseStepMap[parent.turn]);
+
+                    console.log('turns = ', turns);
+
+                    start = parent;
+                    parent = tree2[start.data];
+                }
+
+                // console.log('tree1 = ', tree1);
+                // console.log('tree2 = ', tree2);
+                console.log('path = ', path);
+                console.log('turns = ', turns);
+
+                return {
+                    // loops: loop,
+                    path: path,
+                    turns: turns.filter(function (t) {
+                        return t !== '';
+                    })
+                    // steps: Solver.CubeMiniSolver.getSteps(path)
+                };
+            }
+        }
+
+        return getResult();
     };
 
     Solver.CubeMiniSolver.getSteps = function (path) {
@@ -314,20 +323,23 @@
         return steps;
     };
 
-    Solver.CubeMiniSolver.solve = function (from, to) {
-        return Solver.CubeMiniSolver.twoWaySearch(from, to);
+    Solver.CubeMiniSolver.solve = function (from, to, $timeout, interval, notify, done) {
+        return Solver.CubeMiniSolver.twoWaySearch(from, to, $timeout, interval, notify, done);
     };
 
-    Solver.CubeMiniSolver.solveGreek = function (from, to) {
+    Solver.CubeMiniSolver.solveGreek = function (from, to, $timeout, interval, notify, done) {
         return Solver.CubeMiniSolver.twoWaySearch(
             CubeMini.fromGreekState(from).data,
-            CubeMini.fromGreekState(to).data
+            CubeMini.fromGreekState(to).data,
+            $timeout,
+            interval,
+            notify,
+            done
         );
     };
 
     Solver.CubeMiniSolver.turns = ['L', 'L`', 'U', 'U`', 'B', 'B`'];
     Solver.CubeMiniSolver.reverseStepMap = reverseStepMap;
-
 
     if (typeof module !== 'undefined' && module.exports) {
         module.exports = Solver;
@@ -336,6 +348,7 @@
     }
 
 })(
+    this,
     typeof require === 'function' ? require('./cube-lite') : window.CubeLite,
     typeof require === 'function' ? require('./iterator') : window.Iterator,
     typeof require === 'function' ? require('./cube-mini') : window.CubeMini
