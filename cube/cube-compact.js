@@ -1,5 +1,5 @@
 (function () {
-    var CORNER = {
+    var CORNER_POSITION = {
         // RedGreenYellow: 0,
         // RedYellowGreen: 0,
         // GreenRedYellow: 0,
@@ -12,30 +12,30 @@
         // BlueRedYellow: 1,
         // BlueYellowRed: 1,
         // YellowRedBlue: 1,
-        YellowBlueRed: 1,
+        YellowBlueRed: 0,
 
         // OrangeBlueYellow: 2,
         // OrangeYellowBlue: 2,
         // BlueOrangeYellow: 2,
         // BlueYellowOrange: 2,
-        YellowOrangeBlue: 2,
+        YellowOrangeBlue: 0,
         // YellowBlueOrange: 2,
 
-        YellowGreenOrange: 3,
+        YellowGreenOrange: 0,
         // YellowOrangeGreen: 3,
-        // GreenOrangeYellow: 3,
+        GreenOrangeYellow: 2,
         // GreenYellowOrange: 3,
         // OrangeGreenYellow: 3,
         // OrangeYellowGreen: 3,
 
-        WhiteGreenRed: 4,
+        WhiteGreenRed: 0,
         // WhiteRedGreen: 4,
         // GreenWhiteRed: 4,
         // GreenRedWhite: 4,
         // RedWhiteGreen: 4,
         // RedGreenWhite: 4,
 
-        WhiteBlueOrange: 5,
+        WhiteBlueOrange: 0,
         // WhiteOrangeBlue: 5,
         // BlueOrangeWhite: 5,
         // BlueWhiteOrange: 5,
@@ -43,11 +43,62 @@
         // OrangeBlueWhite: 5,
 
         // WhiteGreenOrange: 6,
-        WhiteOrangeGreen: 6
+        WhiteOrangeGreen: 0
         // GreenOrangeWhite: 6,
         // GreenWhiteOrange: 6,
         // OrangeGreenWhite: 6,
         // OrangeWhiteGreen: 6
+    };
+
+    var CORNER = {
+        RedGreenYellow: 0,
+        RedYellowGreen: 0,
+        GreenRedYellow: 0,
+        GreenYellowRed: 0,
+        YellowGreenRed: 0,
+        YellowRedGreen: 0,
+
+        RedBlueYellow: 1,
+        RedYellowBlue: 1,
+        BlueRedYellow: 1,
+        BlueYellowRed: 1,
+        YellowRedBlue: 1,
+        YellowBlueRed: 1,
+
+        OrangeBlueYellow: 2,
+        OrangeYellowBlue: 2,
+        BlueOrangeYellow: 2,
+        BlueYellowOrange: 2,
+        YellowOrangeBlue: 2,
+        YellowBlueOrange: 2,
+
+        YellowGreenOrange: 3,
+        YellowOrangeGreen: 3,
+        GreenOrangeYellow: 3,
+        GreenYellowOrange: 3,
+        OrangeGreenYellow: 3,
+        OrangeYellowGreen: 3,
+
+        WhiteGreenRed: 4,
+        WhiteRedGreen: 4,
+        GreenWhiteRed: 4,
+        GreenRedWhite: 4,
+        RedWhiteGreen: 4,
+        RedGreenWhite: 4,
+
+        WhiteBlueOrange: 5,
+        WhiteOrangeBlue: 5,
+        BlueOrangeWhite: 5,
+        BlueWhiteOrange: 5,
+        OrangeWhiteBlue: 5,
+        OrangeBlueWhite: 5,
+
+        WhiteGreenOrange: 6,
+        WhiteOrangeGreen: 6,
+        GreenOrangeWhite: 6,
+        GreenWhiteOrange: 6,
+        OrangeGreenWhite: 6,
+        OrangeWhiteGreen: 6
     };
 
     var CornerReverseMap = {
@@ -75,6 +126,21 @@
     };
 
     function CubeCompact(directions, positions) {
+        if (directions.length !== 7) {
+            throw new Error('创建 CubeCompact 时应该指定7个角块!');
+        }
+
+        var count = {};
+        for (var i = 0; i < directions.length; i++) {
+            if (count[directions[i]]) {
+                count[directions[i]]++;
+
+                throw new Error('创建 CubeCompact 时, 角块儿 ' + directions[i] + ' 被指定了多次!');
+            } else {
+                count[directions[i]] = 1;
+            }
+        }
+
         this.directions = directions;
         this.positions = positions;
 
@@ -267,7 +333,8 @@
     };
 
     CubeCompact.Corners = CORNER;
-    
+    CubeCompact.CornerPositions = CORNER_POSITION;
+
     if (typeof module !== 'undefined' && module.exports) {
         module.exports = CubeCompact;
     } else {

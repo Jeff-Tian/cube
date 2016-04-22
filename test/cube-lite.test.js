@@ -422,4 +422,13 @@ describe('Cube Lite', function () {
 
         assert.deepStrictEqual(cube.getFrontRightBottomCorner().join(''), 'σοδ');
     });
+
+    it('can be converted into cube compact', function () {
+        var cube = CubeLite.getPristineCube();
+        assert.equal(cube.toCubeCompact().toString(), '0, 1, 2, 3, 4, 5, 6; 0, 0, 0, 0, 0, 0, 0');
+
+        cube.L();
+        assert.equal(cube.toString(), 'εβηδρχτωλιμκνξοπφζψθασγυ');
+        assert.equal(cube.toCubeCompact().toString(), '0, 1, 3, 6, 4, 2, 5; 0, 0, 2, 1, 0, 1, 2');
+    });
 });

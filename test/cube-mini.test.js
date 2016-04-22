@@ -92,8 +92,36 @@ describe('Cube Mini: ', function () {
         assert.equal(mini.getCornerPosition(7), 0);
     });
 
+    it('can get pristine cube', function () {
+        var c = CubeMini.getPristineCube();
+        assert.equal(c.data, 43819008);
+    });
+
+    it('should go to a nonsense cube', function () {
+        var c = CubeMini.getPristineCube();
+        c.randomize();
+
+        assert.notEqual(c.data, 33816576);
+        assert.doesNotThrow(function () {
+            c.toCubeCompact();
+        });
+    });
+
     it('can convert to Cube Lite', function () {
         assert.equal(CubeMini.getPristineCube().toCubeCompact().toString(), CubeCompact.getPristineCube().toString());
+
+        assert.throws(function () {
+            var c = new CubeMini(33816576);
+            assert.equal(c.toString(), '0000 0010|0000 0100|0000 0000|0000 0000');
+            assert.equal(c.toLiteString(), 'εβηδρχτωλιμκνξοπφζψθασγυ');
+        });
+    });
+
+    it('can convert to Cube Compact', function () {
+        assert.throws(function () {
+            var c = new CubeMini(33816576);
+            assert.equal(c.toCubeCompact().toString(), '0, 1, 0, 0, 4, 0, 2; 0, 0, 0, 0, 0, 0, 0');
+        });
     });
 
     it('can get pristine cube', function () {
@@ -114,30 +142,36 @@ describe('Cube Mini: ', function () {
             var l = CubeLite.getPristineCube();
             l[turn]();
 
+            console.log('lite =  ', l.toString());
+            console.log('mini = ', c.toString());
+            console.log('mini = ', c.data);
+            assert.equal(c.toLiteString(), l.toString());
+            // assert.equal(l.toString(), 'εβηδρχτωλιμκνξοπφζψθασγυ');
+            // assert.equal(l.toString(), 'ικγδφχξνωψλμαβοπζθεηρστυ');
+            // assert.equal(l.toString(), 'νξγδφχκιαβλμωψοπηεθζρστυ');
+
+            c[turn]();
+            l[turn]();
+
             assert.equal(c.toLiteString(), l.toString());
 
-            c.L();
-            l.L();
+            c[turn]();
+            l[turn]();
 
             assert.equal(c.toLiteString(), l.toString());
-
-            c.L();
-            l.L();
-
-            assert.equal(c.toLiteString(), l.toString());
-            c.L();
-            l.L();
+            c[turn]();
+            l[turn]();
 
             assert.equal(c.toLiteString(), l.toString());
         });
     }
 
     testTurn('can turn left', 'L');
-    testTurn('can turn left', 'L`');
-    testTurn('can turn left', 'B');
-    testTurn('can turn left', 'B`');
-    testTurn('can turn left', 'U');
-    testTurn('can turn left', 'U`');
+    testTurn('can turn left counter clockwise', 'L`');
+    testTurn('can turn back clockwise', 'B');
+    testTurn('can turn back counter clockwise', 'B`');
+    testTurn('can turn upper clockwise', 'U');
+    testTurn('can turn upper counter clockwise', 'U`');
 
     it('can randomize a cube', function () {
         var c = CubeMini.getPristineCube();
@@ -162,5 +196,8 @@ describe('Cube Mini: ', function () {
         var c = CubeMini.fromGreekState(CubeLite.getPristineCube().toString());
         assert.equal(c.toString(), CubeMini.getPristineCube().toString());
         assert.equal(c.data, 43819008);
+
+        c = CubeMini.fromGreekState('εβηδρχτωλιμκνξοπφζψθασγυ');
+        assert.equal(c.data, 49561745);
     });
 });

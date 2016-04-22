@@ -8,7 +8,7 @@
     }
 
     function CubeMini(data) {
-        this.data = data || new Array(32);
+        this.data = data; // || new Array(32);
 
         if (!CubeMini.__initialized__) {
 

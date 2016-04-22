@@ -239,14 +239,14 @@ angular.module('cubeModule', [])
 
                 $scope.result = Solver.CubeMiniSolver.solveGreek(from, to);
 
-                $scope.state.steps = $scope.result.steps.reverse();
+                $scope.state.steps = $scope.result.turns.reverse();
                 $scope.doing = false;
             }, 100);
         };
 
         $scope.getMiniString = function (cubeState) {
             cubeState = cubeState || $scope.cube.toString();
-            var cubeMini = CubeMini.fromCubeCompact(new CubeLite(cubeState).toCubeCompact());
+            var cubeMini = CubeMini.fromGreekState(cubeState);
 
             return cubeMini.data;
         };

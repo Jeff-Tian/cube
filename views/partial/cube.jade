@@ -125,7 +125,7 @@ div
     form.ui.form(ng-class="{'loading': doing}")
         button.ui.red.button(ng-click="traverse()", ng-show="false") 遍历
         button.ui.purple.button(ng-click="solve()") 求解
-        span(ng-show="result") 共需 {{result.l}} 步还原
+        span(ng-show="result") 共需 {{result.turns.length}} 步还原
 div.ui.divider
 form.ui.form(ng-class="{'loading': doing}")
     + buttonCubeTable.ui.celled.padded.table

@@ -143,31 +143,184 @@
                 return this.label.join('');
             };
 
+            function mapLabelToColor(l) {
+                var c = LabelColorMapping[l];
+
+                // console.log('mapping ', l, ' to ', c);
+
+                return c;
+            }
+
             CubeLite.prototype.toCubeCompact = function () {
-                function mapLabelToColor(l) {
-                    var c = LabelColorMapping[l];
-
-                    // console.log('mapping ', l, ' to ', c);
-
-                    return c;
-                }
 
                 // console.log('Corner Mapping: ', CubeCompact.Corners);
 
-                var directions = [
-                    CubeCompact.Corners[this.getBackLeftTopCorner().map(mapLabelToColor).join('')],
-                    CubeCompact.Corners[this.getFrontRightTopCorner().map(mapLabelToColor).join('')],
-                    CubeCompact.Corners[this.getFrontLeftTopCorner().map(mapLabelToColor).join('')],
-                    CubeCompact.Corners[this.getBackRightTopCorner().map(mapLabelToColor).join('')],
+                var p1 = this.getBackLeftTopCornerPosition();
 
-                    CubeCompact.Corners[this.getBackLeftBottomCorner().map(mapLabelToColor).join('')],
-                    CubeCompact.Corners[this.getFrontLeftBottomCorner().map(mapLabelToColor).join('')],
-                    CubeCompact.Corners[this.getBackRightBottomCorner().map(mapLabelToColor).join('')]
+                var corner1 = this.getBackLeftTopCorner().map(mapLabelToColor).join('');
+
+                if (typeof  corner1 === 'undefined') {
+                    throw new Error('转化第一个角块时遇到 undefined!');
+                }
+
+                console.log('角块1 = ', corner1);
+
+                corner1 = CubeCompact.Corners[corner1];
+
+                if (typeof  corner1 === 'undefined') {
+                    throw new Error('转化第一个角块时遇到 undefined!');
+                }
+
+                console.log('角块1 = ', corner1);
+
+                var p2 = this.getFrontRightTopCornerPosition();
+                var corner2 = this.getFrontRightTopCorner().map(mapLabelToColor).join('');
+
+                if (typeof  corner2 === 'undefined') {
+                    throw new Error('转化第二个角块时遇到 undefined!');
+                }
+
+                console.log('corner2 = ', corner2);
+
+                corner2 = CubeCompact.Corners[corner2];
+
+                if (typeof  corner2 === 'undefined') {
+                    throw new Error('转化第二个角块时遇到 undefined!');
+                }
+
+                console.log('corner2 = ', corner2);
+
+                var p3 = this.getFrontLeftTopCornerPosition();
+                var corner3 = this.getFrontLeftTopCorner().map(mapLabelToColor).join('');
+
+                if (typeof  corner3 === 'undefined') {
+                    throw new Error('转化第三个角块时遇到 undefined!');
+                }
+
+                console.log('corner3 = ', corner3);
+
+                corner3 = CubeCompact.Corners[corner3];
+
+                if (typeof  corner3 === 'undefined') {
+                    throw new Error('转化第三个角块时遇到 undefined!');
+                }
+
+                console.log('corner3 = ', corner3);
+
+                var p4 = this.getBackRightTopCornerPosition();
+                var corner4 = this.getBackRightTopCorner().map(mapLabelToColor).join('');
+
+                if (typeof  corner4 === 'undefined') {
+                    throw new Error('转化第四个角块时遇到 undefined!');
+                }
+
+                console.log('corner4 = ', corner4);
+
+                corner4 = CubeCompact.Corners[corner4];
+
+                if (typeof  corner4 === 'undefined') {
+                    throw new Error('转化第四个角块时遇到 undefined!');
+                }
+
+                console.log('corner4 = ', corner4);
+
+
+                var p5 = this.getBackLeftBottomCornerPosition();
+                var corner5 = this.getBackLeftBottomCorner().map(mapLabelToColor).join('');
+
+                if (typeof  corner5 === 'undefined') {
+                    throw new Error('转化第五个角块时遇到 undefined!');
+                }
+
+                console.log('corner5 = ', corner5);
+
+                corner5 = CubeCompact.Corners[corner5];
+
+                if (typeof  corner5 === 'undefined') {
+                    throw new Error('转化第五个角块时遇到 undefined!');
+                }
+
+                console.log('corner5 = ', corner5);
+
+                var p6 = this.getFrontLeftBottomCornerPosition();
+                var corner6 = this.getFrontLeftBottomCorner().map(mapLabelToColor).join('');
+
+                if (typeof  corner6 === 'undefined') {
+                    throw new Error('转化第六个角块时遇到 undefined!');
+                }
+
+                console.log('corner6 = ', corner6);
+
+                corner6 = CubeCompact.Corners[corner6];
+
+                if (typeof  corner6 === 'undefined') {
+                    throw new Error('转化第六个角块时遇到 undefined!');
+                }
+
+                console.log('corner6 = ', corner6);
+
+                var p7 = this.getBackRightBottomCornerPosition();
+                var corner7 = this.getBackRightBottomCorner().map(mapLabelToColor).join('');
+
+                if (typeof  corner7 === 'undefined') {
+                    throw new Error('转化第七个角块时遇到 undefined!');
+                }
+
+                console.log('corner7 = ', corner7);
+
+                corner7 = CubeCompact.Corners[corner7];
+
+                if (typeof  corner7 === 'undefined') {
+                    throw new Error('转化第七个角块时遇到 undefined!');
+                }
+
+                console.log('corner7 = ', corner7);
+
+                var directions = [
+                    corner1,
+                    corner2,
+                    corner3,
+                    corner4,
+
+                    corner5,
+                    corner6,
+                    corner7
                 ];
 
-                var positions = [0, 0, 0, 0, 0, 0, 0];
+                var positions = [p1, p2, p3, p4, p5, p6, p7];
 
                 return new CubeCompact(directions, positions);
+            };
+
+            function t(labels) {
+                if (labels[0] === 'Yellow' || labels[0] === 'White') {
+                    return 0;
+                }
+
+                if (labels[1] === 'Yellow' || labels[1] === 'White') {
+                    return 1;
+                }
+
+                if (labels[2] === 'Yellow' || labels[2] === 'White') {
+                    return 2;
+                }
+
+                throw new Error('不应该出现的颜色角块: ' + labels.join(''));
+            }
+
+            CubeLite.prototype.getBackLeftTopCornerPosition = function () {
+                var labels = this.getBackLeftTopCorner().map(mapLabelToColor);
+                return t(labels);
+            };
+
+            CubeLite.prototype.getFrontRightTopCornerPosition = function () {
+                var labels = this.getFrontRightTopCorner().map(mapLabelToColor);
+                return t(labels);
+            };
+
+            CubeLite.prototype.getFrontLeftTopCornerPosition = function () {
+                var labels = this.getFrontLeftTopCorner().map(mapLabelToColor);
+                return t(labels);
             };
 
             CubeLite.prototype.getFrontLeftTopCorner = function () {
@@ -176,6 +329,11 @@
 
             CubeLite.prototype.getFrontRightTopCorner = function () {
                 return [this.label[19], this.label[1], this.label[12]];
+            };
+
+            CubeLite.prototype.getFrontLeftBottomCornerPosition = function () {
+                var labels = this.getFrontLeftBottomCorner().map(mapLabelToColor);
+                return t(labels);
             };
 
             CubeLite.prototype.getFrontLeftBottomCorner = function () {
@@ -190,12 +348,28 @@
                 return [this.label[17], this.label[13], this.label[7]];
             };
 
+            CubeLite.prototype.getBackRightTopCornerPosition = function () {
+                var labels = this.getBackRightTopCorner().map(mapLabelToColor);
+
+                return t(labels);
+            };
+
             CubeLite.prototype.getBackRightTopCorner = function () {
                 return [this.label[16], this.label[6], this.label[8]];
             };
 
+            CubeLite.prototype.getBackLeftBottomCornerPosition = function () {
+                var labels = this.getBackLeftBottomCorner().map(mapLabelToColor);
+                return t(labels);
+            };
+
             CubeLite.prototype.getBackLeftBottomCorner = function () {
                 return [this.label[23], this.label[5], this.label[15]];
+            };
+
+            CubeLite.prototype.getBackRightBottomCornerPosition = function () {
+                var labels = this.getBackRightBottomCorner().map(mapLabelToColor);
+                return t(labels);
             };
 
             CubeLite.prototype.getBackRightBottomCorner = function () {
